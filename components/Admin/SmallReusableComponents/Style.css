@@ -1,0 +1,11 @@
+.custom-datepicker {
+  outline: none;
+  border: 1px solid #cccccc80;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  max-width: 8rem;
+}
+
+.custom-datepicker:focus {
+  border: 2px solid #3182ce;
+}

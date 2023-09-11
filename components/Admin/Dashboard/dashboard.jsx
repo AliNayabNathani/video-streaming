@@ -11,10 +11,11 @@ import {
   Select,
   HStack
 } from '@chakra-ui/react';
-import TableSummary from '../components/Admin/Dashboard/TableSummary';
-import GraphSummary from '../components/Admin/Dashboard/GraphSummary';
-import Charts from '../components/Admin/Dashboard/chart';
-import { Dashboard_Tables } from '../components/Admin/Tables/Table';
+import SidebarWithHeader from '../Sidebar/sidebartest';
+import TableSummary from "./TableSummary"
+import GraphSummary from './GraphSummary';
+import Charts from './chart';
+import { Dashboard_Tables } from '../Tables/Table';
 
 function Dashboard() {
   const [SelectedValue, setSelectedValue] = useState('Tables');
@@ -24,21 +25,21 @@ function Dashboard() {
   }
   return (
     <Box ml={{ base: 0, md: 60 }} p="4">
-      <HStack justifyContent={'space-between'}>
+      <HStack>
         <Heading
           textAlign={'center'}
           marginBottom={'2rem'}
           textDecor={'underline'}
-
+          color={'cyan.400'}
         >Dashboard
         </Heading>
 
-        <Select width={'20%'} defaultValue={'Tables'} marginBottom={5} onChange={handleSelectedValue}>
-          <option value="Summary Overview">Summary Overview</option>
-          <option value="Graph Overview">Graph Overview</option>
+        <Select defaultValue={'Tables'} marginBottom={5} onChange={handleSelectedValue}>
+          <option value="Graphs">Graphs</option>
+          <option value="Tables">Tables</option>
         </Select>
+        {SelectedValue == 'Tables' ? <TableSummary /> : <GraphSummary />}
       </HStack>
-      {SelectedValue == 'Tables' ? <TableSummary /> : <GraphSummary />}
       <Box marginTop={10}>
         <Charts />
       </Box>

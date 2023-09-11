@@ -58,6 +58,20 @@ const customTheme = extendTheme({
         },
       },
     },
+    Input: {
+      baseStyle: {
+        bg: "#232323", // Background color for the card
+        color: "white", // Text color for the card
+        border: "1px solid #55DF01", // Border for the card
+        borderRadius: "md", // Border radius for the card
+      },
+    },
+    Card: {
+      baseStyle: {
+        bg: "#232323",
+        color: "white",
+      },
+    }
   },
   config: {
     initialColorMode: "dark",

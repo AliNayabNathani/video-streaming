@@ -1,0 +1,6 @@
+.Content-Bar {
+  border: 2px solid black;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+}
