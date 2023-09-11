@@ -30,27 +30,27 @@ import { useRouter } from "next/router";
 
 const LinkItems = [
   { name: "Dashboard", icon: BiBarChartSquare, to: "/" },
-  { name: "User", icon: FaUserAlt, to: "/user" },
-  { name: "Content Creator", icon: AiFillPlayCircle, to: "/contentcreator" },
-  { name: "Category", icon: BiWindow, to: "/category" },
-  { name: "Channels", icon: ImTicket, to: "/channel" },
-  { name: "Videos", icon: AiOutlineDropbox, to: "/video" },
-  { name: "Content Approval", icon: AiFillFile, to: "/contentapproval" },
-  { name: "Coupons", icon: ImTicket, to: "/coupons" },
-  { name: "Packages", icon: AiOutlineDropbox, to: "/packages" },
-  { name: "Content", icon: AiFillFile, to: "/content" },
-  { name: "Reports", icon: FaFileAlt, to: "/subscriptionreport" },
-  { name: "Push Notifications", icon: BsFillBellFill, to: "/notif" },
+  { name: "User Management", icon: FaUserAlt, to: "/User" },
+  { name: "Content Creator Management", icon: AiFillPlayCircle, to: "/ContentCreator" },
+  { name: "Category Management", icon: BiWindow, to: "/Category" },
+  { name: "Channels Management", icon: ImTicket, to: "/Channel" },
+  { name: "Videos Management", icon: AiOutlineDropbox, to: "/Video" },
+  { name: "Content Approval Management", icon: AiFillFile, to: "/ContentApproval" },
+  { name: "Coupons Management", icon: ImTicket, to: "/Coupons" },
+  { name: "Packages Management", icon: AiOutlineDropbox, to: "/Packages" },
+  { name: "Content Management", icon: AiFillFile, to: "/Content" },
+  { name: "Reports", icon: FaFileAlt, to: "/SubscriptionReport" },
+  { name: "Custom Push Notifications", icon: BsFillBellFill, to: "/Notif" },
 ];
 const ReportItems = [
-  { name: "Subscription Payment Report", to: "/subscriptionreport" },
-  { name: "Transaction Report", to: "/transactionreport" },
+  { name: "Subscription Payment Report", to: "/SubscriptionReport" },
+  { name: "Transaction Report", to: "/TransactionReport" },
   {
     name: "Content Creator Account setup Payment Report",
-    to: "/contentcreatorreport",
+    to: "/ContentCreatorReport",
   },
-  { name: "Coupons Redemption Report", to: "/couponsreport" },
-  { name: "Live Video Payments Report", to: "/livereport" },
+  { name: "Coupons Redemption Report", to: "/CouponsReport" },
+  { name: "Live Video Payments Report", to: "/LiveVideoReport" },
 ];
 
 const SidebarContent = ({ onClose, ...rest }) => {
@@ -65,7 +65,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
     <Box
       transition="3s ease"
       borderRight="1px"
-      w={{ base: "full", md: 60 }}
+      w={{ base: "full", md: '20rem' }}
       pos="fixed"
       h="full"
       overflow={"auto"}
@@ -82,11 +82,9 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <Box
           key={link.name}
           onClick={() => handleNavigation(link.to)} // Use router.push to navigate
-          p={4}
-          mx={4}
           to
         >
-          <NavItem p={4} mx={4} to icon={link.icon}>
+          <NavItem px={4} py={2} to icon={link.icon}>
             {link.name}
           </NavItem>
           {/* Check if there are subItems and map them under 'Reports' */}
@@ -125,9 +123,9 @@ const NavItem = ({ icon, children, ...rest }) => {
         borderRadius="lg"
         role="group"
         cursor="pointer"
+        color={'whiteAlpha.700'}
         _hover={{
-          bg: "#55DF01",
-          color: "white",
+          color: "#55DF01",
         }}
         {...rest}
       >
@@ -136,7 +134,7 @@ const NavItem = ({ icon, children, ...rest }) => {
             mr="4"
             fontSize="16"
             _groupHover={{
-              color: "white",
+              color: "#55DF01",
             }}
             as={icon}
           />
@@ -149,12 +147,12 @@ const NavItem = ({ icon, children, ...rest }) => {
 const MobileNav = ({ onOpen, ...rest }) => {
   return (
     <Flex
-      ml={{ base: 0, md: 60 }}
+      ml={{ base: 0, md: '20rem' }}
       px={{ base: 4, md: 4 }}
       height="20"
       alignItems="center"
       borderBottomWidth="1px"
-      justifyContent={{ base: "space-between", md: "flex-end" }}
+      justifyContent={{ base: "space-between", md: "space-between" }}
       {...rest}
     >
       <IconButton
@@ -170,14 +168,20 @@ const MobileNav = ({ onOpen, ...rest }) => {
         alt="Logo"
         display={{ base: "flex", md: "none" }}
       />
-      <HStack spacing={{ base: "0", md: "6" }}>
-        <IconButton
-          size="lg"
-          variant="ghost"
-          aria-label="open menu"
-          icon={<BsFillBellFill />}
-        />
+      <HStack width={'100%'} justifyContent={'space-between'} spacing={{ base: "0", md: "6" }}>
+        <Text>Hi Welcome to administrative panel</Text>
         <Flex alignItems={"center"}>
+          <IconButton
+            size="lg"
+            mr={'2rem'}
+            borderRadius={'0'}
+            borderX={'1px solid white'}
+            variant="ghost"
+            color={'white'}
+            _hover={{ bg: 'white', color: '#232323' }}
+            aria-label="open menu"
+            icon={<BsFillBellFill />}
+          />
           <Menu>
             <MenuButton
               py={2}
@@ -191,17 +195,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
                     "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
                   }
                 />
-                <VStack
-                  display={{ base: "none", md: "flex" }}
-                  alignItems="flex-start"
-                  spacing="1px"
-                  ml="2"
-                >
-                  <Text fontSize="sm">Justina Clark</Text>
-                  <Text fontSize="xs" color="gray.600">
-                    Admin
-                  </Text>
-                </VStack>
+                <Text color={'whiteAlpha.600'}>john87@gmail.com</Text>
                 <Box display={{ base: "none", md: "flex" }}>
                   <FiChevronDown />
                 </Box>

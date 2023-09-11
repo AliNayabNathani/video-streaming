@@ -9,6 +9,7 @@ import {
   TableContainer,
   SimpleGrid,
   GridItem,
+  Heading,
 } from "@chakra-ui/react";
 
 import {
@@ -26,7 +27,7 @@ import { userData, userColumns } from "./UserTableData";
 import { Actions } from "../SmallReusableComponents/Action";
 
 const TableTemplate = ({ data, text, columns, Actions, to, Availability }) => {
-  const num = useRef(0);
+  var num = 0;
   return (
     <TableContainer
       mx={5}
@@ -34,10 +35,8 @@ const TableTemplate = ({ data, text, columns, Actions, to, Availability }) => {
       borderRadius={"10px"}
       borderWidth={"2px"}
       borderColor={"blackAlpha.600"}
-      bg={"#232323"}
-      p={4}
     >
-      <Table>
+      <Table colorScheme="gray">
         {text ? <TableCaption>{text}</TableCaption> : null}
         <Thead bg={"#181818"}>
           <Tr>
@@ -59,7 +58,6 @@ const TableTemplate = ({ data, text, columns, Actions, to, Availability }) => {
                 textAlign={"center"}
                 borderColor={"blackAlpha.600"}
                 borderRight={"1px"}
-                color="white"
               >
                 Actions
               </Th>
@@ -71,15 +69,16 @@ const TableTemplate = ({ data, text, columns, Actions, to, Availability }) => {
             ) : null}
           </Tr>
         </Thead>
+
         <Tbody>
           {data.map((item, index) => {
-            num.current++;
+            num++;
             return (
               <Tr
                 style={
-                  num.current % 2 === 0
-                    ? { background: "#232323" }
-                    : { background: "#323232" }
+                  num.current % 2 === 1
+                    ? { background: "RGBA(0, 0, 0, 0.1)" }
+                    : { background: "white" }
                 }
                 key={index}
               >

@@ -1,6 +1,5 @@
 import { HStack } from "@chakra-ui/react";
 import { TableTemplate } from "../Tables/Table";
-import { Link } from "react-router-dom";
 import { HiOutlineEye } from "react-icons/hi";
 import { ToggleButton } from "../SmallReusableComponents/Action";
 
@@ -71,9 +70,7 @@ const ChannelColumn = ['Channel_ID', 'Channel_Title', 'Creator_Name', 'Created_D
 
 const ChannelActions = ({ to }) => (
     <HStack justifyContent={'space-around'}>
-        <Link to={to}>
-            <HiOutlineEye cursor={'pointer'} size={25} />
-        </Link>
+        <HiOutlineEye cursor={'pointer'} size={25} />
         <ToggleButton cursor={'pointer'} />
     </HStack>
 )

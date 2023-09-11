@@ -23,7 +23,7 @@ function Dashboard() {
     setSelectedValue(e.target.value);
   };
   return (
-    <Box ml={{ base: 0, md: 60 }} p="4">
+    <>
       <HStack justifyContent={"space-between"}>
         <Heading textAlign={"center"} marginBottom={"2rem"}>
           Dashboard
@@ -31,7 +31,7 @@ function Dashboard() {
 
         <Select
           width={"20%"}
-          defaultValue={"Tables"}
+          defaultValue={"Summary Overview"}
           marginBottom={5}
           onChange={handleSelectedValue}
         >
@@ -39,14 +39,18 @@ function Dashboard() {
           <option value="Graph Overview">Graph Overview</option>
         </Select>
       </HStack>
-      {SelectedValue == "Tables" ? <TableSummary /> : <GraphSummary />}
+      {SelectedValue == "Summary Overview" ? (
+        <TableSummary />
+      ) : (
+        <GraphSummary />
+      )}
       <Box marginTop={10}>
         <Charts />
       </Box>
       <Box mt={[8, 4]} alignSelf={"center"}>
         <Dashboard_Tables />
       </Box>
-    </Box>
+    </>
   );
 }
 

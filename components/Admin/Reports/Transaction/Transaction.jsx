@@ -12,15 +12,10 @@ import TransactionTable from './TransactionTable';
 
 export default function Transaction() {
     return (
-        <ChakraProvider theme={theme}>
-            <Box mx={1}>
-                <SidebarWithHeader />
-                <Box ml={{ base: 0, md: 60 }} p={4}>
-                    <HeaderWithButtons heading={'Transaction Report Management'} button1={'Export CSV'} />
-                    <SearchBar />
-                    <TransactionTable />
-                </Box>
-            </Box>
-        </ChakraProvider>
+        <>
+            <HeaderWithButtons heading={'Transaction Report Management'} button1={'Export CSV'} />
+            <SearchBar />
+            <TransactionTable />
+        </>
     );
 }

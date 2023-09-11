@@ -1,6 +1,6 @@
-import { Box, Button, ChakraProvider, Flex, FormLabel, HStack, Input, Select, Stack, VStack, useColorModeValue } from "@chakra-ui/react";
-import SidebarWithHeader from "../Sidebar/sidebartest";
-import { PageHeading } from "../SmallReusableComponents/Heading";
+import { Box, Button, Flex, FormLabel, HStack, Input, Select, VStack } from "@chakra-ui/react";
+import { PageHeading } from "../components/Admin/SmallReusableComponents/Heading";
+
 
 const Window = () => (
     <Box>

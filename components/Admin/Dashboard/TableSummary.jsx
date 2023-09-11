@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 export default function TableSummary() {
   const Revenue_Card = ({ title, total_earnings, weekly_earnings }) => (
-    <Card bg={"#232323"}>
+    <Card bg={"#232323"} color={"white"}>
       <CardBody>
         <Flex direction={"column"} alignItems={"center"}>
           <b>{title} </b>
@@ -23,7 +23,7 @@ export default function TableSummary() {
   );
 
   const Stats_Card = ({ title, total, monthly }) => (
-    <Card bg={"#232323"}>
+    <Card bg={"#232323"} color={"white"}>
       <CardBody>
         <Flex direction={"column"} alignItems={"center"}>
           <b>

@@ -1,21 +1,30 @@
+'use client';
+
 import { Button, HStack, IconButton } from "@chakra-ui/react";
 import { HiOutlineEye } from 'react-icons/hi';
 import { BiEdit } from 'react-icons/bi';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { useState } from "react";
 import { FiToggleLeft, FiToggleRight } from 'react-icons/fi';
+import { useRouter } from "next/router";
 
+const Actions = ({ to }) => {
+    const router = useRouter();
 
-const Actions = ({ to }) => (
-    <HStack align={'center'} justifyContent={'space-between'}>
-        <Link to={to}>
+    const handleNavigation = (to) => {
+        router.push(to);
+        onClose();
+    };
+
+    return (
+        <HStack align={'center'} justifyContent={'space-between'}>
             <HiOutlineEye cursor={'pointer'} size={25} />
-        </Link>
-        <BiEdit cursor={'pointer'} size={25} />
-        <AiOutlineDelete cursor={'pointer'} size={25} />
-        <ToggleButton cursor={'pointer'} />
-    </HStack>
-)
+            <BiEdit cursor={'pointer'} size={25} />
+            <AiOutlineDelete cursor={'pointer'} size={25} />
+            <ToggleButton cursor={'pointer'} />
+        </HStack>
+    );
+}
 
 const ToggleButton = () => {
     const [isOn, setIsOn] = useState(true);
