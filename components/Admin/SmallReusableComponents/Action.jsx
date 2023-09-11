@@ -8,17 +8,18 @@ import { useState } from "react";
 import { FiToggleLeft, FiToggleRight } from 'react-icons/fi';
 import { useRouter } from "next/router";
 
-const Actions = ({ to }) => {
+export const handleNavigation = (to) => {
     const router = useRouter();
+    router.push(to);
+    onClose();
+};
 
-    const handleNavigation = (to) => {
-        router.push(to);
-        onClose();
-    };
+const Actions = ({ to }) => {
+
 
     return (
         <HStack align={'center'} justifyContent={'space-between'}>
-            <HiOutlineEye cursor={'pointer'} size={25} />
+            <HiOutlineEye onClick={handleNavigation(to)} cursor={'pointer'} size={25} />
             <BiEdit cursor={'pointer'} size={25} />
             <AiOutlineDelete cursor={'pointer'} size={25} />
             <ToggleButton cursor={'pointer'} />
@@ -38,6 +39,8 @@ const ToggleButton = () => {
             aria-label={isOn ? 'Turn Off' : 'Turn On'}
             icon={isOn ? <FiToggleRight size={25} /> : <FiToggleLeft size={25} />}
             onClick={handleToggle}
+            bg={'transparent'}
+            _hover={'transparent'}
             color={isOn ? 'green' : 'red'}
             colorScheme="transparent"
         />
