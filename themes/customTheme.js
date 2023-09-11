@@ -46,40 +46,9 @@ const customTheme = extendTheme({
         },
       },
     },
-    Table: {
-      variants: {
-        striped: {
-          Tr: {
-            bg: "#232323",
-          },
-          Th: {
-            bg: "#181818",
-          },
-        },
-      },
-    },
-    Input: {
-      baseStyle: {
-        bg: "#232323", // Background color for the card
-        color: "white", // Text color for the card
-        border: "1px solid #55DF01", // Border for the card
-        borderRadius: "md", // Border radius for the card
-      },
-    },
-    Card: {
-      baseStyle: {
-        bg: "#232323",
-        color: "white",
-      },
-    }
   },
   config: {
     initialColorMode: "dark",
-  },
-  colors: {
-    custom: {
-      500: "#323232",
-    },
   },
 });
 
