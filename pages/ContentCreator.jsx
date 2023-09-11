@@ -1,6 +1,6 @@
-import { HeaderWithButtons } from "../SmallReusableComponents/HeaderWithButtons";
-import { SearchBar } from "../SmallReusableComponents/SearchBar";
-import ContentCreatorTable from "../Tables/ContentCreatorTableData";
+import { HeaderWithButtons } from "../components/Admin/SmallReusableComponents/HeaderWithButtons";
+import { SearchBar } from "../components/Admin/SmallReusableComponents/SearchBar";
+import ContentCreatorTable from "../components/Admin/Tables/ContentCreatorTableData";
 
 export default function ContentCreatorManagement() {
     return (

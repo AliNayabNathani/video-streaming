@@ -1,7 +1,6 @@
-import { Box, Button, ChakraProvider, Flex, FormLabel, HStack, Input, Stack, useColorModeValue } from "@chakra-ui/react";
-import SidebarWithHeader from "../Sidebar/sidebartest";
-import { PageHeading } from "../SmallReusableComponents/Heading";
-import PackageTable from "./PackageTable";
+import { Button, Flex, FormLabel, HStack, Input } from "@chakra-ui/react";
+import { PageHeading } from "../components/Admin/SmallReusableComponents/Heading";
+import PackageTable from "../components/Admin/Packages/PackageTable";
 
 const ColumnSearch = () => (
     <HStack width={'100%'} justifyContent={'flex-end'} >
@@ -10,8 +9,8 @@ const ColumnSearch = () => (
                 Search All Columns
             </FormLabel>
             <Input />
-            <Button ml={3} colorScheme="teal">Apply</Button>
-            <Button ml={3} colorScheme="teal">Clear</Button>
+            <Button ml={3} variant={'outline'}>Apply</Button>
+            <Button ml={3} variant={'solid'}>Clear</Button>
         </Flex>
     </HStack>
 );

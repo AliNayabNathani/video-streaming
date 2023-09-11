@@ -7,13 +7,10 @@ import { HeaderModalButtons } from "../SmallReusableComponents/HeaderModalButton
 
 export default function Category() {
     return (
-        <ChakraProvider theme={theme}>
-            <SidebarWithHeader />
-            <Box ml={{ base: 0, md: 60 }} p={4} >
-                <HeaderModalButtons heading={'Category Management'} button1={'Add Category'} button2={'Add Sub Category'} />
-                <SearchBar />
-                <CategoryTable />
-            </Box>
-        </ChakraProvider>
+        <>
+            <HeaderModalButtons heading={'Category Management'} button1={'Add Category'} button2={'Add Sub Category'} />
+            <SearchBar />
+            <CategoryTable />
+        </>
     );
 }

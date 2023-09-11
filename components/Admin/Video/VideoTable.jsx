@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+
 import { ToggleButton } from "../SmallReusableComponents/Action";
 import { TableTemplate } from "../Tables/Table";
 import { HiOutlineEye } from "react-icons/hi";
@@ -111,9 +111,9 @@ const VideoTableColumns = [
 const VideoActions = ({ to }) => {
     return (
         <HStack justifyContent={'space-around'}>
-            <Link to={to}>
-                <HiOutlineEye cursor={'pointer'} size={25} />
-            </Link>
+
+            <HiOutlineEye cursor={'pointer'} size={25} />
+
             <AiOutlineDelete cursor={'pointer'} size={25} />
             <ToggleButton cursor={'pointer'} />
         </HStack>

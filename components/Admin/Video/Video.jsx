@@ -10,16 +10,10 @@ import videojs from "video.js";
 export default function Video() {
     return (
         <>
-            <ChakraProvider>
-                <Box mx={1}>
-                    <SidebarWithHeader />
-                    <Box ml={{ base: 0, md: 60 }} p={4} >
-                        <PageHeading text={'Video Management'} />
-                        <SearchBar />
-                        <VideoTable />
-                    </Box>
-                </Box>
-            </ChakraProvider>
+            <PageHeading text={'Video Management'} />
+            <SearchBar />
+            <VideoTable />
+
         </>
     );
 }

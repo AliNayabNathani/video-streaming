@@ -11,16 +11,9 @@ export default function Content() {
     const [SelectedButton, SetSelectedButton] = useState();
     return (
         <>
-            <ChakraProvider>
-                <Box mx={1}>
-                    <SidebarWithHeader />
-                    <Box ml={{ base: 0, md: 60 }} p={4} >
-                        <PageHeading text={'Content Management'} />
-                        <ContentBar Text_1={'Terms and Conditions'} Text_2={'Privacy Policy'} Text_3={'About Us'} SetSelectedButton={SetSelectedButton} />
-                        <RichTextEditor />
-                    </Box>
-                </Box>
-            </ChakraProvider>
+            <PageHeading text={'Content Management'} />
+            <ContentBar Text_1={'Terms and Conditions'} Text_2={'Privacy Policy'} Text_3={'About Us'} SetSelectedButton={SetSelectedButton} />
+            <RichTextEditor />
         </>
     );
 }
