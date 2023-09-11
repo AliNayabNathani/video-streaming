@@ -72,7 +72,10 @@ const SidebarContent = ({ onClose, ...rest }) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Image src="/assests/videe0/Logo/videe0 - Logo (160x160).png" />
+        <Image
+          src="/assests/videe0/Logo/videe0 - Logo (160x160).png"
+          alt="Logo"
+        />
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (

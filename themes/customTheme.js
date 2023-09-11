@@ -30,6 +30,13 @@ const customTheme = extendTheme({
             color: "white",
           },
         },
+        solid: {
+          bg: "#55DF01",
+          color: "white",
+          _hover: {
+            bg: "#46b304",
+          },
+        },
       },
     },
     Drawer: {
@@ -38,6 +45,26 @@ const customTheme = extendTheme({
           bg: "black",
         },
       },
+    },
+    Table: {
+      variants: {
+        striped: {
+          Tr: {
+            bg: "#232323",
+          },
+          Th: {
+            bg: "#181818",
+          },
+        },
+      },
+    },
+  },
+  config: {
+    initialColorMode: "dark",
+  },
+  colors: {
+    custom: {
+      500: "#323232",
     },
   },
 });

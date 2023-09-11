@@ -1,7 +1,7 @@
 import { ChakraProvider, CSSReset, extendTheme } from "@chakra-ui/react";
 import { theme as chakraTheme } from "@chakra-ui/react";
-import customTheme from "../themes/customTheme";
-import Layout from "../components/Layout";
+import customTheme from "../themes/customTheme.js";
+import Layout from "../components/Navigation/Layout.js";
 
 const theme = extendTheme({
   ...chakraTheme,
