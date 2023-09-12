@@ -25,10 +25,7 @@ function Dashboard() {
   return (
     <>
       <HStack justifyContent={"space-between"}>
-        <Heading
-          textAlign={"center"}
-          marginBottom={"2rem"}
-        >
+        <Heading textAlign={"center"} marginBottom={"2rem"}>
           Dashboard
         </Heading>
 
@@ -42,7 +39,11 @@ function Dashboard() {
           <option value="Graph Overview">Graph Overview</option>
         </Select>
       </HStack>
-      {SelectedValue == "Summary Overview" ? <TableSummary /> : <GraphSummary />}
+      {SelectedValue == "Summary Overview" ? (
+        <TableSummary />
+      ) : (
+        <GraphSummary />
+      )}
       <Box marginTop={10}>
         <Charts />
       </Box>
