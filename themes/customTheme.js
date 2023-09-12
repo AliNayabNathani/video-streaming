@@ -11,6 +11,20 @@ const customTheme = extendTheme({
     },
   },
   components: {
+    Select: {
+
+      baseStyle: {
+        bg: 'blue.200',
+        option: {
+          _hover: {
+            bg: 'blue.200', // Change this to your desired background color
+          },
+          _selected: {
+            bg: 'blue.400', // Change this to your desired background color when an option is selected
+          },
+        },
+      },
+    },
     Button: {
       baseStyle: {
         fontWeight: "bold",

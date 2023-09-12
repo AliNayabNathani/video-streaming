@@ -62,12 +62,15 @@ export default function ChannelDetails() {
                     <SimpleGrid columns={{ base: '1', md: '2', lg: '3' }}>
                         <GridItem colSpan={1}>
                             <VideoPlayer />
+                            <Text>Show 1</Text>
                         </GridItem>
                         <GridItem colSpan={1}>
                             <VideoPlayer />
+                            <Text>Show 2</Text>
                         </GridItem>
                         <GridItem colSpan={1}>
                             <VideoPlayer />
+                            <Text>Show 3</Text>
                         </GridItem>
                     </SimpleGrid>
                 </Box>
