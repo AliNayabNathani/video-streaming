@@ -1,41 +1,52 @@
-import React, { useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // Import the Quill stylesheet
+import React, { useEffect, useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "./TextEditor.css";
 
-function RichTextEditor() {
-    const [editorHtml, setEditorHtml] = useState('');
+function RichTextEditor({ dummyText }) {
+  const [editorHtml, setEditorHtml] = useState("");
 
-    const modules = {
-        toolbar: [
-            [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            [{ 'align': [] }],
-            ['link', 'image'],
-            ['clean']
-        ],
-    };
+  const modules = {
+    toolbar: [
+      [{ header: "1" }, { header: "2" }, { font: [] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ align: [] }],
+      ["link", "image"],
+      ["clean"],
+    ],
+  };
 
-    const formats = [
-        'header', 'font',
-        'bold', 'italic', 'underline', 'strike', 'blockquote',
-        'list', 'bullet',
-        'align',
-        'link', 'image',
-    ];
+  const formats = [
+    "header",
+    "font",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "align",
+    "link",
+    "image",
+  ];
 
-    return (
-        <div style={{ marginTop: '5rem' }}>
-            <ReactQuill
-                theme="snow"
-                value={editorHtml}
-                onChange={setEditorHtml}
-                modules={modules}
-                formats={formats}
-                placeholder="Write something..."
-            />
-        </div>
-    );
+  useEffect(() => {
+    setEditorHtml(dummyText);
+  }, [dummyText]);
+
+  return (
+    <div style={{ marginTop: "5rem" }}>
+      <ReactQuill
+        value={editorHtml}
+        onChange={setEditorHtml}
+        modules={modules}
+        formats={formats}
+        placeholder="Write something..."
+      />
+    </div>
+  );
 }
 
 export default RichTextEditor;

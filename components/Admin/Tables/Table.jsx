@@ -28,11 +28,7 @@ import { userData, userColumns } from "./UserTableData";
 import { Actions } from "../SmallReusableComponents/Action";
 import ReactPaginate from "react-paginate";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-<<<<<<< HEAD
 import "./Table.css";
-=======
-import './Table.css'
->>>>>>> da3f9c4535588c325a506802670c89f1e5aa7ed7
 
 const TableTemplate = ({
   data,
