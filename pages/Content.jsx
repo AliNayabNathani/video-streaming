@@ -4,7 +4,7 @@ import { ContentBar } from "../components/Admin/SmallReusableComponents/ContentB
 import { PageHeading } from "../components/Admin/SmallReusableComponents/Heading";
 
 export default function Content() {
-  const [SelectedButton, SetSelectedButton] = useState();
+  const [SelectedButton, SetSelectedButton] = useState("Terms and Conditions");
 
   const [dummyText, setDummyText] = useState("");
 
@@ -16,7 +16,7 @@ export default function Content() {
   };
 
   useEffect(() => {
-    console.log("Select Button ", SelectedButton);
+    // console.log("Select Button ", SelectedButton);
     setDummyText(dummyTextMap[SelectedButton] || "");
   }, [SelectedButton]);
 

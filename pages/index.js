@@ -10,6 +10,7 @@ import {
   Center,
   Select,
   HStack,
+  Stack,
 } from "@chakra-ui/react";
 import TableSummary from "../components/Admin/Dashboard/TableSummary";
 import GraphSummary from "../components/Admin/Dashboard/GraphSummary";
@@ -24,21 +25,26 @@ function Dashboard() {
   };
   return (
     <>
-      <HStack justifyContent={"space-between"}>
+      <Stack
+        justifyContent={"space-between"}
+        direction={["column", "row"]}
+        alignItems={"center"}
+      >
         <Heading textAlign={"center"} marginBottom={"2rem"}>
           Dashboard
         </Heading>
 
         <Select
-          width={"20%"}
+          width={["70%", "20%"]}
           defaultValue={"Summary Overview"}
-          marginBottom={5}
+          marginBottom={4}
           onChange={handleSelectedValue}
+          focusBorderColor="#323232"
         >
           <option value="Summary Overview">Summary Overview</option>
           <option value="Graph Overview">Graph Overview</option>
         </Select>
-      </HStack>
+      </Stack>
       {SelectedValue == "Summary Overview" ? (
         <TableSummary />
       ) : (

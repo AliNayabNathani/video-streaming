@@ -153,7 +153,6 @@ const TableTemplate = ({
       </TableContainer>
       {itemsPerPage >= 10 ? (
         <>
-          {" "}
           <ReactPaginate
             previousLabel={
               currentPage === 0 ? (

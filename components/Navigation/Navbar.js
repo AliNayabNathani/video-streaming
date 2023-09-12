@@ -27,15 +27,24 @@ import { BsFillBellFill } from "react-icons/bs";
 import { FiMenu, FiChevronDown } from "react-icons/fi";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import "./Navbar.css";
 
 const LinkItems = [
   { name: "Dashboard", icon: BiBarChartSquare, to: "/" },
   { name: "User Management", icon: FaUserAlt, to: "/User" },
-  { name: "Content Creator Management", icon: AiFillPlayCircle, to: "/ContentCreator" },
+  {
+    name: "Content Creator Management",
+    icon: AiFillPlayCircle,
+    to: "/ContentCreator",
+  },
   { name: "Category Management", icon: BiWindow, to: "/Category" },
   { name: "Channels Management", icon: ImTicket, to: "/Channel" },
   { name: "Videos Management", icon: AiOutlineDropbox, to: "/Video" },
-  { name: "Content Approval Management", icon: AiFillFile, to: "/ContentApproval" },
+  {
+    name: "Content Approval Management",
+    icon: AiFillFile,
+    to: "/ContentApproval",
+  },
   { name: "Coupons Management", icon: ImTicket, to: "/Coupons" },
   { name: "Packages Management", icon: AiOutlineDropbox, to: "/Packages" },
   { name: "Content Management", icon: AiFillFile, to: "/Content" },
@@ -64,16 +73,18 @@ const SidebarContent = ({ onClose, ...rest }) => {
     <Box
       transition="3s ease"
       borderRight="1px"
-      w={{ base: "full", md: '20rem' }}
+      w={{ base: "full", md: "20rem" }}
       pos="fixed"
       h="full"
       overflow={"auto"}
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+      <Flex h="20" align={"center"} mx={4} justifyContent={"left"}>
         <Image
-          src="/assests/videe0/Logo/videe0 - Logo (160x160).png"
+          src="/assests/videe0/Logo/Black _ White/sideBarLogo.png"
           alt="Logo"
+          w={"180px"}
+          h={"50px"}
         />
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -122,7 +133,7 @@ const NavItem = ({ icon, children, ...rest }) => {
         borderRadius="lg"
         role="group"
         cursor="pointer"
-        color={'whiteAlpha.700'}
+        color={"whiteAlpha.700"}
         _hover={{
           color: "#55DF01",
         }}
@@ -143,10 +154,18 @@ const NavItem = ({ icon, children, ...rest }) => {
     </Box>
   );
 };
+
 const MobileNav = ({ onOpen, ...rest }) => {
+  const dummyUser = {
+    name: "Ali Nayab",
+    email: "nayab@example.com",
+    avatar:
+      "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9",
+  };
+
   return (
     <Flex
-      ml={{ base: 0, md: '20rem' }}
+      ml={{ base: 0, md: "20rem" }}
       px={{ base: 4, md: 4 }}
       height="20"
       alignItems="center"
@@ -163,56 +182,63 @@ const MobileNav = ({ onOpen, ...rest }) => {
       />
 
       <Image
-        src="/assests/videe0/Logo/videe0 - Logo (110x110).png"
+        src="/assests/videe0/Logo/Black _ White/sideBarLogo.png"
         alt="Logo"
+        w={"110px"}
+        h={"30px"}
         display={{ base: "flex", md: "none" }}
       />
-      <HStack width={'100%'} justifyContent={'space-between'} spacing={{ base: "0", md: "6" }}>
-        <Text>Hi Welcome to administrative panel</Text>
-        <Flex alignItems={"center"}>
-          <IconButton
-            size="lg"
-            mr={'2rem'}
-            borderRadius={'0'}
-            borderX={'1px solid white'}
-            variant="ghost"
-            color={'white'}
-            _hover={{ bg: 'white', color: '#232323' }}
-            aria-label="open menu"
-            icon={<BsFillBellFill />}
-          />
-          <Menu>
-            <MenuButton
-              py={2}
-              transition="all 0.3s"
-              _focus={{ boxShadow: "none" }}
-            >
-              <HStack>
-                <Avatar
-                  size={"sm"}
-                  src={
-                    "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                  }
-                />
-                <Text color={'whiteAlpha.600'}>john87@gmail.com</Text>
-                <Box display={{ base: "none", md: "flex" }}>
-                  <FiChevronDown />
-                </Box>
-              </HStack>
-            </MenuButton>
-            <MenuList>
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
-              <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
-            </MenuList>
-          </Menu>
-        </Flex>
-      </HStack>
+      {/* <HStack
+        width={"100%"}
+        justifyContent={"space-between"}
+        spacing={{ base: "0", md: "6" }}
+      > */}
+      <Text className="hide-on-small">
+        Hi {dummyUser.name}!! Welcome to administrative panel
+      </Text>
+
+      <Flex>
+        <IconButton
+          size="lg"
+          mr={"2rem"}
+          borderRadius={"0"}
+          borderX={"1px solid white"}
+          variant="ghost"
+          color={"white"}
+          _hover={{ bg: "white", color: "#232323" }}
+          aria-label="open menu"
+          icon={<BsFillBellFill />}
+        />
+        <Menu>
+          <MenuButton
+            py={2}
+            transition="all 0.3s"
+            _focus={{ boxShadow: "none" }}
+          >
+            <HStack align={"flex-end"} alignItems={"center"}>
+              <Avatar size={"sm"} src={dummyUser.avatar} />
+              <Text className="hide-on-small" alignSelf={"center"}>
+                {dummyUser.email}
+              </Text>
+              <Box display={{ base: "none", md: "flex" }}>
+                <FiChevronDown />
+              </Box>
+            </HStack>
+          </MenuButton>
+          <MenuList bg={"black"}>
+            <MenuItem bg={"black"}>Profile</MenuItem>
+            <MenuItem bg={"black"}>Settings</MenuItem>
+            <MenuItem bg={"black"}>Billing</MenuItem>
+            <MenuDivider />
+            <MenuItem bg={"black"}>Sign out</MenuItem>
+          </MenuList>
+        </Menu>
+      </Flex>
+      {/* </HStack> */}
     </Flex>
   );
 };
+
 const SidebarWithHeader = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (

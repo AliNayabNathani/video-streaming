@@ -8,7 +8,7 @@ const ContentBar = ({
   SelectedButton,
 }) => {
   return (
-    <Flex justifyContent="flex-start">
+    <Flex justifyContent="flex-start" direction={["column", "row"]}>
       <Flex>
         {Text_1 && (
           <Box
