@@ -4,6 +4,7 @@ import { TableTemplate } from "../Tables/Table";
 import { HiOutlineEye } from "react-icons/hi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { HStack } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 const VideoTableData = [
     {
         Video_ID: '1230',
@@ -109,11 +110,15 @@ const VideoTableColumns = [
 ];
 
 const VideoActions = ({ to }) => {
+
+    const router = useRouter();
+    const handleNavigation = (to) => {
+        router.push(to);
+    };
+
     return (
         <HStack justifyContent={'space-around'}>
-
-            <HiOutlineEye cursor={'pointer'} size={25} />
-
+            <HiOutlineEye onClick={() => handleNavigation(to)} cursor={'pointer'} size={25} />
             <AiOutlineDelete cursor={'pointer'} size={25} />
             <ToggleButton cursor={'pointer'} />
         </HStack>
@@ -122,6 +127,6 @@ const VideoActions = ({ to }) => {
 
 export default function VideoTable() {
     return (
-        <TableTemplate data={VideoTableData} columns={VideoTableColumns} Actions={VideoActions} to="/video/details" />
+        <TableTemplate data={VideoTableData} columns={VideoTableColumns} Actions={VideoActions} to="/VideoDetails" />
     )
 }

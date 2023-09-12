@@ -65,17 +65,10 @@ const VideoInfo = () => {
 export default function VideoDetails() {
     return (
         <>
-            <ChakraProvider>
-                <Box mx={1}>
-                    <SidebarWithHeader />
-                    <Box ml={{ base: 0, md: 60 }} p={4} >
-                        <PageHeading text={'Video Management'} />
-                        <Box border={'2px'} borderColor={'blackAlpha.600'}>
-                            <VideoInfo />
-                        </Box>
-                    </Box>
-                </Box>
-            </ChakraProvider>
+            <PageHeading text={'Video Management'} />
+            <Box border={'2px'} borderColor={'blackAlpha.600'}>
+                <VideoInfo />
+            </Box>
         </>
     );
 }

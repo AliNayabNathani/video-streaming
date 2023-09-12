@@ -27,6 +27,7 @@ import { BsFillBellFill } from "react-icons/bs";
 import { FiMenu, FiChevronDown } from "react-icons/fi";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Nav from "./TestNav";
 
 const LinkItems = [
   { name: "Dashboard", icon: BiBarChartSquare, to: "/" },
@@ -213,6 +214,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
     </Flex>
   );
 };
+
 const SidebarWithHeader = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (

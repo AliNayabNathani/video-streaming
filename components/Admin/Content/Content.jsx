@@ -13,6 +13,7 @@ export default function Content() {
         <>
             <PageHeading text={'Content Management'} />
             <ContentBar Text_1={'Terms and Conditions'} Text_2={'Privacy Policy'} Text_3={'About Us'} SetSelectedButton={SetSelectedButton} />
+
             <RichTextEditor />
         </>
     );

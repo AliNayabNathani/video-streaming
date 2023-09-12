@@ -8,7 +8,6 @@ export default function Video() {
             <PageHeading text={'Video Management'} />
             <SearchBar />
             <VideoTable />
-
         </>
     );
 }
