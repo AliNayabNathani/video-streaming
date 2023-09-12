@@ -7,8 +7,12 @@
   padding: 2;
   color: white;
 }
+<<<<<<< HEAD
 
 .pagination li {
+=======
+​ .pagination li {
+>>>>>>> da3f9c4535588c325a506802670c89f1e5aa7ed7
   margin: 0 5px;
   font-size: 18px;
   cursor: pointer;
@@ -17,8 +21,12 @@
   /* padding: 0.7rem 1.3rem 0.7rem 1.3rem; */
   margin-top: 1rem;
 }
+<<<<<<< HEAD
 
 .pagination .active {
+=======
+​ .pagination .active {
+>>>>>>> da3f9c4535588c325a506802670c89f1e5aa7ed7
   font-weight: bold;
   color: white;
   background-color: #232323;
