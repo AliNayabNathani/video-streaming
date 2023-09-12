@@ -57,8 +57,8 @@ const TableTemplate = ({ data, text, columns, Actions, to, Availability }) => {
             {Actions ? (
               <Th
                 textAlign={"center"}
-                borderColor={"blackAlpha.600"}
                 borderRight={"1px"}
+                borderColor={"blackAlpha.600"}
                 color="white"
               >
                 Actions
@@ -72,7 +72,6 @@ const TableTemplate = ({ data, text, columns, Actions, to, Availability }) => {
           </Tr>
         </Thead>
 
-
         <Tbody>
           {data.map((item, index) => {
             num++;
@@ -85,7 +84,7 @@ const TableTemplate = ({ data, text, columns, Actions, to, Availability }) => {
                 }
                 key={index}
               >
-                {columns.map((column) => {
+                {columns.map((column, columnIndex) => {
                   return (
                     <Td
                       textAlign={"center"}
@@ -101,9 +100,9 @@ const TableTemplate = ({ data, text, columns, Actions, to, Availability }) => {
                 {Actions ? (
                   <Td
                     textAlign={"center"}
+                    borderRight={"1px"}
                     borderColor={"blackAlpha.600"}
                     borderBottom={0}
-                    borderRight={"1px"}
                   >
                     {" "}
                     <Actions to={to} />{" "}
@@ -125,6 +124,7 @@ const TableTemplate = ({ data, text, columns, Actions, to, Availability }) => {
         </Tbody>
       </Table>
     </TableContainer>
+
   );
 };
 
@@ -170,7 +170,7 @@ const User_Tables = () => {
     <TableTemplate
       data={userData}
       columns={userColumns}
-      to={"/user/details"}
+      to={"/UserDetails"}
       Actions={Actions}
     />
   );

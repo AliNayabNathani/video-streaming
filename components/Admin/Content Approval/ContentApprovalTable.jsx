@@ -89,28 +89,28 @@ const ContentApprovalTableColumns = [
 
 const ContentAprrovalModal = () => (
     <>
-        <Box border={'2px solid black'} p={5}>
-            <HStack justifyContent={'space-around'} marginBottom={'1rem'}>
+        <Box p={5}>
+            <HStack borderY={'1px solid RGBA(255, 255, 255, 0.16)'} p={'0.5rem'} justifyContent={'space-around'} marginBottom={'1rem'}>
                 <Text fontWeight={'bold'}>Video Title: </Text>
                 <Text>{ContentApprovalTableData[0].Video_Title}</Text>
             </HStack>
-            <HStack justifyContent={'space-around'} marginBottom={'1rem'}>
+            <HStack borderY={'1px solid RGBA(255, 255, 255, 0.16)'} p={'0.5rem'} bg={'whiteAlpha.300'} justifyContent={'space-around'} marginBottom={'1rem'}>
                 <Text fontWeight={'bold'}>Uploaded Date: </Text>
                 <Text>{ContentApprovalTableData[0].Uploaded_Date}</Text>
             </HStack>
-            <HStack justifyContent={'space-around'} marginBottom={'1rem'}>
+            <HStack borderY={'1px solid RGBA(255, 255, 255, 0.16)'} p={'0.5rem'} justifyContent={'space-around'} marginBottom={'1rem'}>
                 <Text fontWeight={'bold'}>Creator Name: </Text>
                 <Text>{ContentApprovalTableData[0].Creator_Name}</Text>
             </HStack>
-            <HStack justifyContent={'space-around'} marginBottom={'1rem'}>
+            <HStack borderY={'1px solid RGBA(255, 255, 255, 0.16)'} p={'0.5rem'} bg={'whiteAlpha.300'} justifyContent={'space-around'} marginBottom={'1rem'}>
                 <Text fontWeight={'bold'}>Rented Amount: </Text>
                 <Text>{ContentApprovalTableData[0].Rented_Amount}</Text>
             </HStack>
-            <HStack justifyContent={'space-around'} marginBottom={'1rem'}>
+            <HStack borderY={'1px solid RGBA(255, 255, 255, 0.16)'} p={'0.5rem'} justifyContent={'space-around'} marginBottom={'1rem'}>
                 <Text fontWeight={'bold'}>Purchasing Amount: </Text>
                 <Text textAlign={'start'}>{ContentApprovalTableData[0].Purchasing_Amount}</Text>
             </HStack>
-            <HStack justifyContent={'space-around'} marginBottom={'1rem'}>
+            <HStack p={'0.5rem'} justifyContent={'space-around'} marginBottom={'1rem'}>
                 <ContentApprovalButtons />
             </HStack>
         </Box>
@@ -133,7 +133,7 @@ const ContentApprovalActions = ({ to }) => {
                 <HiOutlineEye onClick={() => handleButtonClick('Content Approval')} cursor={'pointer'} size={25} />
                 <ContentApprovalButtons />
             </HStack>
-            <AddModal CustomModal={ContentAprrovalModal} isOpen={isOpen} onClose={onClose} selectedButton={SelectedButton} />
+            <AddModal heading={'Content Approval Management'} CustomModal={ContentAprrovalModal} isOpen={isOpen} onClose={onClose} selectedButton={SelectedButton} />
         </>
     );
 }

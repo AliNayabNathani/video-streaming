@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, HStack, IconButton } from "@chakra-ui/react";
+import { Box, Button, HStack, IconButton } from "@chakra-ui/react";
 import { HiOutlineEye } from 'react-icons/hi';
 import { BiEdit } from 'react-icons/bi';
 import { AiOutlineDelete } from 'react-icons/ai';
@@ -8,18 +8,17 @@ import { useState } from "react";
 import { FiToggleLeft, FiToggleRight } from 'react-icons/fi';
 import { useRouter } from "next/router";
 
-export const handleNavigation = (to) => {
-    const router = useRouter();
+const handleNavigation = (to, router) => {
     router.push(to);
-    onClose();
 };
 
 const Actions = ({ to }) => {
-
-
+    const router = useRouter();
     return (
         <HStack align={'center'} justifyContent={'space-between'}>
-            <HiOutlineEye onClick={handleNavigation(to)} cursor={'pointer'} size={25} />
+            <Box onClick={() => handleNavigation(to, router)}>
+                <HiOutlineEye cursor={'pointer'} size={25} />
+            </Box>
             <BiEdit cursor={'pointer'} size={25} />
             <AiOutlineDelete cursor={'pointer'} size={25} />
             <ToggleButton cursor={'pointer'} />

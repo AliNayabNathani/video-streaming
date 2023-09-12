@@ -1,7 +1,6 @@
-import { Box, ChakraProvider, Divider, theme, useColorModeValue } from "@chakra-ui/react";
-import { Details } from "../SmallReusableComponents/Details";
-import SidebarWithHeader from "../Sidebar/sidebartest";
-import ContentCreatorVideoList from "./ContentCreatorVideoList";
+import { Divider } from "@chakra-ui/react";
+import { Details } from "../components/Admin/SmallReusableComponents/Details";
+import ContentCreatorVideoList from "../components/Admin/Content Creator/ContentCreatorVideoList";
 
 const ContentCreatorDetailData = [
     {

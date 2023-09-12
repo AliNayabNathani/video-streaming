@@ -4,6 +4,7 @@ const PageHeading = ({ text }) => (
     <Heading
         align="start"
         size={{ base: 'md', md: 'lg' }}
+        my={'2rem'}
     >
         {text}
     </Heading>
@@ -15,7 +16,6 @@ const NormalHeading = ({ text }) => (
         direction='row'
         align='start'
         size={'md'}
-        color={'teal.500'}
     >
         {text}
     </Heading>

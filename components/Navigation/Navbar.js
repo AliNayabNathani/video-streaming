@@ -58,7 +58,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
   const handleNavigation = (to) => {
     router.push(to);
-    onClose();
   };
 
   return (

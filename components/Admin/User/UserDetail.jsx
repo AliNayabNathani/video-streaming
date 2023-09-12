@@ -9,8 +9,8 @@ const UserDetailData = [
   {
     UserID: '0013',
     Email: 'abc@xyz.com',
-    TotalAmountSpent: '$30',
-    NumberOfVideosRented: '03',
+    Total_Amount_Spent: '$30',
+    Number_Of_Videos_Rented: '03',
     SubscriptionStatus: 'Subscribed',
     Name: 'John',
     MobileNumber: '865389859',
@@ -25,8 +25,8 @@ const UserDetailData = [
 
 const UserDetailsColumn = ['UserID',
   'Email',
-  'TotalAmountSpent',
-  'NumberOfVideosRented',
+  'Total_Amount_Spent',
+  'Number_Of_Videos_Rented',
   'SubscriptionStatus',
   'Name',
   'MobileNumber',
@@ -40,15 +40,10 @@ const UserDetailsColumn = ['UserID',
 
 export default function UserDetail() {
   return (
-    <ChakraProvider theme={theme}>
-      <Box mx={1}>
-        <SidebarWithHeader />
-        <Box ml={{ base: 0, md: 60 }} p={4}>
-          <Details PageName={'User'} DetailsData={UserDetailData} DetailsColumn={UserDetailsColumn} />
-          <Invoice />
-          <VideoList />
-        </Box>
-      </Box>
-    </ChakraProvider>
+    <>
+      <Details PageName={'User'} DetailsData={UserDetailData} DetailsColumn={UserDetailsColumn} />
+      <Invoice />
+      <VideoList />
+    </>
   );
 }
