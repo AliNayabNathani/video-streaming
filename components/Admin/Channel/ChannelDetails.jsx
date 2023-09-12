@@ -70,7 +70,6 @@ export default function ChannelDetails() {
                             <VideoPlayer />
                         </GridItem>
                     </SimpleGrid>
-
                 </Box>
             </Box>
         </ChakraProvider>

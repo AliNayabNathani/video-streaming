@@ -18,8 +18,8 @@ const HeaderModalButtons = ({ heading, button1, button2 }) => {
         <HStack justifyContent="space-between">
             <PageHeading text={heading} />
             <Stack direction={{ base: 'column', md: 'row' }}>
-                {button1 ? <Button onClick={() => handleButtonClick(button1)} size={{ base: 'sm', md: 'md' }} colorScheme="teal">{button1}</Button> : null}
-                {button2 ? <Button onClick={() => handleButtonClick(button2)} size={{ base: 'sm', md: 'md' }} colorScheme="teal">{button2}</Button> : null}
+                {button1 ? <Button onClick={() => handleButtonClick(button1)} size={{ base: 'sm', md: 'md' }} variant={'outline'}>{button1}</Button> : null}
+                {button2 ? <Button _hover={{ bg: 'black', color: '#55DF01' }} border='1px solid #55DF01' onClick={() => handleButtonClick(button2)} size={{ base: 'sm', md: 'md' }} variant={'solid'}>{button2}</Button> : null}
             </Stack>
             {/* Pass selectedButton to the AddModal */}
             <AddModal isOpen={isOpen} onClose={onClose} selectedButton={selectedButton} />

@@ -95,6 +95,6 @@ const ContentCreatorColumn = [
 
 export default function ContentCreatorTable() {
     return (
-        <TableTemplate data={ContentCreatorData} columns={ContentCreatorColumn} Actions={Actions} to="/contentcreator/details" />
+        <TableTemplate data={ContentCreatorData} columns={ContentCreatorColumn} Actions={Actions} to="/ContentCreatorDetails" />
     );
 }

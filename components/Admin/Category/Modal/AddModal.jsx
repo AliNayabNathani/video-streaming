@@ -7,8 +7,6 @@ import {
     ModalBody,
     ModalCloseButton,
     Button,
-    Lorem,
-    useDisclosure,
     VStack,
     FormLabel,
     Input,
@@ -23,7 +21,7 @@ const AddCategoryModal = () => (
         <Input />
         <FormLabel>Description</FormLabel>
         <Input />
-        <Button colorScheme="teal">Submit</Button>
+        <Button>Submit</Button>
     </VStack>
 )
 
@@ -59,13 +57,13 @@ const AddCoupons = () => (
     </VStack>
 );
 
-const AddModal = ({ isOpen, onClose, selectedButton, CustomModal }) => {
+const AddModal = ({ heading, isOpen, onClose, selectedButton, CustomModal }) => {
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader></ModalHeader>
+                <ModalContent color={'white'} bg={'#232323'}>
+                    <ModalHeader textAlign={'center'}>{heading}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         {selectedButton == 'Add Category' ?
