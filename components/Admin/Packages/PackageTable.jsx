@@ -2,6 +2,7 @@ import { HStack } from "@chakra-ui/react";
 import { TableTemplate } from "../Tables/Table";
 import { ToggleButton } from "../SmallReusableComponents/Action";
 import { BiEdit } from 'react-icons/bi';
+import { useSearchContext } from "../Context api/Context";
 
 const PackageTableData = [
     {
@@ -51,7 +52,19 @@ const PackageActions = () => (
 );
 
 export default function PackageTable() {
+    const { searchQuery, isFilter } = useSearchContext();
+    const filterData = () => {
+        if (searchQuery) {
+            return PackageTableData.filter((data) =>
+                data.Package_Name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                data.Price.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }
+        return PackageTableData;
+    };
     return (
-        <TableTemplate data={PackageTableData} columns={PackageTableColumn} Actions={PackageActions} />
+        <TableTemplate
+            data={searchQuery?.length > 0 && isFilter ? filterData() : PackageTableData}
+            columns={PackageTableColumn} Actions={PackageActions} />
     );
 }

@@ -20,19 +20,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Style.css";
 import { AiOutlineCalendar, AiOutlineSearch } from "react-icons/ai";
-
+import { useSearchContext } from "../Context api/Context";
 const SearchBar = () => {
   const [startDate, setStartDate] = useState(new Date());
-  const [searchText, setSearchText] = useState("");
-
-  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
-    <button style={{ border: "1px solid teal" }} onClick={onClick} ref={ref}>
-      {value}
-    </button>
-  ));
+  const { searchQuery, updateSearchQuery, updateFilter } = useSearchContext();
 
   const handleClear = () => {
-    setSearchText("");
+    // setStartDate(new Date());
+    updateSearchQuery("");
   };
 
   return (
@@ -47,6 +42,7 @@ const SearchBar = () => {
             <Text>Sort by</Text>
             <box className="custom-datepicker">
               <DatePicker
+                className="datepicker"
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
               />
@@ -57,6 +53,7 @@ const SearchBar = () => {
             <Text>To</Text>
             <box className="custom-datepicker">
               <DatePicker
+                className="datepicker"
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
               />
@@ -68,17 +65,20 @@ const SearchBar = () => {
           <InputGroup width={["100%", "60%"]}>
             <Input
               placeholder="Search All Columns"
-              bg={"#3b3b3b"}
+              bg={"#3B3B3B"}
               focusBorderColor="#323232"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
+              value={searchQuery}
+              onChange={(e) => updateSearchQuery(e.target.value)}
             />
             <InputRightElement pointerEvents="none">
               <Icon as={AiOutlineSearch} color="gray.400" />
             </InputRightElement>
           </InputGroup>
-
-          <Button variant={"outline"} size={{ base: "sm", md: "md" }}>
+          <Button
+            variant={"outline"}
+            size={{ base: "sm", md: "md" }}
+            onClick={() => updateFilter()}
+          >
             Apply
           </Button>
           <Button
@@ -96,13 +96,7 @@ const SearchBar = () => {
         alignItems={"center"}
       >
         <Text textAlign={["center", "left"]}>Show enteries</Text>
-        <Select
-          defaultValue={"10"}
-          bg={"#3b3b3b"}
-          w={"30%"}
-          focusBorderColor="#232323"
-          borderColor={"#232323"}
-        >
+        <Select defaultValue={"10"} bg={"#3B3B3B"} w={"30%"}>
           <option value="10">10</option>
           <option value="25">25</option>
           <option value="50">50</option>
@@ -112,5 +106,4 @@ const SearchBar = () => {
     </>
   );
 };
-
 export { SearchBar };

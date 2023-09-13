@@ -1,3 +1,4 @@
+import { useSearchContext } from "../../Context api/Context";
 import { TableTemplate } from "../../Tables/Table";
 
 const TransactionTableData = [
@@ -59,7 +60,20 @@ const TransactionTableColumns = [
 ];
 
 export default function TransactionTable() {
+    const { searchQuery, isFilter } = useSearchContext();
+    const filterData = () => {
+        if (searchQuery) {
+            return TransactionTableData.filter((data) =>
+                data.Transaction_ID.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                data.Content_Creator.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                data.Video_Name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }
+        return TransactionTableData;
+    };
     return (
-        <TableTemplate data={TransactionTableData} columns={TransactionTableColumns} />
+        <TableTemplate
+            data={searchQuery?.length > 0 && isFilter ? filterData() : TransactionTableData}
+            columns={TransactionTableColumns} />
     );
 }

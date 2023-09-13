@@ -5,6 +5,7 @@ import { HiOutlineEye } from "react-icons/hi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { HStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useSearchContext } from "../Context api/Context";
 const VideoTableData = [
     {
         Video_ID: '1230',
@@ -126,7 +127,22 @@ const VideoActions = ({ to }) => {
 }
 
 export default function VideoTable() {
+    const { searchQuery, isFilter } = useSearchContext();
+
+    const filterData = () => {
+        if (searchQuery) {
+            return VideoTableData.filter((data) =>
+                data.Video_ID.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                data.Video_Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                data.Creator_Name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }
+        return VideoTableData;
+    };
     return (
-        <TableTemplate data={VideoTableData} columns={VideoTableColumns} Actions={VideoActions} to="/VideoDetails" />
+        <TableTemplate
+            data={searchQuery?.length > 1 && isFilter ? filterData() : VideoTableData}
+            columns={VideoTableColumns}
+            Actions={VideoActions} to="/VideoDetails" />
     )
 }

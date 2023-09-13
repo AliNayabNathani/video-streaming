@@ -6,5 +6,7 @@
   background-color: #3b3b3b;
 }
 
-.custom-datepicker::before {
+.datepicker {
+  outline: none;
+  background-color: #3b3b3b;
 }

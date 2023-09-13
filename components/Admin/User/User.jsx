@@ -13,4 +13,5 @@ export default function UserManagement() {
             <User_Tables />
         </>
     );
+
 }

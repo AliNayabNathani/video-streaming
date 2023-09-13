@@ -1,6 +1,7 @@
 import { HStack } from "@chakra-ui/react";
 import { TableTemplate } from "../../Tables/Table";
 import { FiDownload } from "react-icons/fi";
+import { useSearchContext } from "../../Context api/Context";
 
 const SubscriptionTableData = [
     {
@@ -55,7 +56,19 @@ const SubsAction = () => (
 )
 
 export default function SubscriptionTable() {
+    const { searchQuery, isFilter } = useSearchContext();
+    const filterData = () => {
+        if (searchQuery) {
+            return SubscriptionTableData.filter((data) =>
+                data.Viewer_Name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                data.Plan_Name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }
+        return SubscriptionTableData;
+    };
     return (
-        <TableTemplate data={SubscriptionTableData} columns={SubscriptionTableColumns} Actions={SubsAction} />
+        <TableTemplate
+            data={searchQuery?.length > 0 && isFilter ? filterData() : SubscriptionTableData}
+            columns={SubscriptionTableColumns} Actions={SubsAction} />
     );
 }

@@ -2,6 +2,7 @@ import { HStack } from "@chakra-ui/react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
 import { TableTemplate } from "../Tables/Table";
+import { useSearchContext } from "../Context api/Context";
 
 const CategoryData = [
     {
@@ -71,8 +72,22 @@ const CategoryActions = () => (
 );
 
 export default function CategoryTable() {
+    const { searchQuery, isFilter } = useSearchContext();
+
+    const filterData = () => {
+        if (searchQuery) {
+            return CategoryData.filter((data) =>
+                data.Category_Name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                data.Sub_Category.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }
+        return CategoryData;
+    };
     return (
-        <TableTemplate data={CategoryData} columns={CategoryColumns} Actions={CategoryActions} />
+        <TableTemplate
+            data={searchQuery?.length > 0 && isFilter ? filterData() : CategoryData}
+            columns={CategoryColumns}
+            Actions={CategoryActions} />
     );
 }
 

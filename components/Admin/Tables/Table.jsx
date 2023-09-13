@@ -24,11 +24,11 @@ import {
   viewerData,
 } from "./DashboardTableData";
 import { useRef, useState } from "react";
-import { userData, userColumns } from "./UserTableData";
 import { Actions } from "../SmallReusableComponents/Action";
 import ReactPaginate from "react-paginate";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import "./Table.css";
+import { useSearchContext } from "../Context api/Context";
 
 const TableTemplate = ({
   data,
@@ -45,9 +45,12 @@ const TableTemplate = ({
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const slicedData = data.slice(startIndex, endIndex);
+  const { searchQuery } = useSearchContext();
+  console.log(searchQuery);
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
+
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   return (
@@ -243,15 +246,4 @@ const Dashboard_Tables = () => {
   );
 };
 
-const User_Tables = () => {
-  return (
-    <TableTemplate
-      data={userData}
-      columns={userColumns}
-      to={"/UserDetails"}
-      Actions={Actions}
-    />
-  );
-};
-
-export { Dashboard_Tables, User_Tables, TableTemplate };
+export { Dashboard_Tables, TableTemplate };
