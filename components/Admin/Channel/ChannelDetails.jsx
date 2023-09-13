@@ -57,6 +57,7 @@ export default function ChannelDetails() {
             <Box mx={1}>
                 <SidebarWithHeader />
                 <Box ml={{ base: 0, md: 60 }} p={4} >
+
                     <PageHeading text={'Channel Management'} />
                     <ChannelInfo />
                     <SimpleGrid columns={{ base: '1', md: '2', lg: '3' }}>
