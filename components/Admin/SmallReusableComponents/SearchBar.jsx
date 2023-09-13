@@ -97,7 +97,13 @@ const SearchBar = () => {
         alignItems={"center"}
       >
         <Text textAlign={["center", "left"]}>Show enteries</Text>
-        <Select defaultValue={"10"} bg={"#3b3b3b"} w={"30%"}>
+        <Select
+          defaultValue={"10"}
+          bg={"#3b3b3b"}
+          w={"30%"}
+          focusBorderColor="#232323"
+          borderColor={"#232323"}
+        >
           <option value="10">10</option>
           <option value="25">25</option>
           <option value="50">50</option>
