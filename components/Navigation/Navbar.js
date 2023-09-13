@@ -72,7 +72,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
   return (
     <Box
       transition="3s ease"
-      borderRight="1px"
+      borderRight="1px solid #232323"
       w={{ base: "full", md: "20rem" }}
       pos="fixed"
       h="full"

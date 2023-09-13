@@ -83,8 +83,8 @@ const TableTemplate = ({
               {Actions ? (
                 <Th
                   textAlign={"center"}
-                  borderColor={"blackAlpha.600"}
                   borderRight={"1px"}
+                  borderColor={"blackAlpha.600"}
                   color="white"
                 >
                   Actions
@@ -130,9 +130,9 @@ const TableTemplate = ({
                   {Actions ? (
                     <Td
                       textAlign={"center"}
-                      borderColor={"blackAlpha.600"}
                       borderBottom={0}
                       borderRight={"1px"}
+                      borderColor={"blackAlpha.600"}
                     >
                       {" "}
                       <Actions to={to} />{" "}
