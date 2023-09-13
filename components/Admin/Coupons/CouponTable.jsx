@@ -3,6 +3,7 @@ import { BiEdit } from 'react-icons/bi';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { HStack } from "@chakra-ui/react";
 import { ToggleButton } from "../SmallReusableComponents/Action";
+import { useSearchContext } from "../Context api/Context";
 
 const CouponTableData = [
     {
@@ -96,7 +97,22 @@ const CouponAvailability = () => (
     <ToggleButton />
 )
 export default function CouponTable() {
+    const { searchQuery, isFilter } = useSearchContext();
+
+    const filterData = () => {
+        if (searchQuery) {
+            return CouponTableData.filter((data) =>
+                data.Coupon_ID.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                data.Coupon_Name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }
+        return CouponTableData;
+    };
     return (
-        <TableTemplate data={CouponTableData} columns={CouponTableColumn} Actions={CouponAction} Availability={CouponAvailability} />
+        <TableTemplate
+            data={searchQuery?.length > 0 && isFilter ? filterData() : CouponTableData}
+            columns={CouponTableColumn}
+            Actions={CouponAction}
+            Availability={CouponAvailability} />
     );
 }

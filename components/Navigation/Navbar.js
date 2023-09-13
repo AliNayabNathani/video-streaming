@@ -19,15 +19,15 @@ import {
   MenuList,
   Image,
 } from "@chakra-ui/react";
+
+
 import { BiBarChartSquare, BiWindow } from "react-icons/bi";
 import { FaUserAlt, FaFileAlt } from "react-icons/fa";
 import { AiFillPlayCircle, AiFillFile, AiOutlineDropbox } from "react-icons/ai";
 import { ImTicket } from "react-icons/im";
 import { BsFillBellFill } from "react-icons/bs";
 import { FiMenu, FiChevronDown } from "react-icons/fi";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import Nav from "./TestNav";
 
 const LinkItems = [
   { name: "Dashboard", icon: BiBarChartSquare, to: "/" },

@@ -1,3 +1,4 @@
+import { useSearchContext } from "../Context api/Context";
 import { Actions } from "../SmallReusableComponents/Action";
 import { TableTemplate } from "./Table";
 
@@ -94,7 +95,22 @@ const ContentCreatorColumn = [
 ];
 
 export default function ContentCreatorTable() {
+    const { searchQuery, isFilter } = useSearchContext();
+
+    const filterData = () => {
+        if (searchQuery) {
+            return ContentCreatorData.filter((data) =>
+                data.Name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                data.Creator_ID.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }
+        return ContentCreatorData;
+    };
     return (
-        <TableTemplate data={ContentCreatorData} columns={ContentCreatorColumn} Actions={Actions} to="/ContentCreatorDetails" />
+        <TableTemplate
+            data={searchQuery?.length > 0 && isFilter ? filterData() : ContentCreatorData}
+            columns={ContentCreatorColumn}
+            Actions={Actions}
+            to="/ContentCreatorDetails" />
     );
 }

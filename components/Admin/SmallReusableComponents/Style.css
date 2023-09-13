@@ -1,7 +1,12 @@
 .custom-datepicker {
   outline: none;
-  background-color: transparent;
+  border: 1px solid #323232;
+  padding: 0.7rem;
+  border-radius: 5px;
+  background-color: #3b3b3b;
 }
 
-.custom-datepicker::before {
+.datepicker {
+  outline: none;
+  background-color: #3b3b3b;
 }

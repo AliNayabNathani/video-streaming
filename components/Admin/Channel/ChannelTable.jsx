@@ -3,6 +3,7 @@ import { TableTemplate } from "../Tables/Table";
 import { HiOutlineEye } from "react-icons/hi";
 import { ToggleButton, handleNavigation } from "../SmallReusableComponents/Action";
 import { useRouter } from "next/router";
+import { useSearchContext } from "../Context api/Context";
 
 const ChannelData = [
     {
@@ -83,7 +84,23 @@ const ChannelActions = ({ to }) => {
     );
 }
 export default function ChannelTable() {
+    const { searchQuery, isFilter } = useSearchContext();
+
+    const filterData = () => {
+        if (searchQuery) {
+            return ChannelData.filter((data) =>
+                data.Channel_ID.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                data.Channel_Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                data.Creator_Name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }
+        return ChannelData;
+    };
     return (
-        <TableTemplate data={ChannelData} columns={ChannelColumn} Actions={ChannelActions} to={"/ChannelDetails"} />
+        <TableTemplate
+            data={searchQuery?.length > 0 && isFilter ? filterData() : ChannelData}
+            columns={ChannelColumn}
+            Actions={ChannelActions}
+            to={"/ChannelDetails"} />
     );
 }

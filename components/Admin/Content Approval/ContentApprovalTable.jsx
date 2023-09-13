@@ -4,6 +4,7 @@ import { Box, Button, HStack, Text, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import { AddModal } from "../Category/Modal/AddModal";
 import { ContentApprovalButtons } from "../SmallReusableComponents/Action";
+import { useSearchContext } from "../Context api/Context";
 
 const ContentApprovalTableData = [
     {
@@ -139,8 +140,22 @@ const ContentApprovalActions = ({ to }) => {
 }
 
 const ContentApprovalTable = () => {
+    const { searchQuery, isFilter } = useSearchContext();
+
+    const filterData = () => {
+        if (searchQuery) {
+            return ContentApprovalTableData.filter((data) =>
+                data.Video_Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                data.Creator_Name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }
+        return ContentApprovalTableData;
+    };
     return (
-        <TableTemplate data={ContentApprovalTableData} columns={ContentApprovalTableColumns} Actions={ContentApprovalActions} />
+        <TableTemplate
+            data={searchQuery?.length > 0 && isFilter ? filterData() : ContentApprovalTableData}
+            columns={ContentApprovalTableColumns}
+            Actions={ContentApprovalActions} />
     )
 }
 
