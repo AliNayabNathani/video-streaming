@@ -32,7 +32,6 @@ const SearchBar = () => {
   ));
 
   const handleClear = () => {
-    // setStartDate(new Date());
     setSearchText("");
   };
 
