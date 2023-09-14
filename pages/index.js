@@ -18,7 +18,7 @@ import Charts from "../components/Admin/Dashboard/chart";
 import { Dashboard_Tables } from "../components/Admin/Tables/Table";
 
 function Dashboard() {
-  const [SelectedValue, setSelectedValue] = useState("Tables");
+  const [SelectedValue, setSelectedValue] = useState("Summary Overview");
 
   const handleSelectedValue = (e) => {
     setSelectedValue(e.target.value);
