@@ -143,6 +143,6 @@ export default function VideoTable() {
         <TableTemplate
             data={searchQuery?.length > 1 && isFilter ? filterData() : VideoTableData}
             columns={VideoTableColumns}
-            Actions={VideoActions} to="/VideoDetails" />
+            Actions={VideoActions} to="/Admin/VideoDetails" />
     )
 }

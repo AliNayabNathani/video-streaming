@@ -101,6 +101,6 @@ export default function ChannelTable() {
             data={searchQuery?.length > 0 && isFilter ? filterData() : ChannelData}
             columns={ChannelColumn}
             Actions={ChannelActions}
-            to={"/ChannelDetails"} />
+            to={"/Admin/ChannelDetails"} />
     );
 }

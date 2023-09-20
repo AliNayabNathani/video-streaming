@@ -1,0 +1,23 @@
+/* .custom-select-option {
+  background-color: rgba(255, 255, 255, 0.48);
+}
+
+.custom-select-option:hover {
+  background-color: blue.200;
+} */
+
+/* .custom-select-option:selected {
+    background: blue.400; 
+  }  */
+.custom-datepicker {
+  outline: none;
+  border: 1px solid #323232;
+  padding: 0.7rem;
+  border-radius: 5px;
+  background-color: #3b3b3b;
+}
+
+.datepicker {
+  outline: none;
+  background-color: transparent;
+}

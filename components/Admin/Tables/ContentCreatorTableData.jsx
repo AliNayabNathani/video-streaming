@@ -111,6 +111,6 @@ export default function ContentCreatorTable() {
             data={searchQuery?.length > 0 && isFilter ? filterData() : ContentCreatorData}
             columns={ContentCreatorColumn}
             Actions={Actions}
-            to="/ContentCreatorDetails" />
+            to="/Admin/ContentCreatorDetails" />
     );
 }

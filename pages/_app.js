@@ -1,22 +1,16 @@
-import { ChakraProvider, CSSReset, extendTheme } from "@chakra-ui/react";
-import { theme as chakraTheme } from "@chakra-ui/react";
-import customTheme from "../themes/customTheme.js";
-import Layout from "../components/Navigation/Layout.js";
-
-const theme = extendTheme({
-  ...chakraTheme,
-  ...customTheme,
-});
+import { useRouter } from "next/router";
+import AdminLayout from "./Admin/AdminLayout";
+import ClientLayout from "./Client/ClientLayout";
 
 function MyApp({ Component, pageProps }) {
-  return (
-    <ChakraProvider theme={theme}>
-      <Layout>
-        <CSSReset />
-        <Component {...pageProps} />
-      </Layout>
-    </ChakraProvider>
-  );
+    const router = useRouter();
+
+    // Determine which layout to use based on the route
+    if (router.pathname.startsWith("/Admin")) {
+        return <AdminLayout Component={Component} pageProps={pageProps} />;
+    } else {
+        return <ClientLayout Component={Component} pageProps={pageProps} />;
+    }
 }
 
 export default MyApp;

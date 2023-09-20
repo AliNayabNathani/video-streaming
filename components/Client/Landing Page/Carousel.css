@@ -1,0 +1,17 @@
+.smoke-background {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 128, 0, 0.5),
+    rgba(0, 128, 0, 0.2)
+  );
+  animation: smoke 10s infinite alternate;
+}
+
+@keyframes smoke {
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}

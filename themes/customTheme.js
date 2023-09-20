@@ -11,20 +11,6 @@ const customTheme = extendTheme({
     },
   },
   components: {
-    Select: {
-
-      baseStyle: {
-        bg: 'blue.200',
-        option: {
-          _hover: {
-            bg: 'blue.200', // Change this to your desired background color
-          },
-          _selected: {
-            bg: 'blue.400', // Change this to your desired background color when an option is selected
-          },
-        },
-      },
-    },
     Button: {
       baseStyle: {
         fontWeight: "bold",
@@ -37,18 +23,29 @@ const customTheme = extendTheme({
           color: "#55DF01",
           _hover: {
             bg: "#55DF01",
-            color: "white",
+            color: "black",
           },
           _active: {
             bg: "#55DF01",
             color: "white",
           },
+          _focus: {
+            bg: "#55DF01",
+            color: "black",
+          }
         },
         solid: {
           bg: "#55DF01",
-          color: "white",
+          borderColor: "#55DF01",
+          color: "#232323",
           _hover: {
-            bg: "#46b304",
+            bg: "black",
+            borderColor: "#55DF01",
+            color: "#55DF01",
+          },
+          _active: {
+            bg: "black",
+            color: "white",
           },
         },
       },
@@ -60,10 +57,31 @@ const customTheme = extendTheme({
         },
       },
     },
+    Menu: {
+      baseStyle: {
+        list: {
+          bg: "rgba(255, 255, 255, 0.24)",
+          borderColor: 'transparent', // Border color of the menu
+        },
+        item: {
+          bg: "rgba(255, 255, 255, 0.24)",
+          _hover: {
+            bg: "rgba(255, 255, 255, 0.48)",
+            color: "white", // Text color of menu items on hover
+          },
+        },
+      },
+    },
   },
   config: {
     initialColorMode: "dark",
     useSystemColorMode: false,
+  },
+  colors: {
+    customGreen: {
+      500: "#55DF01", // Define the desired color value
+    },
+    // ...other color schemes...
   },
 });
 
