@@ -11,6 +11,14 @@ const customTheme = extendTheme({
     },
   },
   components: {
+    Input: {
+      variants: {
+        outline: {
+          bg: "rgba(255, 255, 255, 0.24)",
+          borderColor: 'transparent',
+        },
+      },
+    },
     Button: {
       baseStyle: {
         fontWeight: "bold",
@@ -39,8 +47,8 @@ const customTheme = extendTheme({
           borderColor: "#55DF01",
           color: "#232323",
           _hover: {
-            bg: "black",
-            borderColor: "#55DF01",
+            bg: "transparent",
+            border: "1px solid #55DF01",
             color: "#55DF01",
           },
           _active: {
@@ -60,13 +68,14 @@ const customTheme = extendTheme({
     Menu: {
       baseStyle: {
         list: {
-          bg: "rgba(255, 255, 255, 0.24)",
+          bg: "#414141",
           borderColor: 'transparent', // Border color of the menu
         },
         item: {
           bg: "rgba(255, 255, 255, 0.24)",
+          color: 'black',
           _hover: {
-            bg: "rgba(255, 255, 255, 0.48)",
+            bg: "#232323",
             color: "white", // Text color of menu items on hover
           },
         },
@@ -81,6 +90,10 @@ const customTheme = extendTheme({
     customGreen: {
       500: "#55DF01", // Define the desired color value
     },
+    customGray: {
+      600: 'rgba(255, 255, 255, 0.48)',
+    },
+
     // ...other color schemes...
   },
 });

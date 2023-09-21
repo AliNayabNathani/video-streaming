@@ -1,25 +1,26 @@
 import { Box, Button, GridItem, HStack, Heading, Icon, IconButton, SimpleGrid, Stack, Switch, Text, VStack } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { VideoData } from "./CatalogData";
-import { ToggleButton } from "../../Reusable Components/MainButton";
-
-import { VideoDetails } from "./CatalogDetails";
 import { VideoPlayer } from "../../Reusable Components/VideoPlayer";
 import { useRouter } from "next/router";
+
 
 export default function Catalog() {
     const [isApproved, setIsApproved] = useState(true);
     const router = useRouter();
-    const handleRoute = () => {
-        router.push('/Client/VideoDetails')
+    const handleRoute = (to, index) => {
+        router.push({
+            pathname: to,
+            query: { index: JSON.stringify(index) } // Convert data to a string if it's an object
+        });
     }
 
     return (
         <Box>
             <VStack mt={'5rem'}>
-                {VideoData.map((vid) => (
+                {VideoData.map((vid, index) => (
                     <>
-                        < Stack cursor={'pointer'} justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
+                        < Stack key={index} cursor={'pointer'} justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
                             <Box
                                 // Adjust the width as needed
                                 maxWidth="100%" // Ensure the player doesn't exceed its original size
@@ -42,7 +43,7 @@ export default function Catalog() {
                             </Stack>
 
                             <Stack direction={{ base: 'row', md: 'column' }} alignSelf={'normal'} justifyContent={'space-between'}>
-                                <Button>Publish</Button>
+                                <Button onClick={() => handleRoute('/Client/CatalogDetails', index)}>Publish</Button>
                                 <Stack direction='row' justifyContent={'center'}>
                                     <Switch colorScheme="customGreen" size='lg' />
                                 </Stack>

@@ -3,52 +3,42 @@ import { useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { LiveData } from './LiveData';
 import { NavButton, PinkButton } from "../../Reusable Components/MainButton";
+import { VideoPlayer } from "../../Reusable Components/VideoPlayer";
 
 export default function PPV() {
     return (
-        <Box mx={{ base: '0', md: '5rem' }}>
+        <Box>
             <Box mt={'2rem'} textAlign={'end'}>
-                <NavButton> Create PPV</NavButton>
+                <Button> Create PPV</Button>
             </Box>
             <VStack mt={'1rem'}>
                 {LiveData.map((live) => (
-                    < Stack justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'white'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
+                    < Stack justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
                         <Box
                             // Adjust the width as needed
                             maxWidth="100%" // Ensure the player doesn't exceed its original size
-                            height={{ base: "100%", md: '150px' }}
+                            height={{ base: "100%", md: 'auto' }}
                         >
-                            <ReactPlayer
-                                url={live.url}
-                                width="100%"
-                                height="100%" // This ensures the player maintains its aspect ratio
-                            />
+                            <VideoPlayer />
                         </Box>
 
-                        <VStack alignItems={'start'} fontSize={'md'} spacing={['0.5rem', '1rem']}>
-                            <Heading>{live.name}</Heading>
-                            <Stack direction={{ base: 'column', md: 'row' }}>
-                                <Text>Start Date {live.Start_Date}</Text>
-                                <Text>Start Time {live.Start_Time}</Text>
-                            </Stack>
-                            <Stack direction={{ base: 'column', md: 'row' }}>
-                                <Text>End Date {live.End_Date}</Text>
-                                <Text>End Time {live.End_Time}</Text>
-                            </Stack>
-                            <Stack direction={{ base: 'column', md: 'row' }}>
-                                <Text>Venue {live.Venue}, {live.Country}</Text>
-                            </Stack>
-                        </VStack>
 
-                        <VStack alignSelf={'normal'} justifyContent={'space-between'}>
-                            <VStack>
-                                <Text>Contact Number {live.Contact}</Text>
-                                <Text>Ticket {live.Price}$/seat</Text>
-                            </VStack>
-                            <HStack justifyContent={'space-between'}>
-                                <PinkButton>Edit</PinkButton>
-                                <PinkButton>Go Live</PinkButton>
-                            </HStack>
+                        <Stack alignItems={'flex-start'} spacing={'1rem'} direction={'column'}>
+                            <Heading size={'md'}>{live.name}</Heading>
+                            <Text>Start Date: <b>{live.Start_Date}</b></Text>
+                            <Text>End Date: <b>{live.End_Date}</b></Text>
+                            <Text>Venue: <b>{live.Venue}, {live.Country}</b></Text>
+                            <Text>Contact Number: <b>{live.Contact}</b></Text>
+                        </Stack>
+                        <Stack alignItems={'flex-start'} spacing={'1rem'} direction={'column'}>
+                            <Text>Start Time: <b>{live.Start_Time}</b></Text>
+                            <Text>End Time: <b>${live.End_Time}</b></Text>
+                            <Text>Ticket:  <b>{live.Price}$-seat</b></Text>
+                        </Stack>
+
+                        <VStack justifyContent={'space-between'} spacing={'1rem'}>
+                            <Button w={'100%'}>Edit</Button>
+                            <Button variant={'outline'} w={'100%'} px={['auto', 8]}>Go Live</Button>
                         </VStack>
                     </Stack>
                 ))}

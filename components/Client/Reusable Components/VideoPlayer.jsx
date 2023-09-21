@@ -133,7 +133,7 @@ const VideoPlayer = ({ src, poster, name }) => {
       borderRadius={5}
       cursor={"pointer"}
       _hover={{ scale: "1.5" }}
-      width={["80%", "360px"]}
+      width={["100%", "400px"]}
       mr={"1rem"}
     >
       <Video src={src} poster={poster} name={name} />

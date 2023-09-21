@@ -1,5 +1,6 @@
 export const VideoData = [
     {
+        id: '1',
         name: 'The Dark Web',
         Type: 'Adventure',
         views: '59k',
@@ -13,6 +14,7 @@ export const VideoData = [
         url: 'https://www.youtube.com/watch?v=COv52Qyctws',
     },
     {
+        id: '2',
         name: 'Lost Treasure',
         Type: 'Mystery',
         views: '72k',
@@ -24,6 +26,7 @@ export const VideoData = [
         url: 'https://www.youtube.com/watch?v=COv52Qyctws',
     },
     {
+        id: '3',
         name: 'Space Explorers',
         Type: 'Sci-Fi',
         views: '45k',
@@ -35,6 +38,7 @@ export const VideoData = [
         url: 'https://www.youtube.com/watch?v=COv52Qyctws',
     },
     {
+        id: '4',
         name: 'Ancient Mysteries',
         Type: 'History',
         views: '37k',

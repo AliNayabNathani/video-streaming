@@ -30,6 +30,8 @@
     "react-responsive-carousel": "^3.2.23",
     "react-signature-canvas": "^1.0.6",
     "react-slick": "^0.29.0",
+    "react-time-picker": "^6.5.0",
+    "react-time-range": "^1.0.4",
     "recharts": "^2.8.0",
     "slick-carousel": "^1.8.1",
     "web-vitals": "^2.1.4"
