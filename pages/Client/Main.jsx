@@ -4,9 +4,9 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 import { useDetailContext } from '../../components/Client/Context/context';
-import Nav from '../../components/Client/Bars/DetailsNavbar';
 import Footer from '../../components/Client/Bars/Footer';
 import Sidebar from '../../components/Client/Bars/MainSidebar';
+import Nav from '../../components/Client/Bars/MainNavbar';
 
 export default function Main() {
     const { title } = useDetailContext();

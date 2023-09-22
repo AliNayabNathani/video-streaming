@@ -7,7 +7,7 @@ export default function Analytics() {
     const [SelectedValue, setSelectedValue] = useState('Summary Overview');
 
     return (
-        <Box py={'2rem'} mx={'5rem'}>
+        <Box>
             <Stack direction={['column', 'row']} my={'2rem'} justifyContent={'space-between'}>
                 <Heading textDecor={'underline'}>Analytics</Heading>
                 <Select width={['100%', '20%']} bg={'white'} onChange={(e) => setSelectedValue(e.target.value)}>

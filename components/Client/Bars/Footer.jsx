@@ -25,8 +25,8 @@ const SocialButton = ({
         <chakra.button
             bg={'white'}
             rounded={'md'}
-            w={12}
-            h={12}
+            w={10}
+            h={10}
             cursor={'pointer'}
             as={'a'}
             href={href}
@@ -81,13 +81,13 @@ export default function Footer() {
                 <Heading fontSize={'1.5rem'}>Social Media Links</Heading>
                 <Stack direction={'row'} spacing={6}>
                     <SocialButton label={'Twitter'} href={'#'}>
-                        <Icon mt={'1rem'} as={FaFacebookF} _hover={{ color: 'white' }} color={'black'} boxSize={10} />
+                        <Icon mt={'1rem'} as={FaFacebookF} _hover={{ color: 'white' }} color={'black'} boxSize={8} />
                     </SocialButton>
                     <SocialButton label={'Instagram'} href={'#'}>
-                        <Icon as={FaInstagram} _hover={{ color: 'white' }} color={'black'} boxSize={8} />
+                        <Icon as={FaInstagram} _hover={{ color: 'white' }} color={'black'} boxSize={6} />
                     </SocialButton>
                     <SocialButton label={'YouTube'} href={'#'}>
-                        <Icon as={FaYoutube} _hover={{ color: 'white' }} color={'black'} boxSize={8} />
+                        <Icon as={FaYoutube} _hover={{ color: 'white' }} color={'black'} boxSize={6} />
                     </SocialButton>
                 </Stack>
             </VStack>

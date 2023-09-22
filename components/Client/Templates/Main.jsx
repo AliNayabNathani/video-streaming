@@ -1,8 +1,9 @@
 import { Box } from "@chakra-ui/react";
 import { useDetailContext } from "../Context/context";
-import Nav from "../Bars/DetailsNavbar";
+
 import Sidebar from "../Bars/MainSidebar";
 import Footer from "../Bars/Footer";
+import Nav from "../Bars/MainNavbar";
 
 export default function MainTemplate({ children }) {
     const { title } = useDetailContext();

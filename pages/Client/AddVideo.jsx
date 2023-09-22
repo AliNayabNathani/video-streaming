@@ -7,9 +7,8 @@ import {
     ModalBody,
     ModalCloseButton,
 } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { AiOutlineCloseCircle, } from 'react-icons/ai';
-import { PinkButton } from "../../components/Client/Reusable Components/MainButton";
 import MyVideoTemplate from "../../components/Client/Templates/MyVideoTemplate";
 import { FaPlus } from "react-icons/fa";
 import { VideoPlayer } from "../../components/Client/Reusable Components/VideoPlayer";

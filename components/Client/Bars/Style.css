@@ -1,0 +1,23 @@
+.icon-container {
+  display: inline-block;
+  position: relative;
+  margin-right: 1rem;
+}
+
+.icon-container::before,
+.icon-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background-color: white;
+}
+
+.icon-container::before {
+  left: -1rem;
+}
+
+.icon-container::after {
+  right: -1rem;
+}

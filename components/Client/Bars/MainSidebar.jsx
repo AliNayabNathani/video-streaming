@@ -46,7 +46,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
     const router = useRouter();
 
     const handleRoute = (to) => {
-        console.log(to);
         router.push(to);
     }
     return (
