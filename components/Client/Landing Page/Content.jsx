@@ -97,6 +97,8 @@ const VideoCarousal = () => {
     )
 }
 
+
+
 const Features = ({ direction, text }) => (
     <Stack my={10} display={{ base: 'block', md: 'flex' }} direction={direction} justifyContent={'center'} spacing={32}>
         <VStack p={5} alignItems={'start'} justifyContent={'center'}>
@@ -111,7 +113,9 @@ export default function Content() {
     return (
         <>
             <CSSReset />
-            <ImageCarousel Images={Images} />
+            <div className="carouselBody">
+                <ImageCarousel Images={Images} />
+            </div>
             <Box mx={{ base: 16, md: 64 }}>
                 <Header />
                 <Features text={'Feature 1'} direction={'row'} />

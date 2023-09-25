@@ -19,8 +19,20 @@ import { LanguageSelect } from '../Reusable Components/LanguageSelect';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { useRef } from 'react';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { useRouter } from 'next/router';
 
 export default function Nav() {
+    const { user, error, isLoading } = useUser();
+    const router = useRouter();
+
+    const handleNavigation = (to) => {
+        router.push(to);
+    }
+
+    if (user) {
+        router.push('/Client/Dashboard');
+    }
 
     const MobileNav = () => {
         const { isOpen, onOpen, onClose } = useDisclosure()
@@ -42,12 +54,13 @@ export default function Nav() {
 
                                 <LanguageSelect />
 
-                                <Button width={'100%'} variant={'outline'}>
+                                <Button width={'100%'} variant={'outline'} onClick={() => handleNavigation('/pages/Client/Details.jsx')}>
                                     Support
                                 </Button>
-                                <Button width={'100%'} variant={'solid'}>
+                                <Button onClick={() => handleNavigation('/api/auth/login')} width={'100%'} variant={'solid'}>
                                     Login
                                 </Button>
+                                {error && <Text>Server Error</Text>}
                             </VStack>
                         </DrawerBody>
                     </DrawerContent>
@@ -55,7 +68,8 @@ export default function Nav() {
             </Box>
         )
     }
-    return (
+
+    return isLoading ? (<div>Loading...</div>) : (
         <>
             <Box px={4} borderBottom={'1px'} borderColor={'whiteAlpha.600'}>
                 <Flex h={24} px={{ base: 5, md: 10 }} alignItems={'center'} justifyContent={'space-between'}>
@@ -69,10 +83,10 @@ export default function Nav() {
 
                     <Flex display={['none', 'block']} alignItems={'center'}>
                         <Stack direction={'row'} spacing={7}>
-                            <Button variant={'outline'} >
+                            <Button variant={'outline'} onClick={() => handleNavigation('/pages/Client/Details.jsx')}>
                                 Support
                             </Button>
-                            <Button variant={'solid'}>
+                            <Button variant={'solid'} onClick={() => handleNavigation('/api/auth/login')}>
                                 Login
                             </Button>
                         </Stack>
@@ -81,5 +95,5 @@ export default function Nav() {
                 </Flex>
             </Box>
         </>
-    );
+    )
 }

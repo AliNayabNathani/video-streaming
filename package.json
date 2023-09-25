@@ -9,12 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.1",
+    "@auth0/nextjs-auth0": "^3.1.0",
     "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/react": "^2.8.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "axios": "^1.5.0",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
+    "express-session": "^1.17.3",
     "framer-motion": "^10.16.4",
     "next": "13.4.19",
     "pure-react-carousel": "^1.30.1",
