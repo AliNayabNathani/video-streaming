@@ -13,6 +13,7 @@ import './Style.css';
 import { useState } from "react";
 import { AiOutlineCalendar } from "react-icons/ai";
 import { BiTime } from "react-icons/bi";
+import { useDetailContext } from "../../components/Client/Context/context";
 
 export default function CreatePPV() {
     const [startDate, setStartDate] = useState(new Date());
@@ -59,7 +60,8 @@ export default function CreatePPV() {
         const [selectedTime, setSelectedTime] = useState('');
         const timeOptions = generateTimeOptions();
         console.log(timeOptions);
-
+        const { updateSubTitle } = useDetailContext();
+        updateSubTitle(null);
         // const handleTimeChange = (event) => {
         //     setSelectedTime(event.target.value);
         // };

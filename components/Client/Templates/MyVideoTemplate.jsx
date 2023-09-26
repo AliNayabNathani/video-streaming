@@ -31,6 +31,7 @@ const NavData = [
 export default function MyVideoTemplate({ children }) {
     const { subTitle } = useDetailContext();
     const router = useRouter();
+
     const handleNavigation = (to) => {
         router.push(to);
     }
@@ -46,7 +47,7 @@ export default function MyVideoTemplate({ children }) {
                 <ContentBar text='Video' data={NavData} />
                 <Box>
                     {NavData.map((navItem, index) => (
-                        <React.Fragment key={index}>
+                        <React.Fragment key={index} onClick={() => handleNavigation('/Client/MyVideo')}>
                             {navItem.name === subTitle && navItem.to && React.createElement(navItem.to)}
                         </React.Fragment>
                     ))}

@@ -16,23 +16,42 @@ import {
     VStack,
 } from '@chakra-ui/react';
 import { LanguageSelect } from '../Reusable Components/LanguageSelect';
-import { ChevronDownIcon } from '@chakra-ui/icons';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { useRef } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 export default function Nav() {
     const { user, error, isLoading } = useUser();
     const router = useRouter();
+    const login = async () => {
+        // const domain = "dev-g47ngs10wcqmnpfs.us.auth0.com";
+        // const audience = "https://www.VideeO.com";
+        // const scope = "get:user";
+        // const clientId = "adb38ErO5bDrRS3ICJsRDrYBtUxOpOlX";
+        // const responseType = "code";
+        // const redirectUri = "http://localhost:3000/Client/Dashboard";
+
+        // const response = await fetch(
+        //     `https://dev-g47ngs10wcqmnpfs.us.auth0.com/authorize?audience=https://www.VideeO.com&scope=get:user&response_type=code&client_id=adb38ErO5bDrRS3ICJsRDrYBtUxOpOlX&redirect_uri=http://localhost:3000/Client/Dashboard`, {
+        //     redirect: "manual"
+        // }
+        // );
+        const domain = "dev-g47ngs10wcqmnpfs.us.auth0.com";
+        const url = `https://dev-g47ngs10wcqmnpfs.us.auth0.com/authorize?audience=https://www.VideeO.com&scope=get:user&response_type=code&client_id=adb38ErO5bDrRS3ICJsRDrYBtUxOpOlX&redirect_uri=http://localhost:3000/Client/Dashboard`;
+        router.push(url);
+
+
+    };
 
     const handleNavigation = (to) => {
         router.push(to);
     }
 
-    if (user) {
-        router.push('/Client/Dashboard');
-    }
+    // if (user) {
+    //     router.push('/Client/Dashboard');
+    // }
 
     const MobileNav = () => {
         const { isOpen, onOpen, onClose } = useDisclosure()
@@ -86,7 +105,7 @@ export default function Nav() {
                             <Button variant={'outline'} onClick={() => handleNavigation('/pages/Client/Details.jsx')}>
                                 Support
                             </Button>
-                            <Button variant={'solid'} onClick={() => handleNavigation('/api/auth/login')}>
+                            <Button variant={'solid'} onClick={() => login()}>
                                 Login
                             </Button>
                         </Stack>

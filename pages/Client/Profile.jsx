@@ -6,6 +6,13 @@ import { useRouter } from "next/router";
 
 export default function Profile() {
     const router = useRouter();
+    const logout = async () => {
+        const domain = "dev-g47ngs10wcqmnpfs.us.auth0.com";
+        const clientId = "adb38ErO5bDrRS3ICJsRDrYBtUxOpOlX";
+        const redirectTo = "http://localhost:3000/Client/";
+
+        router.push(`https://${domain}/logout?clientId=${clientId}&returnTo=${redirectTo}`);
+    }
     const handleNavigation = () => {
         router.push('/Client/ChangePassword');
     }
@@ -35,6 +42,7 @@ export default function Profile() {
                         <Text fontWeight={'bold'}>Phone Number</Text>
                         <Input mb={'1rem'} type='number' placeholder="+91 098765432" />
                         <Button w={'100%'} onClick={handleNavigation}>Change Password</Button>
+                        <Button w={'100%'} onClick={() => logout()}>Log Out</Button>
                     </VStack>
                 </Box>
             </Flex>

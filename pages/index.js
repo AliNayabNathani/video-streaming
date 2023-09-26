@@ -25,13 +25,28 @@ async function callProtectedApi() {
 }
 
 export default function Home() {
-    // const {
-    //     loginWithPopup,
-    //     loginWithRedirect,
-    //     logout,
-    //     user,
-    //     isAuthenticated
-    // } = useAuth0();
+    const login = async () => {
+        const domian = "dev-g47ngs10wcqmnpfs.us.auth0.com";
+        const audience = "https://www.VideeO.com";
+        const scope = "get:user";
+        const clientId = "adb38ErO5bDrRS3ICJsRDrYBtUxOpOlX";
+        const secret = "SnXLFhGSx96StPNq80nhIwo2DsFP2saLdT6IXLx-2jw1ShoPA2UwxJGkeNFe3ukm"
+        const responseType = "code";
+        const redirectUri = "http://localhost:3000/client/dashboard";
+
+        const response = fetch(
+            `https://${domian}/authorize?` +
+            `audience=${audience}&` +
+            `scope=${scope}&` +
+            `response_type=${responseType}&` +
+            `client_id=${clientId}&` +
+            `redirect_uri${redirectUri}&`, {
+            redirect: "manual"
+        }
+        );
+
+        window.location.replace(response.url);
+    }
     const { user, error, isLoading } = useUser();
     const router = useRouter();
 
@@ -42,9 +57,9 @@ export default function Home() {
     if (error) return <div>{error.message}</div>
 
     if (user) {
-        useEffect(() => {
-            router.push('/Client/Dashboard');
-        }, []);
+        // useEffect(() => {
+        //     router.push('/Client/Dashboard');
+        // }, []);
         return (
             <>
                 {JSON.stringify(user, null, 2)}
