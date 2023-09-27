@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "react-datepicker/dist/react-datepicker.css";
 import { HeaderWithButtons } from '../../components/Admin/SmallReusableComponents/HeaderWithButtons';
 import { SearchBar } from '../../components/Admin/SmallReusableComponents/SearchBar';
@@ -18,8 +18,18 @@ import {
     ModalCloseButton,
 } from '@chakra-ui/react'
 import './style.css';
+import axios from 'axios';
 
 const ShowAddUserModal = ({ isOpen, onClose }) => {
+    const [userData, setUserData] = useState();
+
+    console.log(userData);
+    const backendurl = 'http://localhost:5000';
+    useEffect(() => {
+        axios.get(`${backendurl}/`)
+            .then(res => res.json())
+            .then(setUserData);
+    }, []);
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
@@ -44,7 +54,6 @@ const ShowAddUserModal = ({ isOpen, onClose }) => {
                                 Submit
                             </Button>
                         </VStack>
-
                     </ModalBody>
                 </ModalContent>
             </Modal>

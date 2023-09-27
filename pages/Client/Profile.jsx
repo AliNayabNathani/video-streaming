@@ -6,15 +6,15 @@ import { useRouter } from "next/router";
 
 export default function Profile() {
     const router = useRouter();
-    const logout = async () => {
-        const domain = "dev-g47ngs10wcqmnpfs.us.auth0.com";
-        const clientId = "adb38ErO5bDrRS3ICJsRDrYBtUxOpOlX";
-        const redirectTo = "http://localhost:3000/Client/";
+    // const logout = async () => {
+    //     const domain = "dev-g47ngs10wcqmnpfs.us.auth0.com";
+    //     const clientId = "adb38ErO5bDrRS3ICJsRDrYBtUxOpOlX";
+    //     const redirectTo = "http://localhost:3000/Client/";
 
-        router.push(`https://${domain}/logout?clientId=${clientId}&returnTo=${redirectTo}`);
-    }
-    const handleNavigation = () => {
-        router.push('/Client/ChangePassword');
+    //     router.push(`https://${domain}/logout?client_id=${clientId}&returnTo=${redirectTo}`);
+    // }
+    const handleNavigation = (to) => {
+        router.push(to);
     }
     const CustomIcon = () => (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36">
@@ -41,8 +41,8 @@ export default function Profile() {
                         <Input mb={'1rem'} placeholder="Zack123@gmail.com" />
                         <Text fontWeight={'bold'}>Phone Number</Text>
                         <Input mb={'1rem'} type='number' placeholder="+91 098765432" />
-                        <Button w={'100%'} onClick={handleNavigation}>Change Password</Button>
-                        <Button w={'100%'} onClick={() => logout()}>Log Out</Button>
+                        <Button w={'100%'} onClick={() => handleNavigation()}>Change Password</Button>
+                        <Button w={'100%'} onClick={() => handleNavigation('/api/auth/logout')}>Log Out</Button>
                     </VStack>
                 </Box>
             </Flex>

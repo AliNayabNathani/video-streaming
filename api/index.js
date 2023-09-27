@@ -1,8 +1,7 @@
 const express = require('express');
 const app = express();
 const { auth } = require('express-oauth2-jwt-bearer');
-const guards = require('express-jwt-permissions')();
-const { handleAuth } = require('@auth0/nextjs-auth0');
+
 const port = process.env.PORT || 8080;
 
 const jwtCheck = auth({
@@ -14,11 +13,8 @@ const jwtCheck = auth({
 // enforce on all endpoints
 app.use(jwtCheck);
 
-app.get('/Client/Dashboard', guards.check(['get:user']), function (req, res) {
-    res.json({
-        user: 'This is User',
-        pass: 'This is Password',
-    })
+app.get('/authorized', function (req, res) {
+    res.send('Secured Resource');
 });
 
 app.listen(port);

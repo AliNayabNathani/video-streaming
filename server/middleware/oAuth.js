@@ -2,7 +2,7 @@ var axios = require("axios");
 
 const tokenEndpoint = "https://dev-g47ngs10wcqmnpfs.us.auth0.com/oauth/token";
 
-oAuth = (req, res, next) => {
+oAuth = async (req, res, next) => {
     var code = req.query.code;
 
     if (!code) {
@@ -16,7 +16,7 @@ oAuth = (req, res, next) => {
     params.append("code", code);
     params.append("redirect_uri", "http://localhost:3000/Client/Dashboard");
 
-    axios.post(tokenEndpoint, params)
+    await axios.post(tokenEndpoint, params)
         .then(response => {
             req.oauth = response.data;
             console.log(req.oauth);

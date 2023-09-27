@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ChakraProvider,
   theme,
@@ -16,13 +16,15 @@ import TableSummary from "../../components/Admin/Dashboard/TableSummary";
 import GraphSummary from "../../components/Admin/Dashboard/GraphSummary";
 import Charts from "../../components/Admin/Dashboard/chart";
 import { Dashboard_Tables } from "../../components/Admin/Tables/Table";
+import axios from "axios";
 
 function Dashboard() {
   const [SelectedValue, setSelectedValue] = useState("Summary Overview");
-
+  const [dashboardData, setDashboardData] = useState();
   const handleSelectedValue = (e) => {
     setSelectedValue(e.target.value);
   };
+  const backendurl = 'http://localhost:5000';
 
   return (
     <>
