@@ -27,10 +27,13 @@ const NavData = [
 ];
 
 export default function MyVideo() {
-    const { subTitle } = useDetailContext();
+    const { updateSubTitle, subTitle } = useDetailContext();
     const router = useRouter();
     const handleNavigation = (to) => {
         router.push(to);
+    }
+    if (!subTitle) {
+        updateSubTitle('Catalog Listing');
     }
     return (
         <MainTemplate>

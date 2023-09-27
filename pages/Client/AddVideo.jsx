@@ -7,12 +7,12 @@ import {
     ModalBody,
     ModalCloseButton,
 } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { AiOutlineCloseCircle, } from 'react-icons/ai';
-import { PinkButton } from "../../components/Client/Reusable Components/MainButton";
 import MyVideoTemplate from "../../components/Client/Templates/MyVideoTemplate";
 import { FaPlus } from "react-icons/fa";
 import { VideoPlayer } from "../../components/Client/Reusable Components/VideoPlayer";
+import { useDetailContext } from "../../components/Client/Context/context";
 
 const FormLabelOutline = ({ children }) => (
     <Text width={'100%'} textAlign={'start'} fontSize={'1rem'} fontWeight={'bold'}>
@@ -120,7 +120,8 @@ const UploadOutline = () => {
 
 export default function AddVideo() {
     const [visibleVideoOutlines, setVisibleVideoOutlines] = useState([]);
-
+    const { updateSubTitle } = useDetailContext();
+    updateSubTitle(null);
     const handleAddButtonClick = () => {
         setVisibleVideoOutlines([...visibleVideoOutlines, <VideoOutline key={visibleVideoOutlines.length} />]);
     };

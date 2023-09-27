@@ -24,3 +24,7 @@
     height: 10rem;
   }
 }
+
+.thin-lines-icon svg path {
+  stroke-width: 10; /* Adjust the value to make the lines thinner */
+}

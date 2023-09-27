@@ -8,16 +8,20 @@ import {
   Text,
   Heading,
   SimpleGrid,
+  VStack,
 } from "@chakra-ui/react";
 export default function TableSummary() {
   const Revenue_Card = ({ title, total_earnings, weekly_earnings }) => (
     <Card bg={"#232323"} color={"white"}>
       <CardBody>
-        <Flex direction={"column"} alignItems={"center"}>
+        <VStack spacing={'1rem'} direction={"column"} alignItems={"center"}>
           <b>{title} </b>
-          <Text>{total_earnings}</Text>
-          <Text>+{weekly_earnings}</Text>
-        </Flex>
+          <Box>
+            <Text>{total_earnings}</Text>
+            <Text style={{ color: 'green' }}>+{weekly_earnings}</Text>
+          </Box>
+          <Text>From Previous Month</Text>
+        </VStack>
       </CardBody>
     </Card>
   );
@@ -25,13 +29,16 @@ export default function TableSummary() {
   const Stats_Card = ({ title, total, monthly }) => (
     <Card bg={"#232323"} color={"white"}>
       <CardBody>
-        <Flex direction={"column"} alignItems={"center"}>
-          <b>
-            <u>{title}</u>
-          </b>
-          <Text>This month: {monthly}</Text>
-          <Text>Total: {total}</Text>
-        </Flex>
+        <VStack spacing={'1rem'} direction={"column"} alignItems={"center"}>
+          <Text fontWeight={'bold'}>
+            {title}
+          </Text>
+          <Box>
+            <Text>This month: {monthly}</Text>
+            <Text>Total: {total}</Text>
+          </Box>
+          <Text textDecor={'underline'}>View All</Text>
+        </VStack>
       </CardBody>
     </Card>
   );

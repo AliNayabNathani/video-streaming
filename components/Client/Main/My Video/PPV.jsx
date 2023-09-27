@@ -4,12 +4,17 @@ import ReactPlayer from "react-player";
 import { LiveData } from './LiveData';
 import { NavButton, PinkButton } from "../../Reusable Components/MainButton";
 import { VideoPlayer } from "../../Reusable Components/VideoPlayer";
+import { useRouter } from "next/router";
 
 export default function PPV() {
+    const router = useRouter();
+    const handleNavigation = () => {
+        router.push('/Client/CreatePPV');
+    }
     return (
         <Box>
             <Box mt={'2rem'} textAlign={'end'}>
-                <Button> Create PPV</Button>
+                <Button onClick={handleNavigation}> Create PPV</Button>
             </Box>
             <VStack mt={'1rem'}>
                 {LiveData.map((live) => (
@@ -17,7 +22,8 @@ export default function PPV() {
                         <Box
                             // Adjust the width as needed
                             maxWidth="100%" // Ensure the player doesn't exceed its original size
-                            height={{ base: "100%", md: 'auto' }}
+                            // height={{ base: "100%", md: 'auto' }}
+                            h={'100%'}
                         >
                             <VideoPlayer />
                         </Box>
