@@ -2,6 +2,7 @@ import { ChakraProvider, CSSReset, extendTheme } from "@chakra-ui/react";
 import { theme as chakraTheme } from "@chakra-ui/react";
 import customTheme from "../../themes/customTheme.js";
 import Layout from "../../components/Client/Navigation/Layout.js";
+import ProtectedRoute from "../../components/ProtectedRoute.js";
 
 const theme = extendTheme({
     ...chakraTheme,
@@ -10,6 +11,7 @@ const theme = extendTheme({
 
 function ClientLayout({ Component, pageProps }) {
     return (
+
         <ChakraProvider theme={theme}>
             <Layout>
                 <CSSReset />

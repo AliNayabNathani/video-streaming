@@ -11,6 +11,7 @@ import Nav from '../../components/Client/Bars/MainNavbar';
 export default function Main() {
     const { title } = useDetailContext();
     return (
+
         <Box
             display="flex"
             flexDirection="column"
@@ -24,5 +25,6 @@ export default function Main() {
             </Box>
             <Footer />
         </Box >
+
     );
 }

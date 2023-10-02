@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    console.log('user details:\n\n\n\n', req.oidc.isAuthenticated())
-    res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-});
+// router.get('/', (req, res) => {
+//     console.log('user details:\n\n\n\n', req.oidc.isAuthenticated())
+//     res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+// });
 
 
 // router.get('/protected', (req, res) => {

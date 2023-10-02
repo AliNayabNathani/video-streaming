@@ -1,7 +1,7 @@
 import { Button, HStack, Heading, Icon, Input, Stack } from "@chakra-ui/react";
 import { AiOutlineSearch } from 'react-icons/ai';
 import { DummyText } from "./Dummytext";
-import { LinkItems } from "./Data";
+import { SetupItems } from "./Data";
 import React, { useRef } from "react";
 import { BsSearch } from "react-icons/bs";
 export const DetailText = ({ text }) => {
@@ -29,7 +29,7 @@ export const DetailText = ({ text }) => {
                 </>
             ) : null}
 
-            {LinkItems.map((link) => (
+            {SetupItems.map((link) => (
                 <React.Fragment key={link.name}>
                     {link.name === text && !link.subItems && link.Data && React.createElement(link.Data)}
                     {link.subItems &&
@@ -41,7 +41,6 @@ export const DetailText = ({ text }) => {
                     }
                 </React.Fragment>
             ))}
-
         </>
     );
 }

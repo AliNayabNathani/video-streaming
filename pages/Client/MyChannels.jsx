@@ -14,11 +14,99 @@ import {
     Icon,
 } from "@chakra-ui/react";
 
-// import { VideoPlayer } from "../../components/Client/Reusable Components/VideoPlayer";
 import MainTemplate from "../../components/Client/Templates/Main";
 import { Video } from "../../components/Client/Reusable Components/VideoPlayer";
-import { useState } from "react";
-import { AiOutlineCloseCircle } from "react-icons/ai";
+import { useRef, useState } from "react";
+import { AiOutlineCloseCircle, AiOutlinePlus } from "react-icons/ai";
+import { FiEdit3 } from "react-icons/fi";
+
+const ChannelData = [
+    {
+        name: 'Dark',
+        src: 'https://vjs.zencdn.net/v/oceans.mp4',
+        poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
+        episodes: [
+            {
+                name: 'Episode 1',
+                Duration: '25',
+                src: 'https://vjs.zencdn.net/v/oceans.mp4',
+                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
+                desc: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Veritatis vel labore vitae obcaecati magni quibusdam harum nam, quod nobis debitis sunt temporibus aperiam sit vero laudantium, tenetur reprehenderit illum nemo?'
+            },
+            {
+                name: 'Episode 2',
+                Duration: '30',
+                src: 'https://vjs.zencdn.net/v/oceans.mp4',
+                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
+                desc: 'Another episode description.'
+            },
+            {
+                name: 'Episode 3',
+                Duration: '30',
+                src: 'https://vjs.zencdn.net/v/oceans.mp4',
+                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
+                desc: 'Another episode description.'
+            },
+            {
+                name: 'Episode 4',
+                Duration: '30',
+                src: 'https://vjs.zencdn.net/v/oceans.mp4',
+                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
+                desc: 'Another episode description.'
+            },
+            {
+                name: 'Episode 5',
+                Duration: '30',
+                src: 'https://vjs.zencdn.net/v/oceans.mp4',
+                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
+                desc: 'Another episode description.'
+            },
+        ]
+    },
+    {
+        name: 'Stranger Things',
+        src: 'https://vjs.zencdn.net/v/oceans.mp4',
+        poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
+        episodes: [
+            {
+                name: 'Episode 1',
+                Duration: '40',
+                src: 'https://vjs.zencdn.net/v/oceans.mp4',
+                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
+                desc: 'Description for Stranger Things Episode 1.'
+            },
+            {
+                name: 'Episode 2',
+                Duration: '35',
+                src: 'https://vjs.zencdn.net/v/oceans.mp4',
+                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
+                desc: 'Description for Stranger Things Episode 2.'
+            },
+        ]
+    },
+    {
+        name: 'Breaking Bad',
+        src: 'https://vjs.zencdn.net/v/oceans.mp4',
+        poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
+        episodes: [
+            {
+                name: 'Episode 1',
+                Duration: '45',
+                src: 'https://vjs.zencdn.net/v/oceans.mp4',
+                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
+                desc: 'Description for Breaking Bad Episode 1.'
+            },
+            {
+                name: 'Episode 2',
+                Duration: '50',
+                src: 'https://vjs.zencdn.net/v/oceans.mp4',
+                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
+                desc: 'Description for Breaking Bad Episode 2.'
+            },
+        ]
+    },
+];
+
 
 const VideoPlayer = ({ src, poster, name }) => (
     <Box
@@ -33,56 +121,50 @@ const VideoPlayer = ({ src, poster, name }) => (
     </Box>
 )
 
-const ChannelOutline = () => (
-    <VStack spacing={'2rem'} my={'2rem'}>
-        <HStack w={'100%'} justifyContent={'space-between'}>
-            <Heading size={'md'}>Channel 01</Heading>
-            <Text>Created On: <b>02-12-22</b></Text>
-        </HStack>
-        <HStack maxW={'100%'} overflow={'hidden'}>
-            <Box>
-                <Box
-                    // Adjust the width as needed
-                    maxWidth="100%" // Ensure the player doesn't exceed its original size
-                    height={{ base: "100%", md: 'auto' }}
-                >
-                    <VideoPlayer
-                        poster="https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8"
-                        name={'Dark'}
-                        src={'https://vjs.zencdn.net/v/oceans.mp4'} />
-                </Box>
-                <Text mt={'0.5rem'}>Show 01</Text>
-            </Box>
-            <Box>
-                <Box
-                    // Adjust the width as needed
-                    maxWidth="100%" // Ensure the player doesn't exceed its original size
-                    height={{ base: "100%", md: 'auto' }}
-                >
-                    <VideoPlayer
-                        poster="https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8"
-                        name={'Dark'}
-                        src={'https://vjs.zencdn.net/v/oceans.mp4'} />
-                </Box>
-                <Text>Show 01</Text>
-            </Box>
-            <Box>
-                <Box
-                    // Adjust the width as needed
-                    maxWidth="100%" // Ensure the player doesn't exceed its original size
-                    height={{ base: "100%", md: 'auto' }}
-                >
-                    <VideoPlayer
-                        poster="https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8"
-                        name={'Dark'}
-                        src={'https://vjs.zencdn.net/v/oceans.mp4'} />
-                </Box>
-                <Text>Show 01</Text>
-            </Box>
-        </HStack>
-        <Text textAlign={'end'} w={'100%'} textDecor={'underline'}>View All</Text>
-    </VStack>
-)
+const ChannelOutline = ({ setShowName }) => {
+    const [currentIndex, setCurrentIndex] = useState();
+
+    const handleClick = (index, name) => {
+        if (index !== currentIndex) {
+            setShowName(name)
+        }
+        else {
+            setShowName('');
+        }
+        setCurrentIndex(index);
+
+    }
+
+    return (
+        <VStack spacing={'2rem'} my={'2rem'}>
+            <HStack w={'100%'} justifyContent={'space-between'}>
+                <Heading size={'md'}>Channel 01</Heading>
+                <Text>Created On: <b>02-12-22</b></Text>
+            </HStack>
+            <HStack maxW={'100%'} overflowX={'scroll'}>
+                {ChannelData.map((data, index) => {
+                    return (
+                        <Box onClick={() => handleClick(index, data.name)}>
+
+                            <Box
+                                // Adjust the width as needed
+                                maxWidth="100%" // Ensure the player doesn't exceed its original size
+                                height={{ base: "100%", md: 'auto' }}
+                            >
+                                <VideoPlayer
+                                    poster={data.poster}
+                                    name={data.name}
+                                    src={data.src} />
+                            </Box>
+                            <Text mt={'0.5rem'}>{data.name}</Text>
+                        </Box>
+                    )
+                })}
+            </HStack>
+            <Text textAlign={'end'} w={'100%'} textDecor={'underline'}>View All</Text>
+        </VStack>
+    );
+}
 
 
 const AddEpisode = ({ index, episodes, setEpisodes }) => {
@@ -99,15 +181,18 @@ const AddEpisode = ({ index, episodes, setEpisodes }) => {
             </HStack>
             <Box w={'100%'}>
                 <Text>Title</Text>
-                <Input placeholder="Title" />
+                <Input bg={'#414141'} placeholder="Title" />
             </Box>
             <Box w={'100%'}>
                 <Text>Upload File</Text>
-                <Input variant={'unstyled'} type="file" />
+                <Button justifyContent={'space-between'} w={'100%'} rightIcon={<AiOutlinePlus size={20} />}>
+                    Select File from Device
+                    <Input display={'none'} type="file" />
+                </Button>
             </Box>
             <Box w={'100%'}>
                 <Text>Description</Text>
-                <Textarea placeholder="Description" />
+                <Textarea bg={'#414141'} placeholder="Description" />
             </Box>
         </>
     );
@@ -115,11 +200,6 @@ const AddEpisode = ({ index, episodes, setEpisodes }) => {
 
 const AddChannelModal = ({ isOpen, onClose }) => {
     const [episodes, setEpisodes] = useState([]);
-    // const [episodeData, setEpisodeData] = useState({
-    //     name,
-    //     Title, 
-
-    // });
     const handleNextEpClick = () => {
         setEpisodes([...episodes, <AddEpisode key={episodes.length} />])
     }
@@ -130,18 +210,19 @@ const AddChannelModal = ({ isOpen, onClose }) => {
                 <ModalContent py={'2rem'} minH={['auto', '500px']} minW={["auto", "700px"]} bg={'#232323'}>
                     <ModalCloseButton />
                     <ModalBody>
-                        <VStack h={'100%'} w={'100%'} justifyContent={'center'} alignItems={'center'} >
-                            <VStack px={'3rem'} spacing={'1rem'} alignItems={'flex-start'}>
+                        <VStack h={'100%'} px={'5rem'} w={'100%'} justifyContent={'center'} alignItems={'center'} >
+                            <VStack w={'100%'} spacing={'1rem'} alignItems={'flex-start'}>
                                 <Heading size={'md'}>Add Channel</Heading>
                                 <Box w={'100%'}>
                                     <Text>Channel Name</Text>
-                                    <Input />
+                                    <Input bg={'#414141'} placeholder="Enter Channel Name" />
                                 </Box>
                                 {episodes.map((ep, index) => (
                                     <AddEpisode key={index} index={index} episodes={episodes} setEpisodes={setEpisodes} />
                                 ))}
                             </VStack>
-                            <Button onClick={handleNextEpClick} >Add Next Episode</Button>
+                            <Button variant={'outline'} w={'100%'} onClick={handleNextEpClick} >Add Next Episode</Button>
+                            <Button w={'30%'}>Save</Button>
                         </VStack>
                     </ModalBody>
                 </ModalContent>
@@ -153,6 +234,7 @@ const AddChannelModal = ({ isOpen, onClose }) => {
 
 export default function Channel() {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [showName, setShowName] = useState();
 
     return (
         <MainTemplate>
@@ -162,13 +244,40 @@ export default function Channel() {
                     <Button onClick={onOpen}>Create Channel</Button>
                 </Stack>
                 <Box>
-                    <ChannelOutline />
+                    <ChannelOutline setShowName={setShowName} />
                     <Divider />
-                    <ChannelOutline />
+                    {ChannelData.map((data) => {
+                        if (data.name == showName) {
+                            return data.episodes.map((episode) => (
+                                <Stack cursor={'pointer'} my={'1rem'} spacing={'1rem'} justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
+                                    <Box
+                                        // Adjust the width as needed
+                                        maxWidth="100%" // Ensure the player doesn't exceed its original size
+                                        height={{ base: "100%", md: 'auto' }}
+                                    >
+                                        <VideoPlayer
+                                            poster={episode.poster}
+                                            name={episode.name}
+                                            src={episode.src} />
+                                    </Box>
+                                    <Stack alignItems={'flex-start'} spacing={'1rem'} direction={'column'}>
+                                        <Heading size={'md'}>{episode.name}</Heading>
+                                        <Text>{episode.Duration} min</Text>
+                                        <Text>{episode.desc}</Text>
+                                    </Stack>
+                                    <Stack direction={{ base: 'row', md: 'column' }} alignSelf={'normal'} justifyContent={'space-between'}>
+                                        <Icon as={FiEdit3} boxSize={6} />
+                                    </Stack>
+                                </Stack>
+                            ))
+                        }
+                    })}
+                    <ChannelOutline setShowName={setShowName} />
                     <Divider />
-                    <ChannelOutline />
+                    <ChannelOutline setShowName={setShowName} />
                 </Box>
                 <AddChannelModal isOpen={isOpen} onClose={onClose} />
+
             </Box>
         </MainTemplate>
     );

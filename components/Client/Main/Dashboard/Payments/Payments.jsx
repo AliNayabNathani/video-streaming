@@ -120,8 +120,7 @@ export const Payments = () => {
                         <Text>100K</Text>
                     </HStack>
                 </Box>
-                <Stack w={['100%', 'auto']} alignItems={'flex-end'} direction={{ base: 'column', md: 'row' }}>
-                    <Checkbox>Select all</Checkbox>
+                <Stack w={['100%', '35%']} alignItems={'flex-end'} direction={{ base: 'column', md: 'row' }}>
                     <Flex w={'100%'} h={'2.5rem'} alignItems={'center'} justifyContent={'space-between'} className="custom-datepicker">
                         <DatePicker
                             className="datepicker"
@@ -131,7 +130,7 @@ export const Payments = () => {
                         <Icon as={AiOutlineCalendar} />
                     </Flex>
                     <Menu>
-                        <MenuButton w={'100%'} p={2} _active={{ bg: '#232323' }} _hover={{ bg: '#232323' }} textAlign={'center'} borderRadius={'5px'} as={Box} bg="rgba(255, 255, 255, 0.48)">
+                        <MenuButton w={['100%', '250px']} p={2} _active={{ bg: '#232323' }} _hover={{ bg: '#232323' }} textAlign={'center'} borderRadius={'5px'} as={Box} bg={'#414141'}>
                             <HStack justifyContent={'space-between'}>
                                 <Text>{optionValue}</Text>
                                 <Icon as={ChevronDownIcon} />

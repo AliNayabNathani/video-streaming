@@ -37,38 +37,22 @@ const DashboardNavData = [
 ];
 
 export default function Dashboard() {
-    const { user, error, isLoading } = useUser();
     const { subTitle } = useDetailContext();
-    // const { code } = queryString.parse(location.search);
     const router = useRouter();
-    const { code } = router.query;
-    const [userData, setUserData] = useState([]);
 
     // useEffect(() => {
-    //     fetch(`http://localhost:3001/Client/Dashboard?code=${code}`, {
-    //         method: 'GET',
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             Accept: "application/json",
-    //         }
-    //     })
-    //         .then(res => res.json())
-    //         .then(res => setUserData(JSON.stringify(res)))
-    // }, [code]);
-
-    useEffect(() => {
-        axios.get('http://localhost:3001/api/protected')
-            .then(response => {
-                // Handle the successful response here
-                setUserData(JSON.stringify(response.data));
-            })
-            .catch(error => {
-                // Handle errors here
-                console.error('Error fetching data:', error);
-            });
-    }, []);
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>{error.message}</div>;
+    //     axios.get('http://localhost:3001/api/protected')
+    //         .then(response => {
+    //             // Handle the successful response here
+    //             setUserData(JSON.stringify(response.data));
+    //         })
+    //         .catch(error => {
+    //             // Handle errors here
+    //             console.error('Error fetching data:', error);
+    //         });
+    // }, []);
+    // if (isLoading) return <div>Loading...</div>;
+    // if (error) return <div>{error.message}</div>;
 
     return (
         <MainTemplate>
@@ -78,15 +62,6 @@ export default function Dashboard() {
                     <Button>Export CSV</Button>
                 </HStack>
                 <ContentBar text="Dashboard" data={DashboardNavData} />
-                {/* {user && (
-                    <div>
-                        <img src={user.picture} alt={user.name} />
-                        <h2>{user.name}</h2>
-                        <p>{user.email}</p>
-                    </div>
-                )} */}
-                {userData}
-                {console.log(userData)}
                 <Box>
                     {DashboardNavData.map((navItem, index) => (
                         <React.Fragment key={index}>

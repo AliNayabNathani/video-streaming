@@ -9,13 +9,22 @@ import {
   Heading,
   SimpleGrid,
   VStack,
+  Icon,
 } from "@chakra-ui/react";
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import { BiInfoCircle } from "react-icons/bi";
+import { Tooltip } from "recharts";
 export default function TableSummary() {
-  const Revenue_Card = ({ title, total_earnings, weekly_earnings }) => (
+  const Revenue_Card = ({ title, total_earnings, weekly_earnings, label }) => (
     <Card bg={"#232323"} color={"white"}>
       <CardBody>
         <VStack spacing={'1rem'} direction={"column"} alignItems={"center"}>
-          <b>{title} </b>
+          <HStack justifyContent={'space-between'}>
+            <Heading size={'md'} color={'#55DF01'}>{title} </Heading>
+            <Tooltip hasArrow label={label} color='white'>
+              <AiOutlineInfoCircle size={8} />
+            </Tooltip>
+          </HStack>
           <Box>
             <Text>{total_earnings}</Text>
             <Text style={{ color: 'green' }}>+{weekly_earnings}</Text>
@@ -30,9 +39,7 @@ export default function TableSummary() {
     <Card bg={"#232323"} color={"white"}>
       <CardBody>
         <VStack spacing={'1rem'} direction={"column"} alignItems={"center"}>
-          <Text fontWeight={'bold'}>
-            {title}
-          </Text>
+          <Heading size={'md'} color={'#55DF01'}>{title} </Heading>
           <Box>
             <Text>This month: {monthly}</Text>
             <Text>Total: {total}</Text>
@@ -46,24 +53,27 @@ export default function TableSummary() {
   return (
     <>
       <SimpleGrid
-        columns={{ base: "2", md: "5" }}
-        spacing={{ base: 2, md: 5 }}
+        columns={{ base: "2", md: "4" }}
+        spacing={{ base: 2, md: 4 }}
         borderRadius={5}
       >
         <Revenue_Card
           title="Total Revenue"
           total_earnings="$54000"
           weekly_earnings="$2000"
+          label='Revenue of Current Month'
         />
         <Revenue_Card
           title="Sales Revenue"
           total_earnings="$33000"
           weekly_earnings="$1300"
+          label='Sales of Current Month'
         />
         <Revenue_Card
           title="Hub Revenue"
           total_earnings="$21000"
           weekly_earnings="$800"
+          label='Hub Revenue of Current Month'
         />
         <Stats_Card title="Total Users" total="15000" monthly="150" />
         <Stats_Card

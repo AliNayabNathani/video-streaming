@@ -3,7 +3,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { HeaderWithButtons } from '../../components/Admin/SmallReusableComponents/HeaderWithButtons';
 import { SearchBar } from '../../components/Admin/SmallReusableComponents/SearchBar';
 import { TableTemplate } from '../../components/Admin/Tables/Table';
-import { userColumns, userData } from '../../components/Admin/Tables/UserTableData';
+import { userColumns } from '../../components/Admin/Tables/UserTableData';
 import { Actions } from '../../components/Admin/SmallReusableComponents/Action';
 import { useSearchContext } from '../../components/Admin/Context api/Context';
 import { Button, FormControl, FormLabel, Heading, Input, Select, Stack, VStack, useDisclosure } from '@chakra-ui/react';
@@ -19,17 +19,13 @@ import {
 } from '@chakra-ui/react'
 import './style.css';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToken } from '../../features/user/userSlice';
 
 const ShowAddUserModal = ({ isOpen, onClose }) => {
-    const [userData, setUserData] = useState();
-
-    console.log(userData);
-    const backendurl = 'http://localhost:5000';
-    useEffect(() => {
-        axios.get(`${backendurl}/`)
-            .then(res => res.json())
-            .then(setUserData);
-    }, []);
+    const [name, setName] = useState();
+    const [gender, setGender] = useState();
+    const [number, setNumber] = useState();
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
@@ -41,15 +37,15 @@ const ShowAddUserModal = ({ isOpen, onClose }) => {
                             p={[5, 20]}>
                             <Heading fontSize={'2rem'} alignSelf={'center'}>Add User</Heading>
                             <FormLabel>User Name</FormLabel>
-                            <Input mb={'1rem'} border={'2px solid black'} placeholder='Abheesh' />
+                            <Input onClick={(e) => setName(e.target.value)} mb={'1rem'} value={name} border={'2px solid black'} placeholder='Abheesh' />
                             <FormLabel>Gender</FormLabel>
-                            <Select mb={'1rem'} border={'2px solid black'}>
+                            <Select onChange={(e) => setGender(e.target.value)} mb={'1rem'} border={'2px solid black'}>
                                 <option style={{ background: '#232323' }} select-option selected>Male</option>
                                 <option style={{ background: '#232323' }}> Female</option>
                                 <option style={{ background: '#232323' }}>Other</option>
                             </Select>
                             <FormLabel>Mobile Number</FormLabel>
-                            <Input mb={'1rem'} border={'2px solid black'} placeholder='876587589' />
+                            <Input onClick={(e) => setNumber(e.target.value)} mb={'1rem'} border={'2px solid black'} placeholder='876587589' />
                             <Button alignSelf={'center'} mr={3} onClick={onClose}>
                                 Submit
                             </Button>
@@ -87,6 +83,33 @@ const HeaderButtons = ({ onOpen }) => {
 export default function UserManagement() {
     const { searchQuery, isFilter } = useSearchContext();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [userData, setUserData] = useState([]);
+    const dispatch = useDispatch();
+    const { user } = useSelector(state => state.user);
+
+    console.log('User: ', user);
+    useEffect(() => {
+        // Define a function to fetch data from the backend
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("http://localhost:5000/api/v1/users/getAllUsers", {
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    withCredentials: true,
+                }); // Replace with your backend API endpoint
+                console.log(response);
+                setUserData(response.data.users);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        // Call the fetchData function when the component mounts
+        fetchData();
+    }, []);
+
+    console.log(userData);
 
     const filterData = () => {
         if (searchQuery) {

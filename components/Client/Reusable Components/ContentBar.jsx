@@ -13,7 +13,7 @@ export const ContentBar = ({ text, data }) => {
         }
         else {
             updateSubTitle(e.target.textContent);
-            console.log(subTitle);
+
         }
     }
 

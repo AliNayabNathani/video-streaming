@@ -59,7 +59,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <Box
             transition="3s ease"
             borderRight="1px"
-            w={{ base: 'full', md: '60%' }}
+            minW={{ base: 'full', md: '25%' }}
             overflowY={'auto'}
             border={'2px solid black'}
             borderY={'none'}

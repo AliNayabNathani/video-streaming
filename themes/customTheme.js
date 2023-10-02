@@ -72,7 +72,7 @@ const customTheme = extendTheme({
           borderColor: 'transparent', // Border color of the menu
         },
         item: {
-          bg: "rgba(255, 255, 255, 0.24)",
+          bg: "#414141",
           color: 'black',
           _hover: {
             bg: "#232323",
@@ -88,7 +88,7 @@ const customTheme = extendTheme({
   },
   colors: {
     customGreen: {
-      500: "#55DF01", // Define the desired color value
+      500: "#55DF01",
     },
     customGray: {
       600: 'rgba(255, 255, 255, 0.48)',

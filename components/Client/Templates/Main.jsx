@@ -8,6 +8,7 @@ import Nav from "../Bars/MainNavbar";
 export default function MainTemplate({ children }) {
     const { title } = useDetailContext();
     return (
+
         <Box
             display="flex"
             flexDirection="column"
@@ -21,5 +22,6 @@ export default function MainTemplate({ children }) {
             </Box>
             <Footer />
         </Box >
+
     );
 }

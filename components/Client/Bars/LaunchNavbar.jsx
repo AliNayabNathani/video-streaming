@@ -23,7 +23,6 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 
 export default function Nav() {
-    const { user, error, isLoading } = useUser();
     const router = useRouter();
     // const login = async () => {
     //     // const domain = "dev-g47ngs10wcqmnpfs.us.auth0.com";
@@ -77,7 +76,7 @@ export default function Nav() {
                                 <Button onClick={() => handleNavigation('/api/auth/login')} width={'100%'} variant={'solid'}>
                                     Login
                                 </Button>
-                                {error && <Text>Server Error</Text>}
+
                             </VStack>
                         </DrawerBody>
                     </DrawerContent>
@@ -86,7 +85,7 @@ export default function Nav() {
         )
     }
 
-    return isLoading ? (<div>Loading...</div>) : (
+    return (
         <>
             <Box px={4} borderBottom={'1px'} borderColor={'whiteAlpha.600'}>
                 <Flex h={24} px={{ base: 5, md: 10 }} alignItems={'center'} justifyContent={'space-between'}>

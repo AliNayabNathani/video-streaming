@@ -11,10 +11,10 @@
   }  */
 .custom-datepicker {
   outline: none;
-  border: 1px solid #323232;
+  border: 1px solid rgba(255, 255, 255, 0.562);
   padding: 0.7rem;
   border-radius: 5px;
-  background-color: #3b3b3b;
+  background-color: transparent;
 }
 
 .datepicker {

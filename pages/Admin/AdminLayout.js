@@ -3,7 +3,6 @@ import { theme as chakraTheme } from "@chakra-ui/react";
 import customTheme from "../../themes/customTheme.js";
 import Layout from "../../components/Admin/Navigation/Layout.js";
 import { SearchContextProvider } from "../../components/Admin/Context api/Context.jsx";
-
 const theme = extendTheme({
   ...chakraTheme,
   ...customTheme,
