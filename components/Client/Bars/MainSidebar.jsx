@@ -155,7 +155,8 @@ const SidebarContent = ({ onClose, ...rest }) => {
                                             <Box
                                                 fontSize="0.8rem"
                                                 p={1}
-                                                pl={8}>
+                                                pl={8}
+                                                onClick={() => handleNavigation(sublink.to)}>
                                                 <NavSubItem>
                                                     {sublink.name}
                                                 </NavSubItem>

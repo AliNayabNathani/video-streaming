@@ -17,6 +17,56 @@ export const MainItems = [
         to: '/Client/Dashboard'
     },
     {
+        name: 'Account',
+        Icon: AiOutlineUser,
+        subItems: [
+            {
+                name: 'Complete Account Setup',
+                to: '/Client/Account/CompleteSetup',
+            },
+            {
+                name: 'Payee Setup',
+                to: '/Client/Account/Payee',
+            },
+            {
+                name: 'Company Profie',
+                to: '/Client/Account/CompanyProfile',
+            },
+            {
+                name: 'Bank and tax information',
+                to: '/Client/Account/BankInfo',
+            },
+            {
+                name: 'European Content Acquisition',
+                to: '/Client/Account/EuropeContent',
+            },
+            {
+                name: 'Payment and Banking',
+                to: '/Client/Account/Payment',
+            },
+            {
+                name: 'Tax Information',
+                to: '/Client/Account/TaxInfo',
+            },
+            {
+                name: 'VideeO direct tax profile',
+                to: '/Client/Account/VideeoTax',
+            },
+            {
+                name: 'Billing Preferences ',
+                to: '/Client/Account/Billing',
+            },
+            {
+                name: 'Users and Roles',
+                to: '/Client/Account/UserRoles',
+            },
+            {
+                name: 'invoices',
+                to: '/Client/Account/Invoices',
+            },
+        ]
+    },
+    {
         name: 'Upload Video',
         Icon: AiOutlineYoutube,
         to: '/Client/UploadVideo'
@@ -56,11 +106,11 @@ export const MainItems = [
         },
         {
             name: 'Privacy Policy',
-            to: '/Client/privacy'
+            to: '/Client/Privacy'
         },
         {
             name: 'Copyrights / trademarks',
-            to: '/Client/copyright'
+            to: '/Client/Copyright'
         }],
     },
     {

@@ -36,6 +36,26 @@ import './style.css';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 
+const NotifData = [
+    {
+        msg: 'New Video Uploaded',
+        desc: 'Mark has uploaded a new video: "Exploring the Great Outdoors"'
+    },
+    {
+        msg: 'Comment on Your Video',
+        desc: 'You have a new comment on your video: "How to Bake the Perfect Cake"'
+    },
+    {
+        msg: 'Channel Subscription',
+        desc: 'User123 has subscribed to your channel!'
+    },
+    {
+        msg: 'Video Purchased',
+        desc: 'You have successfuly Purchased the Video: "Great Web of lies"'
+    }
+];
+
+
 const MobileNav = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef();
@@ -129,21 +149,27 @@ export default function Nav() {
                                     />
                                 </Box>
                             </MenuButton>
+
                             <MenuList w={'600px'} p={0} m={0}>
                                 <MenuItem p={3} color={'white'} bg={'#232323'}>
                                     <HStack w={'100%'} justifyContent={'space-between'}>
                                         <Heading size={'md'}>Notifications</Heading>
-                                        <Text textDecor={'underline'}>Mark all Read </Text>
+                                        <Text textDecor={'underline'} color={'#55DF01'}>Mark all Read </Text>
                                     </HStack>
                                 </MenuItem>
 
-                                <MenuItem p={5} bg={'#323232'} color={'white'}>
-                                    <Box>
-                                        <Heading size={'md'}>Video Purchased</Heading>
-                                        <Text fontSize={'0.9rem'}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias eum aliquid neque, hic esse minima repudiandae. Obcaecati vitae assumenda officia.</Text>
-                                    </Box>
-                                </MenuItem>
-                                <Divider />
+                                {NotifData.map((data) => (
+                                    <>
+                                        <MenuItem p={5} bg={'#323232'} color={'white'}>
+                                            <Box>
+                                                <Heading color={'#55DF01'} size={'md'}>{data.msg}</Heading>
+                                                <Text fontSize={'0.9rem'}>{data.desc}</Text>
+                                            </Box>
+                                        </MenuItem>
+                                        <Divider />
+                                    </>
+                                ))}
+
 
                             </MenuList>
                         </Menu>

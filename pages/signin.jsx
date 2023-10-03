@@ -50,9 +50,11 @@ export default function SignIn() {
 
   useEffect(() => {
     if (user.roleId === 2 || user.roleId === 4)
-      console.log(user.roleId);
-    router.push('/Admin/');
+      router.push('/Admin');
+    else if (user.roleId === 1 || user.roleId === 3)
+      router.push('/Client/Main');
   })
+
   return (
     <VStack h={"100vh"} justifyContent={"center"} alignItems={"center"}>
       <Stack

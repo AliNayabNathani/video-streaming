@@ -92,7 +92,7 @@ export default function Nav() {
                     <Box display={['none', 'block']}>
                         <LanguageSelect />
                     </Box>
-                    <Image src={'assests/videe0/Logo/Black _ White/sideBarLogo.png'}
+                    <Image src='/assests/videe0/Logo/Black _ White/sideBarLogo.png'
                         alt="Logo"
                         w={"180px"}
                         h={"50px"} />

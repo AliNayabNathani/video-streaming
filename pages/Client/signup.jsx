@@ -1,14 +1,16 @@
-import { Box, Button, Checkbox, HStack, Heading, Image, Input, Stack, Text, VStack, } from "@chakra-ui/react";
+import { Box, Button, Checkbox, Divider, HStack, Heading, Image, Input, Stack, Text, VStack, } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Launch from "../../components/Client/Templates/Launch";
 import { generateHideOnMobileCSS } from "../../components/Client/GlobalCSS/GlobalCSSStye";
-const DummyUser = [
-    {
-        email: 'Abheshkhemani@gmail.com',
-        password: "Abheesh123"
-    }
-]
+import './style.css';
+
+// const DummyUser = [
+//     {
+//         email: 'Abheshkhemani@gmail.com',
+//         password: "Abheesh123"
+//     }
+// ]
 
 export default function SignIn() {
     const router = useRouter();
@@ -19,13 +21,7 @@ export default function SignIn() {
     });
 
     const HandleSubmit = () => {
-        DummyUser.map((User) => {
-            if (Info.email === User.email) {
-                router.push('/Client/Dashboard');
-            }
-            else
-                alert('Incorrect Username or Password');
-        })
+        router.push('/Client/otp');
     }
 
     const HandleChange = (e) => {
@@ -37,29 +33,42 @@ export default function SignIn() {
         );
     }
 
+    const InputText = ({ children }) => (
+        <Text color={'white'} w={'100%'} textAlign={'start'}>
+            {children}
+        </Text>
+    )
     return (
         <Launch>
-            <VStack h={'70vh'} justifyContent={'center'} alignItems={'center'}>
-                <form>
-                    <Stack direction={{ base: 'column', md: 'row' }} border={'2px solid black'} borderRadius={'5px'}>
-                        <style>{generateHideOnMobileCSS()}</style>
-                        <Box p={{ base: '0', md: '16' }} borderBottom={'2px solid black'} borderRight={'1px solid black'}>
-                            <Image className="hide-on-mobile" src='/public/assests/videe0/Logo/videe0 - Logo (250x150).png' />
-                        </Box>
-                        <VStack p={{ base: '16', md: '16' }}>
-                            <Heading textDecor={'underline'}>Registration</Heading>
-                            <Input onChange={HandleChange} type="text" borderColor={'gray.500'} placeholder="Full Name" />
-                            <HStack justifyContent={'center'}>
-                                <Input maxWidth={'20%'} onChange={HandleChange} type="number" borderColor={'gray.500'} placeholder="+" />
-                                <Input maxWidth={'80%'} onChange={HandleChange} type="number" borderColor={'gray.500'} placeholder="Phone Number" />
-                            </HStack>
-                            <Input onChange={HandleChange} type="email" borderColor={'gray.500'} placeholder="Email Address" />
-                            <Checkbox>Agree Terms and Conditions</Checkbox>
-                            <Text>We will send a 6 digit Code</Text>
-                            <Button onClick={() => HandleSubmit}>Sign Up</Button>
-                        </VStack>
-                    </Stack>
-                </form>
+            <VStack m={['2rem', '5rem']} justifyContent={"center"} alignItems={"center"} >
+                <Stack spacing={'2rem'} p={['2rem', '5rem']} w={["auto", "80%"]} h={["auto", "60%"]} bg={'#232323'} justifyContent={'center'} alignItems={'center'} direction={{ base: 'column', md: 'row' }}>
+                    {/* <style>{generateHideOnMobileCSS()}</style> */}
+                    <VStack
+                        alignItems={"center"}
+                        alignSelf={"center"}
+                        justifyItems={"center"}
+                        w={['auto', "40%"]}
+                    >
+                        <Image alt="logo" w={['150px', '250px']} className="hide-on-mobile" src='/assests/videe0/Logo/Black _ White/sideBarLogo.png' />
+                    </VStack>
+                    <div className="divider-line"></div>
+                    <VStack
+                        w={['auto', "40%"]}
+                        alignItems={"center"}
+                        alignSelf={"center"}
+                        justifyItems={"center"}>
+                        <Heading>Registration</Heading>
+                        <InputText>Full Name</InputText>
+                        <Input onChange={HandleChange} type="text" borderColor={'lighterGray'} placeholder="Enter your full name" />
+                        <InputText>Email Address</InputText>
+                        <Input onChange={HandleChange} type="email" borderColor={'lighterGray'} placeholder="Email Address" />
+                        <InputText>Password</InputText>
+                        <Input onChange={HandleChange} type="email" borderColor={'lighterGray'} placeholder="Password" />
+                        <Checkbox w={'100%'} textAlign={'start'}>Agree Terms and Conditions</Checkbox>
+                        <Button w={'100%'} onClick={() => HandleSubmit}>Sign Up</Button>
+                        <Text>Already have an Account? <a style={{ color: '#55DF01' }} href="/Client/signin">Login</a></Text>
+                    </VStack>
+                </Stack>
             </VStack>
         </Launch>
     );

@@ -7,14 +7,14 @@ import {
     ModalBody,
     ModalCloseButton,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineCloseCircle, } from 'react-icons/ai';
 import { FaPlus } from "react-icons/fa";
 import { VideoPlayer } from "../../Reusable Components/VideoPlayer";
 import { useDetailContext } from "../../Context/context";
 
 const FormLabelOutline = ({ children }) => (
-    <Text width={'100%'} textAlign={'start'} fontSize={'1rem'} fontWeight={'bold'}>
+    <Text width={'100%'} color={'white'} textAlign={'start'} fontSize={'1rem'} fontWeight={'bold'}>
         {children}
     </Text>
 )
@@ -41,10 +41,30 @@ const VideoOutline = ({ index, visibleVideoOutlines, setVisibleVideoOutlines }) 
 }
 
 
-const UploadOutline = () => {
+const UploadOutline = ({ trailerData, setTrailerData }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    function TrailerModal({ isOpen, onClose }) {
+
+    function TrailerModal({ isOpen, onClose, trailerData, setTrailerData }) {
+        const [tempTrailerData, setTempTrailerData] = useState({
+            title: '',
+            src: '',
+            poster: ''
+        });
+        console.log('Temp: ', tempTrailerData);
+        console.log('Trailer: ', trailerData);
+        const handleTrailerData = (e) => {
+            setTempTrailerData({ ...tempTrailerData, [e.target.name]: e.target.value });
+        }
+
+        const handleTrailerUpload = () => {
+            setTrailerData([...trailerData, tempTrailerData]);
+            onClose();
+        }
+
+        const clearTrailerData = () => {
+            setTrailerData([]);
+        }
         return (
             <>
                 <Modal isOpen={isOpen} onClose={onClose}>
@@ -54,16 +74,19 @@ const UploadOutline = () => {
                         <ModalCloseButton />
                         <ModalBody>
                             <Text>Enter Title</Text>
-                            <Input />
+                            <Input value={tempTrailerData.title} name="title" onChange={handleTrailerData} />
                             <Text>Select Video</Text>
-                            <Input type="file" accept="video/*" />
+                            <Input value={tempTrailerData.src} name="src" onChange={handleTrailerData} type="file" accept="video/*" />
                             <Text>Select thumbnail</Text>
-                            <Input type="file" accept="image/*" />
+                            <Input value={tempTrailerData.poster} name='poster' onChange={handleTrailerData} type="file" accept="image/*" />
                         </ModalBody>
 
                         <ModalFooter>
-                            <Button colorScheme='blue' mr={3} onClick={onClose}>
+                            <Button mr={3} onClick={handleTrailerUpload}>
                                 Upload
+                            </Button>
+                            <Button mr={3} onClick={clearTrailerData}>
+                                clear
                             </Button>
                         </ModalFooter>
                     </ModalContent>
@@ -73,13 +96,6 @@ const UploadOutline = () => {
     }
 
     const [uploadedVideo, setUploadedVideo] = useState([]);
-    // const [trailerData, setTrailerData] = useState([]);
-    const handleVideoUpload = (e) => {
-        e.stopPropagation();
-
-        const file = e.target.files[0];
-        setUploadedVideo(file);
-    }
 
     const UploadPreview = () => (
         <VideoPlayer
@@ -109,7 +125,7 @@ const UploadOutline = () => {
                             onClick={onOpen}
                         />
                     </HStack>
-                    <TrailerModal isOpen={isOpen} onClose={onClose} />
+                    <TrailerModal trailerData={trailerData} setTrailerData={setTrailerData} isOpen={isOpen} onClose={onClose} />
                 </Stack>
             </VStack>
         </Box>
@@ -118,12 +134,10 @@ const UploadOutline = () => {
 
 export default function AddVideo() {
     const [visibleVideoOutlines, setVisibleVideoOutlines] = useState([]);
-    const { updateSubTitle } = useDetailContext();
-    updateSubTitle(null);
+    const [trailerData, setTrailerData] = useState([]);
     const handleAddButtonClick = () => {
         setVisibleVideoOutlines([...visibleVideoOutlines, <VideoOutline key={visibleVideoOutlines.length} />]);
     };
-
 
     const [input, setInput] = useState({
         title: "",
@@ -244,9 +258,31 @@ export default function AddVideo() {
                     <VStack width={['100%', '50%']} alignItems={'flex-start'}>
 
                         <FormLabelOutline>Trailers (if any)</FormLabelOutline>
-                        <VStack alignItems={'flex-start'} bg={'whiteAlpha.400'} w={'100%'} p={8}>
-                            <UploadOutline />
-                        </VStack>
+                        <HStack overflowX={'auto'}>
+                            {trailerData.map((data, index) => {
+                                console.log(data);
+                                return (
+                                    <VStack key={index} alignItems={'flex-start'} bg={'whiteAlpha.400'} w={'100%'} p={8}>
+                                        <VStack alignItems={['center', 'flex-start']}>
+                                            <Stack direction={'row-reverse'}>
+                                                <HStack>
+                                                    <Box
+                                                        bg={'#414141'}
+                                                        color={'#55DF01'}
+                                                        w={'150px'} h={'150px'}
+                                                    >
+
+                                                    </Box>
+                                                </HStack>
+                                            </Stack>
+                                        </VStack>
+                                    </VStack>
+                                )
+                            })}
+                            <VStack alignItems={'flex-start'} bg={'whiteAlpha.400'} w={'100%'} p={8}>
+                                <UploadOutline trailerData={trailerData} setTrailerData={setTrailerData} />
+                            </VStack>
+                        </HStack>
 
 
                         <FormLabel>Trailer Langauge (Optional)</FormLabel>
