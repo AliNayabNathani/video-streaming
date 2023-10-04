@@ -76,7 +76,7 @@ export const authSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.isSucess = true
-                state.user = action.payload.data
+                state.user = action.payload
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = true
