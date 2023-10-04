@@ -93,7 +93,7 @@ export default function CreatePPV() {
                     <VStack w={'100%'} alignItems={'flex-start'}>
                         <Text>Event art</Text>
                         <Box w={'100%'} objectFit={'unset'}>
-                            <Image mb={2} src='/assests/Video Images/R.jpg' />
+                            <Image alt="Event Picture" mb={2} src='/assests/Video Images/R.jpg' />
                         </Box>
                         <Text>Event Title</Text>
                         <Input placeholder="Title" />

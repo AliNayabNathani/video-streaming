@@ -119,7 +119,7 @@ export default function CompanyProfile() {
             </Box>
 
             <Box border={'1px solid #55DF01'} p={4} borderRadius={'5px'}>
-                <Text mb={'2rem'}>Please keep your company profile up-to-date. You must complete a company profile even if you're not part of an organization. If you are setting up as an individual, enter your first and last name as the company name</Text>
+                <Text mb={'2rem'}>Please keep your company profile up-to-date. You must complete a company profile even if you`re not part of an organization. If you are setting up as an individual, enter your first and last name as the company name</Text>
                 <Divider mb={'2rem'} />
                 <Stack direction={['column', 'row']} justifyContent={'space-between'} alignItems={'center'}>
                     <Box>

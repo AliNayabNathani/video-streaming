@@ -17,8 +17,8 @@ export default function PPV() {
                 <Button onClick={handleNavigation}> Create PPV</Button>
             </Box>
             <VStack mt={'1rem'}>
-                {LiveData.map((live) => (
-                    < Stack justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
+                {LiveData.map((live, index) => (
+                    < Stack key={index} justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
                         <Box
                             // Adjust the width as needed
                             maxWidth="100%" // Ensure the player doesn't exceed its original size

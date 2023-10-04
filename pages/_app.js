@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
-import AdminLayout from "./Admin/AdminLayout";
-import ClientLayout from "./Client/ClientLayout";
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { useEffect } from "react";
 import { Provider } from "react-redux";
 import store from "../features/store";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import AdminLayout from "../components/Admin/AdminLayout";
+import ClientLayout from "../components/Client/ClientLayout";
 
 
 function MyApp({ Component, pageProps }) {

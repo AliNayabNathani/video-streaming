@@ -19,8 +19,7 @@ import { useRef, useState } from "react";
 import { AiOutlineCloseCircle, AiOutlinePlus } from "react-icons/ai";
 import { FiEdit3 } from "react-icons/fi";
 import axios from "axios";
-import { server } from "../server";
-
+import { server } from "../../components/server";
 const ChannelData = [
     {
         name: 'Dark',
@@ -158,7 +157,7 @@ const ChannelOutline = ({ setShowName }) => {
             <HStack maxW={'100%'} overflowX={'scroll'}>
                 {ChannelData.map((data, index) => {
                     return (
-                        <Box onClick={() => handleClick(index, data.name)}>
+                        <Box key={index} onClick={() => handleClick(index, data.name)}>
 
                             <Box
                                 // Adjust the width as needed
@@ -262,8 +261,8 @@ export default function Channel() {
                     <Divider />
                     {ChannelData.map((data) => {
                         if (data.name == showName) {
-                            return data.episodes.map((episode) => (
-                                <Stack cursor={'pointer'} my={'1rem'} justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
+                            return data.episodes.map((episode, index) => (
+                                <Stack key={index} cursor={'pointer'} my={'1rem'} justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
                                     <Box
                                         // Adjust the width as needed
                                         maxWidth="100%" // Ensure the player doesn't exceed its original size

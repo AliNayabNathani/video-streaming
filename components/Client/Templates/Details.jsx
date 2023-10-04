@@ -16,20 +16,19 @@ import { LinkItems } from '../Details/Data';
 export default function Details() {
     const { title } = useDetailContext();
     return (
-        <ProtectedRoute>
-            <Box
-                display="flex"
-                flexDirection="column"
-                minHeight="100vh" >
-                <Nav />
-                <Box display={'flex'} overflow="hidden" flex='1'>
-                    <Sidebar />
-                    <Box ml={{ base: 0, md: '25%' }} overflowY={'scroll'} p={4}>
-                        <DetailText text={title} />
-                    </Box>
+
+        <Box
+            display="flex"
+            flexDirection="column"
+            minHeight="100vh" >
+            <Nav />
+            <Box display={'flex'} overflow="hidden" flex='1'>
+                <Sidebar />
+                <Box ml={{ base: 0, md: '25%' }} overflowY={'scroll'} p={4}>
+                    <DetailText text={title} />
                 </Box>
-                <Footer />
-            </Box >
-        </ProtectedRoute>
+            </Box>
+            <Footer />
+        </Box >
     );
 }

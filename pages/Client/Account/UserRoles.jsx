@@ -50,25 +50,25 @@ export default function UserRoles() {
 
                 <Box my={'1rem'}>
                     <Heading mb={'0.5rem'} size={'md'} color={'#55DF01'}>Modify Access Levels:</Heading>
-                    <Text>To change an individual's role or other profile information:</Text>
+                    <Text>To change an individual`s role or other profile information:</Text>
                     <OrderedList color={'#9c9c9c'}>
                         <ListItem>Click Users & Roles, then All Users</ListItem>
-                        <ListItem>Choose Edit next to the individual's entry, make your changes, and save.</ListItem>
+                        <ListItem>Choose Edit next to the individual`s entry, make your changes, and save.</ListItem>
                     </OrderedList>
                 </Box>
 
                 <Box my={'1rem'}>
                     <Heading mb={'0.5rem'} size={'md'} color={'#55DF01'}>Revoke Access</Heading>
-                    <Text>To permanently remove someone's access:</Text>
+                    <Text>To permanently remove someone`s access:</Text>
                     <OrderedList color={'#9c9c9c'}>
                         <ListItem>Go to Users & Roles, then All Users.</ListItem>
-                        <ListItem>Click Delete next to the user's name.</ListItem>
+                        <ListItem>Click Delete next to the user`s name.</ListItem>
                     </OrderedList>
                 </Box>
 
                 <Box my={'1rem'}>
                     <Heading mb={'0.5rem'} size={'md'} color={'#55DF01'}>Warning:</Heading>
-                    <Text>Deletion is irreversible; you'll need to re-invite the user if you want to grant access later. If login issues persist, ensure you're using the correct email and password. Multiple accounts linked to the same email address may result in login confusion.</Text>
+                    <Text>Deletion is irreversible; you`ll need to re-invite the user if you want to grant access later. If login issues persist, ensure you`re using the correct email and password. Multiple accounts linked to the same email address may result in login confusion.</Text>
                 </Box>
             </Box>
         </MainTemplate>

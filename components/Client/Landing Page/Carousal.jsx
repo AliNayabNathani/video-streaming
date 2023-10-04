@@ -49,6 +49,7 @@ function ImageCarousel({ Images }) {
             {/* Radio buttons for each slide */}
             {[1, 2, 3, 4, 5].map((index) => (
                 <input
+                    key={index}
                     type="radio"
                     name="testimonial"
                     id={`t-${index}`}
@@ -64,27 +65,27 @@ function ImageCarousel({ Images }) {
                     <>
                         <label class="item" for="t-1">
                             <div className='item'>
-                                <img src="assests/Carousal/Image1.jpg" alt="picture" />
+                                <Image src="assests/Carousal/Image1.jpg" alt="picture" />
                             </div>
                         </label>
                         <label class="item" for="t-2">
                             <div className='item'>
-                                <img src="assests/Carousal/Image2.jpg" alt="picture" />
+                                <Image src="assests/Carousal/Image2.jpg" alt="picture" />
                             </div>
                         </label>
                         <label class="item" for="t-3">
                             <div className='item'>
-                                <img src="assests/Carousal/Image3.jpg" alt="picture" />
+                                <Image src="assests/Carousal/Image3.jpg" alt="picture" />
                             </div>
                         </label>
                         <label class="item" for="t-4">
                             <div className='item'>
-                                <img src="assests/Carousal/Image4.jpg" alt="picture" />
+                                <Image src="assests/Carousal/Image4.jpg" alt="picture" />
                             </div>
                         </label>
                         <label class="item" for="t-5">
                             <div className='item'>
-                                <img src="assests/Carousal/Image2.jpg" alt="picture" />
+                                <Image src="assests/Carousal/Image2.jpg" alt="picture" />
                             </div>
                         </label>
                     </>

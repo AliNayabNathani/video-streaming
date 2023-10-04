@@ -6,10 +6,10 @@ export default function Contact() {
         <MainTemplate>
             <Heading size={'lg'} mb={'2rem'}>Contact Us</Heading>
             <Text>
-                If you need help, please visit our Help Center.There you'll find answers to many common questions about creating an account, watching and uploading videos, and maintaining your channel.
+                If you need help, please visit our Help Center.There you&apos;ll find answers to many common questions about creating an account, watching and uploading videos, and maintaining your channel.
             </Text>
             <Text>
-                If you're unable to find what you're looking for in the Help Center, we suggest visiting our Community Help Forum.Experiencing a bug ? Take a look at our Current Site Issues page to see a list of known issues we're working to fix.
+                If you&apos;re unable to find what you&apos;re looking for in the Help Center, we suggest visiting our Community Help Forum.Experiencing a bug ? Take a look at our Current Site Issues page to see a list of known issues we&apos;re working to fix.
             </Text>
 
             <Heading size={'md'} mt={'2rem'} mb={'1rem'} color={'#55DF01'}>Our Address</Heading>

@@ -16,10 +16,10 @@ export const DummyText = ({ count }) => {
                         Visit videeO.com. For users with an account specific to a certain region, you will be directed accordingly.
                     </li>
                     <li>
-                        Click on your username located at the upper right corner of the screen and select "Dashboard."
+                        Click on your username located at the upper right corner of the screen and select &quot;Dashboard.&quot;
                     </li>
                     <li>
-                        You'll land on the Dashboard Overview
+                        You&apos;ll land on the Dashboard Overview
                     </li>
                 </ol>
                 <Text>With Payee Settings, you can modify various components of your account --- be it your profile, bank information, or tax details.</Text>
@@ -55,8 +55,8 @@ export const Overview = () => (
     <Box mt={'3rem'} mr={{ base: 'none', md: '15rem' }}>
         <Heading>Overview</Heading>
         <Text>VideeOHub serves as a bridge between content creators ranging from indie producers to big-shot studios-and our diverse, global audience accessible through an array of devices. VideeOHub allows you to offer your content that meets our guidelines for either rental or purchase, primarily on key global markets from United States to Africa
-            At Videeo, we are committed to regularly updating our content library to provide fresh and engaging material for our viewers. We typically license professionally crafted movies and TV series that have either hit the silver screen, been featured on major TV channels, or been showcased at leading film festivals. However, being professionally produced is not the sole criteria; Videeo retains the discretion to either include or exclude content based on various factors. We might also choose to license unique titles that haven't been released theatrically or featured on major networks or festivals. It's important to note that any content licensed is not guaranteed a permanent spot and can be taken down at any time, as determined solely by Videeo.
-            Each submitted title is subject to both manual and automated evaluations before any licensing agreements are made. Until your content has been approved across all the territories and formats you've requested, it will be tagged as 'Under Review'. Please be aware that submission of your title doesn't ensure its selection for licensing, nor does it commit Videeo to a specific publishing timeframe.
+            At Videeo, we are committed to regularly updating our content library to provide fresh and engaging material for our viewers. We typically license professionally crafted movies and TV series that have either hit the silver screen, been featured on major TV channels, or been showcased at leading film festivals. However, being professionally produced is not the sole criteria; Videeo retains the discretion to either include or exclude content based on various factors. We might also choose to license unique titles that haven&apos;t been released theatrically or featured on major networks or festivals. It&apos;s important to note that any content licensed is not guaranteed a permanent spot and can be taken down at any time, as determined solely by Videeo.
+            Each submitted title is subject to both manual and automated evaluations before any licensing agreements are made. Until your content has been approved across all the territories and formats you&apos;ve requested, it will be tagged as &apos;Under Review&apos;. Please be aware that submission of your title doesn&apos;t ensure its selection for licensing, nor does it commit Videeo to a specific publishing timeframe.
             For more info, please refer to your Video Onboarding Guide (link to guide on site) for a detailed guide of the process from start to finish</Text>
     </Box>
 )

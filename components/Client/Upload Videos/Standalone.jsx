@@ -58,8 +58,9 @@ export const TableTemplate = ({ data, columns }) => {
             <Table colorScheme='gray'>
                 <Thead bg={"#181818"}>
                     <Tr>
-                        {columns.map((c) => (
+                        {columns.map((c, index) => (
                             <Th
+                                key={index}
                                 textAlign={"center"}
                                 maxWidth={"10rem"}
                                 px={"10px"}
@@ -77,9 +78,11 @@ export const TableTemplate = ({ data, columns }) => {
                                 { background: 'RGBA(0, 0, 0, 0.05)' } :
                                 { background: 'RGBA(255, 255, 255, 0.15)' }}
                                 key={index}>
-                                {columns.map((column) => {
+                                {columns.map((column, index) => {
                                     return (
-                                        <Td textAlign={"center"}
+                                        <Td
+                                            key={index}
+                                            textAlign={"center"}
                                             border={0}
                                             borderBottom={'1px solid RGBA(255, 255, 255, 0.48)'}>
                                             {item[column]}

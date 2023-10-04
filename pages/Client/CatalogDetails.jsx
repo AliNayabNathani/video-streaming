@@ -68,7 +68,7 @@ const VideoInfo = ({ vid }) => {
                 alignItems={"center"}
             >
                 <Box width={"250px"} height={"250px"}>
-                    <Image src="/assests/Carousal/Image1.jpg" />
+                    <Image src="/assests/Carousal/Image1.jpg" alt="carousel" />
                 </Box>
                 <HStack spacing={32} alignItems={"flex-start"}>
                     <VStack fontSize={'1.1rem'} spacing={4} justifySlef={'start'} alignItems={"flex-start"}>
@@ -140,8 +140,9 @@ export default function VideoDetails() {
                         justifyContent={["center", "space-between"]}
                         spacing={[6, 0]}
                     >
-                        {TrailerData.map((trailer) => (
+                        {TrailerData.map((trailer, index) => (
                             <VideoPlayer
+                                key={index}
                                 src={trailer.src}
                                 poster={trailer.poster}
                                 name={trailer.name}
@@ -155,9 +156,10 @@ export default function VideoDetails() {
                         autoRows="auto"
                         gap={[6, 2]}
                     >
-                        {EpisodeData.map((episode) => (
-                            <GridItem colSpan={1}>
+                        {EpisodeData.map((episode, index) => (
+                            <GridItem key={index} colSpan={1}>
                                 <VideoPlayer
+                                    key={index}
                                     src={episode.src}
                                     poster={episode.poster}
                                     name={episode.name}

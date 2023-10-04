@@ -74,7 +74,7 @@ export default function SignIn() {
           justifyItems={"center"}
           w={"50%"}
         >
-          <Image src="/assests/videe0/Logo/videe0 - Logo (250x150).png" />
+          <Image alt="logo" src="/assests/videe0/Logo/videe0 - Logo (250x150).png" />
         </VStack>
         <VStack
           justifyContent={"center"}
@@ -131,7 +131,7 @@ export default function SignIn() {
           </Button>
           <HStack>
             <Text fontSize="sm" mt={0}>
-              You don't have an account?
+              You don&apos;t have an account?
             </Text>
             <Text color={"#55DF01"} fontWeight={"semibold"}>
               Create Account

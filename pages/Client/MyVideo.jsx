@@ -245,7 +245,7 @@ const CreatePPV = () => {
                 <VStack w={'40%'} alignItems={'flex-start'}>
                     <Text>Event art</Text>
                     <Box objectFit={'unset'}>
-                        <Image mb={2} w={'350px'} h={'auto'} objectFit={'cover'} src='/assests/Video Images/R.jpg' />
+                        <Image alt="video" mb={2} w={'350px'} h={'auto'} objectFit={'cover'} src='/assests/Video Images/R.jpg' />
                     </Box>
                     <Text>Event Title</Text>
                     <Input placeholder="Title" />

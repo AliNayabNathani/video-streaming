@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.1",
+    "null-loader": "^4.0.1",
     "video.js": "^8.5.2"
   }
 }

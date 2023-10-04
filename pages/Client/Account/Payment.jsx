@@ -49,8 +49,9 @@ const PaymentTable = () => {
             <Table colorScheme='gray'>
                 <Thead bg={"#181818"}>
                     <Tr>
-                        {accountColumns.map((c) => (
+                        {accountColumns.map((c, index) => (
                             <Th
+                                key={index}
                                 textAlign={"center"}
                                 maxWidth={"10rem"}
                                 px={"10px"}

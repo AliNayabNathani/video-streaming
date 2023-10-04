@@ -212,8 +212,8 @@ export const Earnings = () => {
         <Box >
             <Heading fontSize={'1.5rem'} my={5} textAlign={{ base: 'center', md: 'start' }}>Statistics</Heading>
             <Stack width={'100%'} direction={{ base: 'column', md: 'row' }} alignItems={'center'} justifyContent={{ base: 'center', md: 'start' }}>
-                {contentData.map((content) => (
-                    <GrayOutline text={content.name} num={content.num} />
+                {contentData.map((content, index) => (
+                    <GrayOutline key={index} text={content.name} num={content.num} />
                 ))}
             </Stack>
             <TableComp TablehHeading={TablehHeading} TableColumn={TableColumn} />

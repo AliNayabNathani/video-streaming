@@ -1,5 +1,18 @@
 // 'use client';
 
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+
+export default function Index() {
+    const router = useRouter();
+    useEffect(() => {
+        router.push('/Client');
+    }, [])
+    return (
+        <></>
+    );
+}
+
 // import { useAuth0 } from '@auth0/auth0-react';
 // import axios from 'axios';
 // import { useRouter } from 'next/router';

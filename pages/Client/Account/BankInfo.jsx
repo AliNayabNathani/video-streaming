@@ -85,8 +85,8 @@ export default function BankInfo() {
 
             <Box mb={'1rem'}>
                 <Heading size={'sm'} color={'#55DF01'}>Provided:</Heading>
-                <Text>The IRS doesn't require your consent to any provision of this document other than the certications required to avoid backup withholding. Signature (type full name)</Text>
-                <Text>By typing my name on any given date, I'm signing the tax form under penalties of perjury</Text>
+                <Text>The IRS doesn`t require your consent to any provision of this document other than the certications required to avoid backup withholding. Signature (type full name)</Text>
+                <Text>By typing my name on any given date, I`m signing the tax form under penalties of perjury</Text>
                 <Text>Date _____</Text>
                 <Text>Submit for review --- review document</Text>
                 <Text>Make changes                  submit</Text>

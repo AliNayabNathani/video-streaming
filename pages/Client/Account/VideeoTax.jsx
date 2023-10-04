@@ -24,7 +24,7 @@ export default function VideeoTax() {
                     <Button w={['50%', '20%']} variant={'outline'}>Business</Button>
                 </HStack>
 
-                <Text mb={'0.5rem'}>"Individual" includes sole propertors or single-member LLCs where the owner is an individual</Text>
+                <Text mb={'0.5rem'}>&quot;Individual&quot;includes sole propertors or single-member LLCs where the owner is an individual</Text>
 
                 <div onClick={onToggle}>
                     <Text color={'#55DF01'} as={'a'} cursor={'pointer'}>
@@ -51,7 +51,7 @@ export default function VideeoTax() {
                         <Button w={'100%'}>Yes</Button>
                         <Button w={'100%'} variant={'outline'}>No</Button>
                     </HStack>
-                    <Button w={['100%', '60%']} variant={'outline'}>I'm not sure if I'm a US resident alien</Button>
+                    <Button w={['100%', '60%']} variant={'outline'}>I&apos;m not sure if I&apos;m a US resident alien</Button>
                 </Stack>
 
                 <div onClick={onToggle}>

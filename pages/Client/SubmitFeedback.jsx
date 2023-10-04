@@ -29,7 +29,7 @@ const VideoInfo = () => {
                 alignItems={"center"}
             >
                 <Box width={"250px"} height={"250px"}>
-                    <Image src="/assests/Carousal/Image1.jpg" />
+                    <Image alt="Content" src="/assests/Carousal/Image1.jpg" />
                 </Box>
                 <HStack spacing={"2rem"} alignItems={"flex-start"}>
                     <VStack alignItems={"flex-start"}>

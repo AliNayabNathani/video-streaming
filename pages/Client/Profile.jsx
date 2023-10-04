@@ -3,20 +3,13 @@ import MainTemplate from "../../components/Client/Templates/Main";
 import { BiUserCircle } from "react-icons/bi";
 import { FiEdit3 } from "react-icons/fi";
 import { useRouter } from "next/router";
-import { logout, reset } from "../../features/auth/authSlice";
+import { logout } from "../../features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Profile() {
     const router = useRouter();
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
-    // const logout = async () => {
-    //     const domain = "dev-g47ngs10wcqmnpfs.us.auth0.com";
-    //     const clientId = "adb38ErO5bDrRS3ICJsRDrYBtUxOpOlX";
-    //     const redirectTo = "http://localhost:3000/Client/";
-
-    //     router.push(`https://${domain}/logout?client_id=${clientId}&returnTo=${redirectTo}`);
-    // }
     const handleNavigation = (to) => {
         router.push(to);
     }
@@ -46,9 +39,9 @@ export default function Profile() {
                     </HStack>
                     <VStack px={20} pb={10} alignItems={'flex-start'} justifyContent={'center'}>
                         <Text fontWeight={'bold'}>Username</Text>
-                        <Input value={user.user.name} mb={'1rem'} disabled />
+                        <Input value={user?.user?.name} mb={'1rem'} disabled />
                         <Text fontWeight={'bold'}>E-mail address</Text>
-                        <Input value={user.user.email} mb={'1rem'} disabled />
+                        <Input value={user?.user?.email} mb={'1rem'} disabled />
                         <Text fontWeight={'bold'}>Phone Number</Text>
                         <Input mb={'1rem'} type='number' placeholder="+91 098765432" disabled />
                         <Button w={'100%'} onClick={() => handleNavigation()}>Change Password</Button>

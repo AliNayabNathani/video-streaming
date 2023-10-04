@@ -162,8 +162,9 @@ export default function VideoDetails() {
           justifyContent={["center", "space-between"]}
           spacing={[6, 0]}
         >
-          {TrailerData.map((trailer) => (
+          {TrailerData.map((trailer, index) => (
             <VideoPlayer
+              key={index}
               src={trailer.src}
               poster={trailer.poster}
               name={trailer.name}
@@ -177,8 +178,8 @@ export default function VideoDetails() {
           autoRows="auto"
           gap={[6, 2]}
         >
-          {EpisodeData.map((episode) => (
-            <GridItem colSpan={1}>
+          {EpisodeData.map((episode, index) => (
+            <GridItem key={index} colSpan={1}>
               <VideoPlayer
                 src={episode.src}
                 poster={episode.poster}
