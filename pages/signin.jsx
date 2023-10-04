@@ -16,16 +16,9 @@ import {
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { useDispatch, useSelector } from 'react-redux';
-import { addUser, login, loginUser, logout } from "../features/user/userSlice";
-
-const initialState = {
-  name: '',
-  email: '',
-  password: '',
-  isMember: true,
-};
+import { login, reset, addToken } from "../features/auth/authSlice";
+import Spinner from "../components/spinner";
 
 export default function SignIn() {
   const router = useRouter();
@@ -34,27 +27,36 @@ export default function SignIn() {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.user);
-  console.log('User: ', user);
-  const handleLogin = async () => {
-    try {
-      dispatch(loginUser({ email, password }));
-    } catch (error) {
-      console.error('Login failed:', error);
-    }
-  };
-
-  const handleLogout = () => {
-    dispatch(logout());
-  };
-
+  const { user, isLoading, isSuccess, message, isError } = useSelector((state) => state.auth);
   useEffect(() => {
-    if (user.roleId === 2 || user.roleId === 4)
-      router.push('/Admin');
-    else if (user.roleId === 1 || user.roleId === 3)
-      router.push('/Client/Main');
-  })
+    if (isError) {
+      alert(message);
+    }
 
+    if (isSuccess || user) {
+      router.push('/Client/Overview')
+    }
+
+    dispatch(reset())
+  }, [user, isError, isSuccess, message, router, dispatch])
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const userData = {
+      email,
+      password
+    }
+    dispatch(login(userData));
+  }
+  // useEffect(() => {
+  //   if (user.roleId === 2 || user.roleId === 4)
+  //     router.push('/Admin');
+  //   else if (user.roleId === 1 || user.roleId === 3)
+  //     router.push('/Client/Main');
+  // })
+  if (isLoading) {
+    return <Spinner />
+  }
   return (
     <VStack h={"100vh"} justifyContent={"center"} alignItems={"center"}>
       <Stack

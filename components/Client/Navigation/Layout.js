@@ -3,6 +3,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 import { DetailContextProvider } from "../Context/context";
+import { ToastContainer } from "react-toastify";
 
 function Layout({ children }) {
 

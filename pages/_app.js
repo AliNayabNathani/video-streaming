@@ -2,10 +2,11 @@ import { useRouter } from "next/router";
 import AdminLayout from "./Admin/AdminLayout";
 import ClientLayout from "./Client/ClientLayout";
 import { UserProvider } from '@auth0/nextjs-auth0/client';
-import toast, { Toaster } from 'react-hot-toast';
 import { useEffect } from "react";
 import { Provider } from "react-redux";
 import store from "../features/store";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function MyApp({ Component, pageProps }) {
@@ -27,7 +28,6 @@ function MyApp({ Component, pageProps }) {
     return (
         <Provider store={store}>
             <Layout Component={Component} pageProps={pageProps} />
-            <Toaster />
         </Provider>
 
 

@@ -3,6 +3,8 @@ import { theme as chakraTheme } from "@chakra-ui/react";
 import customTheme from "../../themes/customTheme.js";
 import Layout from "../../components/Client/Navigation/Layout.js";
 import ProtectedRoute from "../../components/ProtectedRoute.js";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
 
 const theme = extendTheme({
     ...chakraTheme,

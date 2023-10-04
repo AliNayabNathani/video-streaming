@@ -85,9 +85,7 @@ export default function UserManagement() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [userData, setUserData] = useState([]);
     const dispatch = useDispatch();
-    const { user } = useSelector(state => state.user);
-
-    console.log('User: ', user);
+    // const { user } = useSelector(state => state.user);
     useEffect(() => {
         // Define a function to fetch data from the backend
         const fetchData = async () => {

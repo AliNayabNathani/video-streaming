@@ -3,9 +3,13 @@ import MainTemplate from "../../components/Client/Templates/Main";
 import { BiUserCircle } from "react-icons/bi";
 import { FiEdit3 } from "react-icons/fi";
 import { useRouter } from "next/router";
+import { logout, reset } from "../../features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Profile() {
     const router = useRouter();
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
     // const logout = async () => {
     //     const domain = "dev-g47ngs10wcqmnpfs.us.auth0.com";
     //     const clientId = "adb38ErO5bDrRS3ICJsRDrYBtUxOpOlX";
@@ -15,6 +19,11 @@ export default function Profile() {
     // }
     const handleNavigation = (to) => {
         router.push(to);
+    }
+    console.log(user);
+    const handleLogout = () => {
+        router.push('/Client');
+        dispatch(logout());
     }
     const CustomIcon = () => (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36">
@@ -36,13 +45,13 @@ export default function Profile() {
                     </HStack>
                     <VStack px={20} pb={10} alignItems={'flex-start'} justifyContent={'center'}>
                         <Text fontWeight={'bold'}>Username</Text>
-                        <Input mb={'1rem'} placeholder="Zack" />
+                        <Input value={user.user.name} mb={'1rem'} disabled />
                         <Text fontWeight={'bold'}>E-mail address</Text>
-                        <Input mb={'1rem'} placeholder="Zack123@gmail.com" />
+                        <Input value={user.user.email} mb={'1rem'} disabled />
                         <Text fontWeight={'bold'}>Phone Number</Text>
-                        <Input mb={'1rem'} type='number' placeholder="+91 098765432" />
+                        <Input mb={'1rem'} type='number' placeholder="+91 098765432" disabled />
                         <Button w={'100%'} onClick={() => handleNavigation()}>Change Password</Button>
-                        <Button w={'100%'} onClick={() => handleNavigation('/api/auth/logout')}>Log Out</Button>
+                        <Button w={'100%'} onClick={handleLogout}>Log Out</Button>
                     </VStack>
                 </Box>
             </Flex>

@@ -13,12 +13,13 @@ import {
     Textarea,
     Icon,
 } from "@chakra-ui/react";
-
 import MainTemplate from "../../components/Client/Templates/Main";
 import { Video } from "../../components/Client/Reusable Components/VideoPlayer";
 import { useRef, useState } from "react";
 import { AiOutlineCloseCircle, AiOutlinePlus } from "react-icons/ai";
 import { FiEdit3 } from "react-icons/fi";
+import axios from "axios";
+import { server } from "../server";
 
 const ChannelData = [
     {
@@ -31,7 +32,8 @@ const ChannelData = [
                 Duration: '25',
                 src: 'https://vjs.zencdn.net/v/oceans.mp4',
                 poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
-                desc: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Veritatis vel labore vitae obcaecati magni quibusdam harum nam, quod nobis debitis sunt temporibus aperiam sit vero laudantium, tenetur reprehenderit illum nemo?'
+                desc: 'Another episode description.'
+
             },
             {
                 name: 'Episode 2',
@@ -108,6 +110,18 @@ const ChannelData = [
 ];
 
 
+const response = axios.get(server + 'creator/mychannels', {
+    method: "GET",
+    withCredentials: true,
+})
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
+console.log(response);
 const VideoPlayer = ({ src, poster, name }) => (
     <Box
         border={"1px solid transparent"}
@@ -249,7 +263,7 @@ export default function Channel() {
                     {ChannelData.map((data) => {
                         if (data.name == showName) {
                             return data.episodes.map((episode) => (
-                                <Stack cursor={'pointer'} my={'1rem'} spacing={'1rem'} justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
+                                <Stack cursor={'pointer'} my={'1rem'} justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
                                     <Box
                                         // Adjust the width as needed
                                         maxWidth="100%" // Ensure the player doesn't exceed its original size
@@ -260,7 +274,7 @@ export default function Channel() {
                                             name={episode.name}
                                             src={episode.src} />
                                     </Box>
-                                    <Stack alignItems={'flex-start'} spacing={'1rem'} direction={'column'}>
+                                    <Stack alignItems={'flex-start'} justifyContent={'flex-start'} s direction={'column'}>
                                         <Heading size={'md'}>{episode.name}</Heading>
                                         <Text>{episode.Duration} min</Text>
                                         <Text>{episode.desc}</Text>
