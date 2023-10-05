@@ -73,7 +73,7 @@ export default function Nav() {
                                 <Button width={'100%'} variant={'outline'} onClick={() => handleNavigation('/pages/Client/Details.jsx')}>
                                     Support
                                 </Button>
-                                <Button onClick={() => handleNavigation('/api/auth/login')} width={'100%'} variant={'solid'}>
+                                <Button onClick={() => handleNavigation('/signin')} width={'100%'} variant={'solid'}>
                                     Login
                                 </Button>
 
@@ -102,7 +102,7 @@ export default function Nav() {
                             <Button variant={'outline'} onClick={() => handleNavigation('/pages/Client/Details.jsx')}>
                                 Support
                             </Button>
-                            <Button variant={'solid'} onClick={() => handleNavigation('api/auth/login')}>
+                            <Button variant={'solid'} onClick={() => handleNavigation('/signin')}>
                                 Login
                             </Button>
                         </Stack>

@@ -10,14 +10,15 @@ export default function Profile() {
     const router = useRouter();
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
+
     const handleNavigation = (to) => {
         router.push(to);
     }
+
     console.log(user);
     const handleLogout = () => {
-        router.push('/Client');
         dispatch(logout());
-        window.location.reload();
+        router.push('/Client');
     }
     const CustomIcon = () => (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36">
