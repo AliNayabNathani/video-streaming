@@ -19,7 +19,9 @@ import {
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import './style.css';
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { server } from "../../../server";
 
 
 const contentData = [
@@ -45,50 +47,50 @@ const contentData = [
     }
 ]
 
-const data = [
-    {
-        name: 'Page A',
-        uv: 4000,
-        pv: 2400,
-        amt: 2400,
-    },
-    {
-        name: 'Page B',
-        uv: 3000,
-        pv: 1398,
-        amt: 2210,
-    },
-    {
-        name: 'Page C',
-        uv: 2000,
-        pv: 9800,
-        amt: 2290,
-    },
-    {
-        name: 'Page D',
-        uv: 2780,
-        pv: 3908,
-        amt: 2000,
-    },
-    {
-        name: 'Page E',
-        uv: 1890,
-        pv: 4800,
-        amt: 2181,
-    },
-    {
-        name: 'Page F',
-        uv: 2390,
-        pv: 3800,
-        amt: 2500,
-    },
-    {
-        name: 'Page G',
-        uv: 3490,
-        pv: 4300,
-        amt: 2100,
-    },
-];
+// const data = [
+//     {
+//         name: 'Page A',
+//         uv: 4000,
+//         pv: 2400,
+//         amt: 2400,
+//     },
+//     {
+//         name: 'Page B',
+//         uv: 3000,
+//         pv: 1398,
+//         amt: 2210,
+//     },
+//     {
+//         name: 'Page C',
+//         uv: 2000,
+//         pv: 9800,
+//         amt: 2290,
+//     },
+//     {
+//         name: 'Page D',
+//         uv: 2780,
+//         pv: 3908,
+//         amt: 2000,
+//     },
+//     {
+//         name: 'Page E',
+//         uv: 1890,
+//         pv: 4800,
+//         amt: 2181,
+//     },
+//     {
+//         name: 'Page F',
+//         uv: 2390,
+//         pv: 3800,
+//         amt: 2500,
+//     },
+//     {
+//         name: 'Page G',
+//         uv: 3490,
+//         pv: 4300,
+//         amt: 2100,
+//     },
+// ];
 
 const GrayOutline = ({ text, num }) => (
     <Flex justifyContent={'center'} alignItems={'center'} width={'100%'} height={'7rem'} border={'1px solid black'} borderRadius={'10px'} bg={'#232323'} >
@@ -160,6 +162,9 @@ const TableComp = ({ TablehHeading, TableColumn }) => (
 )
 
 const Info_Graph = ({ data }) => {
+    console.log(data);
+    const maxViews = Math.max(...data.map(item => item.views));
+
     return (
         <div
             style={{
@@ -180,21 +185,13 @@ const Info_Graph = ({ data }) => {
                 >
                     <CartesianGrid horizontal={true} vertical={false} />
                     <XAxis dataKey="name" />
-                    <YAxis />
+                    <YAxis domain={[0, maxViews != 0 ? maxViews : 10]} />
                     <Tooltip />
                     <Line type="monotone"
-                        dataKey="uv"
+                        dataKey="views"
                         stroke="#55DF51"
                         strokeWidth={4}
                         dot={false} />
-
-                    <Line
-                        type="monotone"
-                        dataKey="pv"
-                        stroke="#55DF01"
-                        strokeWidth={4}
-                        dot={false}
-                    />
                     {/* <Line type="monotone" stroke="#55DF01" /> */}
                 </LineChart>
             </ResponsiveContainer>
@@ -204,10 +201,33 @@ const Info_Graph = ({ data }) => {
 
 export const Earnings = () => {
     const [optionValue, setOptionValue] = useState('Yearly');
+    const [viewerChartData, setViewerChartData] = useState([]);
 
+    // let data = viewerChartData.optionValue;
+    console.log('Data: ', viewerChartData.length);
+    // data = viewerChartData[0].find(item => item.name === 'daily');
     const handleSelectChange = value => {
         setOptionValue(value);
     };
+    // const handleData = () => {
+    //     if (data) 
+    // }
+    useEffect(() => {
+        axios.get(server + 'stats/total-views-chart', {
+            headers: {
+                "Content-type": "application/json",
+            },
+            withCredentials: true,
+        })
+            .then((response) => {
+                setViewerChartData(response.data.viewsByInterval);
+            })
+            .catch((error) => {
+                // Handle any errors that occur during the request
+                console.error(error);
+            });
+    }, []);
+
     return (
         <Box >
             <Heading fontSize={'1.5rem'} my={5} textAlign={{ base: 'center', md: 'start' }}>Statistics</Heading>
@@ -234,7 +254,18 @@ export const Earnings = () => {
                     </MenuList>
                 </Menu>
             </HStack>
-            <Info_Graph data={data} />
+
+            {viewerChartData.length != 0 && (
+                optionValue === 'Daily'
+                    ? <Info_Graph data={viewerChartData.daily} />
+                    : optionValue === 'Weekly'
+                        ? <Info_Graph data={viewerChartData.weekly} />
+                        : optionValue === 'Monthly'
+                            ? <Info_Graph data={viewerChartData.monthly} />
+                            : optionValue === 'Yearly'
+                                ? <Info_Graph data={viewerChartData.yearly} />
+                                : null // Provide a default case or return null if none of the conditions match
+            )}
         </Box>
     )
 }

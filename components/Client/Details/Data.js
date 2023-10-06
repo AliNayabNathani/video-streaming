@@ -76,11 +76,11 @@ export const MainItems = [
         Icon: AiOutlineSlack,
         to: '/Client/MyChannels'
     },
-    {
-        name: 'Submit Feedback',
-        Icon: MdRateReview,
-        to: '/Client/SubmitFeedback'
-    },
+    // {
+    //     name: 'Submit Feedback',
+    //     Icon: MdRateReview,
+    //     to: '/Client/SubmitFeedback'
+    // },
     {
         name: 'Analytics',
         Icon: AiOutlineStock,

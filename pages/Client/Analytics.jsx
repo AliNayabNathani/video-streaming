@@ -1,5 +1,5 @@
 import { Box, HStack, Heading, Icon, Menu, MenuButton, MenuItem, MenuList, Select, Stack } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MainTemplate from "../../components/Client/Templates/Main";
 import TableSummary from "../../components/Admin/Dashboard/TableSummary";
 import GraphSummary from "../../components/Admin/Dashboard/GraphSummary";
@@ -7,7 +7,6 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export default function Analytics() {
     const [SelectedValue, setSelectedValue] = useState('Summary Overview');
-
     return (
         <MainTemplate>
             <Box>
