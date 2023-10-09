@@ -1,9 +1,0 @@
-Fonts used in this design:
-
-Font: Space Grotesk
-Author: Florian Karsten
-Url: https://fonts.google.com/specimen/Space+Grotesk
-
-Font: Noto Sans
-Author: Google
-Url: https://fonts.google.com/specimen/Noto+Sans
