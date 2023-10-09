@@ -13,8 +13,8 @@ const fileUpload = require("express-fileupload");
 // const helmet = require("helmet");
 // const xss = require("xss-clean");
 const cors = require("cors");
-const { auth } = require("express-openid-connect");
-const config = require("./config/auth0");
+// const { auth } = require("express-openid-connect");
+// 0
 
 //database
 const { connectDB, dbConfig } = require("./db/connect");
@@ -58,12 +58,12 @@ app.use(cookieParser(process.env.JWT_SECRET));
 
 // app.use(express.static("./public"));
 app.use(fileUpload());
-app.use(auth(config));
+// app.use(auth(config));
 //routes
 
-app.get("/", (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
-});
+// app.get("/", (req, res) => {
+//   res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
+// });
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", adminRouter);
 app.use("/api/v1/other", otherRouter);
