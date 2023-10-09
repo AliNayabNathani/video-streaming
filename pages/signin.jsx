@@ -16,7 +16,7 @@ import {
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { login, reset, addToken } from "../features/auth/authSlice";
 import Spinner from "../components/spinner";
 
@@ -27,27 +27,36 @@ export default function SignIn() {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const dispatch = useDispatch();
-  const { user, isLoading, isSuccess, message, isError } = useSelector((state) => state.auth);
+  const { user, isLoading, isSuccess, message, isError } = useSelector(
+    (state) => state.auth
+  );
+  const roleId = user?.user?.roleId;
   useEffect(() => {
     if (isError) {
       alert(message);
     }
-
+    console.log(roleId);
     if (isSuccess || user) {
-      router.push('/Client/Overview')
+      if (roleId == 1 || roleId == 3) {
+        router.push("/Admin/");
+      } else if (roleId == 4) {
+        router.push("/Client/Overview");
+      } else {
+        router.push("/UnAuthorized");
+      }
     }
 
-    dispatch(reset())
-  }, [user, isError, isSuccess, message, router, dispatch])
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, router, dispatch]);
 
   const handleLogin = (e) => {
     e.preventDefault();
     const userData = {
       email,
-      password
-    }
+      password,
+    };
     dispatch(login(userData));
-  }
+  };
   // useEffect(() => {
   //   if (user.roleId === 2 || user.roleId === 4)
   //     router.push('/Admin');
@@ -55,7 +64,7 @@ export default function SignIn() {
   //     router.push('/Client/Main');
   // })
   if (isLoading) {
-    return <Spinner />
+    return <Spinner />;
   }
   return (
     <VStack h={"100vh"} justifyContent={"center"} alignItems={"center"}>
@@ -74,13 +83,15 @@ export default function SignIn() {
           justifyItems={"center"}
           w={"50%"}
         >
-          <Image alt="logo" src="/assests/videe0/Logo/videe0 - Logo (250x150).png" />
+          <Image
+            alt="logo"
+            src="/assests/videe0/Logo/videe0 - Logo (250x150).png"
+          />
         </VStack>
         <VStack
           justifyContent={"center"}
           p={{ base: "30", md: "55" }}
           spacing={10}
-
         >
           <Heading>Sign In</Heading>
 
@@ -126,7 +137,7 @@ export default function SignIn() {
               Forgot Password?
             </Text>
           </HStack>
-          <Button onClick={handleLogin} w={"100%"} mt={[2, 4]} p={[0, 6]} >
+          <Button onClick={handleLogin} w={"100%"} mt={[2, 4]} p={[0, 6]}>
             Sign In
           </Button>
           <HStack>

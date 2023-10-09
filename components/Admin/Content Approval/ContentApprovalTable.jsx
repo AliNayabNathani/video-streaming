@@ -1,10 +1,12 @@
 import { TableTemplate } from "../Tables/Table";
 import { HiOutlineEye } from "react-icons/hi";
 import { Box, Button, HStack, Text, useDisclosure } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddModal } from "../Category/Modal/AddModal";
 import { ContentApprovalButtons } from "../SmallReusableComponents/Action";
 import { useSearchContext } from "../Context api/Context";
+import axios from "axios";
+import { server } from "../../server";
 
 const ContentApprovalTableData = [
   {
@@ -80,11 +82,11 @@ const ContentApprovalTableData = [
 ];
 
 const ContentApprovalTableColumns = [
-  "Video_Title",
-  "Creator_Name",
-  "Rented_Amount",
-  "Purchasing_Amount",
-  "Uploaded_Date",
+  "name",
+  "creator_name",
+  "rented_amount",
+  "purchasing_amount",
+  "createdAt",
 ];
 
 const ContentAprrovalModal = () => (
@@ -183,24 +185,46 @@ const ContentApprovalActions = ({ to }) => {
 
 const ContentApprovalTable = () => {
   const { searchQuery, isFilter } = useSearchContext();
+  const [contentData, setContentData] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${server}users/content-approval`, {
+          headers: {
+            "Content-type": "application/json",
+          },
+          withCredentials: true,
+        });
+        const modifiedData = await response.data.videos.map((item) => {
+          const datePart = item.createdAt.split("T")[0];
+          return {
+            ...item,
+            createdAt: datePart,
+          };
+        });
+        setContentData(modifiedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  contentData?.sort((a, b) => parseInt(a.id) - parseInt(b.id));
 
   const filterData = () => {
     if (searchQuery) {
-      return ContentApprovalTableData.filter(
+      return contentData.filter(
         (data) =>
           data.Video_Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
           data.Creator_Name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    return ContentApprovalTableData;
+    return contentData;
   };
   return (
     <TableTemplate
-      data={
-        searchQuery?.length > 0 && isFilter
-          ? filterData()
-          : ContentApprovalTableData
-      }
+      data={searchQuery?.length > 0 && isFilter ? filterData() : contentData}
       columns={ContentApprovalTableColumns}
       Actions={ContentApprovalActions}
     />

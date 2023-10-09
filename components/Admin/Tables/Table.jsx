@@ -44,14 +44,14 @@ const TableTemplate = ({
   const [currentPage, setCurrentPage] = useState(0);
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const slicedData = data.slice(startIndex, endIndex);
+  const slicedData = data?.slice(startIndex, endIndex);
   const { searchQuery } = useSearchContext();
   console.log(searchQuery);
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
 
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const totalPages = Math.ceil(data?.length / itemsPerPage);
 
   return (
     <>
@@ -103,7 +103,7 @@ const TableTemplate = ({
           </Thead>
 
           <Tbody>
-            {slicedData.map((item, index) => {
+            {slicedData?.map((item, index) => {
               num++;
               return (
                 <Tr
@@ -192,7 +192,7 @@ const TableTemplate = ({
               )
             }
             breakLabel={"..."}
-            pageCount={Math.ceil(data.length / itemsPerPage)}
+            pageCount={Math.ceil(data?.length / itemsPerPage)}
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             onPageChange={handlePageClick}

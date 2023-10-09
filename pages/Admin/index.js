@@ -24,8 +24,6 @@ function Dashboard() {
   const handleSelectedValue = (e) => {
     setSelectedValue(e.target.value);
   };
-  const backendurl = 'http://localhost:5000';
-
   return (
     <>
       <Stack
