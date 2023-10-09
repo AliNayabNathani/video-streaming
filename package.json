@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "web-build": "npm install --prefix video-streaming-server && npm run build",
+    "web-start": "node video-streaming-server/app.js && npm run start",
     "server-start": "node video-streaming-server/app.js",
     "server-install": "npm install --prefix video-streaming-server",
     "lint": "next lint"
