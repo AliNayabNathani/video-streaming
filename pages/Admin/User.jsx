@@ -130,6 +130,7 @@ const ShowAddUserModal = ({ isOpen, onClose }) => {
                 mb={"1rem"}
                 border={"2px solid black"}
                 placeholder="876587589"
+                type="number"
               />
               <Button
                 alignSelf={"center"}

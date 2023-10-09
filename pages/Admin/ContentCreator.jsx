@@ -21,7 +21,35 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { server } from "../../components/server";
+import { useState } from "react";
 const ShowAddUserModal = ({ isOpen, onClose }) => {
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    gender: "",
+    number: "",
+  });
+  console.log(userInfo);
+  const handleSubmit = async () => {
+    const { name, gender, number } = userInfo;
+    const res = await axios
+      .post(
+        `${server}users/add-content-creator`,
+        { name, gender, number },
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+          withCredentials: true,
+        }
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+    console.log(res);
+    onClose();
+  };
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -42,9 +70,18 @@ const ShowAddUserModal = ({ isOpen, onClose }) => {
                 mb={"1rem"}
                 border={"2px solid black"}
                 placeholder="Abheesh"
+                onChange={(e) =>
+                  setUserInfo({ ...userInfo, name: e.target.value })
+                }
               />
               <FormLabel>Gender</FormLabel>
-              <Select mb={"1rem"} border={"2px solid black"}>
+              <Select
+                mb={"1rem"}
+                onChange={(e) =>
+                  setUserInfo({ ...userInfo, gender: e.target.value })
+                }
+                border={"2px solid black"}
+              >
                 <option
                   style={{ background: "#232323" }}
                   select-option
@@ -60,8 +97,12 @@ const ShowAddUserModal = ({ isOpen, onClose }) => {
                 mb={"1rem"}
                 border={"2px solid black"}
                 placeholder="876587589"
+                type="number"
+                onChange={(e) =>
+                  setUserInfo({ ...userInfo, number: e.target.value })
+                }
               />
-              <Button alignSelf={"center"} mr={3} onClick={onClose}>
+              <Button alignSelf={"center"} mr={3} onClick={handleSubmit}>
                 Submit
               </Button>
             </VStack>

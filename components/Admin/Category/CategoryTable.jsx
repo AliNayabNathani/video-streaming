@@ -292,9 +292,8 @@ const CategoryActions = () => (
   </HStack>
 );
 
-export default function CategoryTable() {
+export default function CategoryTable({ categoryData, setCategoryData }) {
   const { searchQuery, isFilter } = useSearchContext();
-  const [categoryData, setCategoryData] = useState();
   useEffect(() => {
     const fetchData = async () => {
       try {
