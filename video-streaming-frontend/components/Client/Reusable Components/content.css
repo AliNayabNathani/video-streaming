@@ -1,0 +1,56 @@
+.Content-Bar {
+  border: 2px solid black;
+  border-right: none;
+  font-weight: bold;
+  border-radius: 0;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* Styling for the selected option text */
+.selected-option {
+  color: RGBA(255, 255, 255, 0.36);
+  padding: 5px; /* Add padding as needed */
+  border-radius: 4px; /* Add border-radius for a rounded look */
+}
+
+/* Styling for the hidden Select component */
+.hidden-select {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 1; /* Ensure the Select is above the selected-option div */
+  cursor: pointer; /* Make it look clickable */
+}
+
+/* carousel.css */
+.carousel-container {
+  position: relative;
+}
+
+.smoke-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 128, 0, 0.5),
+    rgba(0, 128, 0, 0.2)
+  );
+  animation: smoke 10s infinite alternate;
+  z-index: -1;
+}
+
+@keyframes smoke {
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
