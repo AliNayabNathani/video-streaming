@@ -15,7 +15,7 @@ const fileUpload = require("express-fileupload");
 const cors = require("cors");
 // const { auth } = require("express-openid-connect");
 // 0
-const path = require('paths');
+const path = require('path');
 //database
 const { connectDB, dbConfig } = require("./db/connect");
 const sequelize = require("./config/sequelize");
