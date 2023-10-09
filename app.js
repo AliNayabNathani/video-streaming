@@ -45,7 +45,7 @@ app.use(
   cors({
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: ["http://localhost:3000", "http://localhost:3001", "*"],
   })
 );
 // app.use(xss());
@@ -64,6 +64,7 @@ app.use(fileUpload());
 // app.get("/", (req, res) => {
 //   res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
 // });
+app.use(express.static(path.resolve(__dirname, './video-streaming-frontend/pages/index.js')));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", adminRouter);
 app.use("/api/v1/other", otherRouter);
