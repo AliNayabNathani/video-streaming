@@ -1,0 +1,152 @@
+import {
+  Button,
+  FormLabel,
+  Heading,
+  Input,
+  Select,
+  Stack,
+  VStack,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { HeaderWithButtons } from "../../components/Admin/SmallReusableComponents/HeaderWithButtons";
+import { SearchBar } from "../../components/Admin/SmallReusableComponents/SearchBar";
+import ContentCreatorTable from "../../components/Admin/Tables/ContentCreatorTableData";
+import { PageHeading } from "../../components/Admin/SmallReusableComponents/Heading";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/react";
+import axios from "axios";
+import { server } from "../../components/server";
+import { useState } from "react";
+const ShowAddUserModal = ({ isOpen, onClose }) => {
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    gender: "",
+    number: "",
+  });
+  console.log(userInfo);
+  const handleSubmit = async () => {
+    const { name, gender, number } = userInfo;
+    const res = await axios
+      .post(
+        `${server}users/add-content-creator`,
+        { name, gender, number },
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+          withCredentials: true,
+        }
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+    console.log(res);
+    onClose();
+  };
+
+  return (
+    <>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent color={"white"} bg={"#232323"} minW={["auto", "700px"]}>
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack
+              alignItems={"flex-start"}
+              direction={{ base: "column", md: "row" }}
+              p={[5, 20]}
+            >
+              <Heading fontSize={"2rem"} alignSelf={"center"}>
+                Add User
+              </Heading>
+              <FormLabel>User Name</FormLabel>
+              <Input
+                mb={"1rem"}
+                border={"2px solid black"}
+                placeholder="Abheesh"
+                onChange={(e) =>
+                  setUserInfo({ ...userInfo, name: e.target.value })
+                }
+              />
+              <FormLabel>Gender</FormLabel>
+              <Select
+                mb={"1rem"}
+                onChange={(e) =>
+                  setUserInfo({ ...userInfo, gender: e.target.value })
+                }
+                border={"2px solid black"}
+              >
+                <option
+                  style={{ background: "#232323" }}
+                  select-option
+                  selected
+                >
+                  Male
+                </option>
+                <option style={{ background: "#232323" }}> Female</option>
+                <option style={{ background: "#232323" }}>Other</option>
+              </Select>
+              <FormLabel>Mobile Number</FormLabel>
+              <Input
+                mb={"1rem"}
+                border={"2px solid black"}
+                placeholder="876587589"
+                type="number"
+                onChange={(e) =>
+                  setUserInfo({ ...userInfo, number: e.target.value })
+                }
+              />
+              <Button alignSelf={"center"} mr={3} onClick={handleSubmit}>
+                Submit
+              </Button>
+            </VStack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
+
+const HeaderButtons = ({ onOpen }) => {
+  return (
+    <Stack
+      justifyContent={["center", "space-between"]}
+      direction={["column", "row"]}
+      align={["center", "center"]}
+      my={[0, 4]}
+      mb={8}
+    >
+      <PageHeading text="Content Creator Management" />
+      <Stack direction={["column", "row"]} align={["center", "flex-end"]}>
+        <Button size={{ base: "sm", md: "md" }} variant={"outline"}>
+          Export CSV
+        </Button>
+        <Button
+          onClick={onOpen}
+          size={{ base: "sm", md: "md" }}
+          variant={"solid"}
+        >
+          Add User
+        </Button>
+      </Stack>
+    </Stack>
+  );
+};
+
+export default function ContentCreatorManagement() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  return (
+    <>
+      <HeaderButtons onOpen={onOpen} />
+      <ShowAddUserModal isOpen={isOpen} onClose={onClose} />
+      <SearchBar />
+      <ContentCreatorTable />
+    </>
+  );
+}
