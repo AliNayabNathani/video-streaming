@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { generateHideOnMobileCSS } from "../../components/Client/GlobalCSS/GlobalCSSStye";
 import "./style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { register, reset } from "../features/auth/authSlice";

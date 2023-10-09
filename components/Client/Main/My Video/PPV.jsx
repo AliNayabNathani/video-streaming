@@ -1,6 +1,5 @@
 import { Box, Button, GridItem, HStack, Heading, Icon, IconButton, SimpleGrid, Stack, Text, VStack } from "@chakra-ui/react";
 import { useRef, useState } from "react";
-import ReactPlayer from "react-player";
 import { LiveData } from './LiveData';
 import { NavButton, PinkButton } from "../../Reusable Components/MainButton";
 import { VideoPlayer } from "../../Reusable Components/VideoPlayer";
