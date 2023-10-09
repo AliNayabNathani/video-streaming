@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "server-start": "node video-streaming-server/app.js",
+    "server-install": "npm install --prefix video-streaming-server",
     "lint": "next lint"
   },
   "dependencies": {
