@@ -1,0 +1,1 @@
+"use strict";exports.id=5625,exports.ids=[5625],exports.modules={5625:(o,t,e)=>{e.d(t,{c7:()=>MainButton});var r=e(997),x=e(8930);e(6689);let MainButton=({children:o})=>r.jsx(x.Button,{fontSize:"1rem",borderRadius:"5px",py:4,px:8,border:"1px solid black",boxShadow:"4px 4px 4px black",children:o})}};
