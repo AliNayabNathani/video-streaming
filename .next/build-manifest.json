@@ -15,10 +15,15 @@
     "static/chunks/main-app.js"
   ],
   "pages": {
-    "/Admin/Category": [
+    "/": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/Admin/Category.js"
+      "static/chunks/pages/index.js"
+    ],
+    "/Admin/Coupons": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/Admin/Coupons.js"
     ],
     "/_app": [
       "static/chunks/webpack.js",

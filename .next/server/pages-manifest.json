@@ -2,6 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/Admin/ContentCreator": "pages/Admin/ContentCreator.js",
-  "/Admin/Category": "pages/Admin/Category.js"
+  "/": "pages/index.js",
+  "/Admin/Coupons": "pages/Admin/Coupons.js"
 }

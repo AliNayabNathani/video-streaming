@@ -1,0 +1,13 @@
+.signatureCanvas {
+  border: 1px solid black;
+  background-color: white;
+  width: 20rem;
+  height: 10rem;
+}
+
+@media (max-width: 768px) {
+  .signatureCanvas {
+    width: 15rem;
+    height: 10rem;
+  }
+}
