@@ -123,7 +123,7 @@ const AddSubCategoryModal = ({
                   setSubCatData({ ...subCatData, category_id: e.target.value })
                 }
               >
-                {categoryData.map((item, index) => (
+                {categoryData?.map((item, index) => (
                   <option key={index} value={item.id}>
                     {item.name}
                   </option>

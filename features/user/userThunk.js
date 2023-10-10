@@ -1,11 +1,12 @@
 import axios from 'axios'
 import customFetch from '../../utils/axios';
+import { server } from '../../components/server';
 
 export const loginUserThunk = async (url, user, thunkAPI) => {
     try {
         console.log('user: ', user);
         // const resp = await customFetch.post(url, user);
-        const response = await axios.post(`http://localhost:5000/api/v1${url}`, user, {
+        const response = await axios.post(`${server}${url}`, user, {
             headers: {
                 "Content-type": "application/json"
             },
