@@ -27,7 +27,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import "./style.css";
+import "./Style.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { server } from "../../components/server";
