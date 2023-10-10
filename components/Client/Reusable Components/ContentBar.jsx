@@ -13,7 +13,7 @@ export const ContentBar = ({ text, data }) => {
         }
         else {
             updateSubTitle(e.target.textContent);
-            console.log(subTitle);
+
         }
     }
 
@@ -31,16 +31,16 @@ export const ContentBar = ({ text, data }) => {
     return (
         <Flex alignItems={'center'}>
             <Flex width={'100%'} display={{ base: 'none', md: 'none', lg: 'none', xl: 'flex' }} borderRight={'2px solid black'}>
-                {data.map((navbar) => (
-                    <ContentButton>
+                {data.map((navbar, index) => (
+                    <ContentButton key={index}>
                         {navbar.name}
                     </ContentButton>
                 ))}
             </Flex>
             <Flex mt={2} width={'100%'} alignItems={'center'} display={{ base: 'flex', md: 'flex', lg: 'flex', xl: 'none' }} boxShadow={'0px 0px 2px black'} >
                 <Select onChange={HandleOptionClick} fontSize={'1.2rem'} bg={'white'}>
-                    {data.map((navbar) => (
-                        <option className="myOption" value={navbar.name}>{navbar.name}</option>
+                    {data.map((navbar, index) => (
+                        <option key={index} className="myOption" value={navbar.name}>{navbar.name}</option>
                     ))}
                 </Select>
             </Flex>

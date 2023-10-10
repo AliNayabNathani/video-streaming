@@ -10,13 +10,17 @@ import {
     DrawerContent,
     useDisclosure,
     Stack,
+    Collapse,
+    UnorderedList,
+    ListItem,
 } from '@chakra-ui/react';
 import {
     FiMenu,
 } from 'react-icons/fi';
 import { useDetailContext } from '../Context/context';
-import { MainItems } from '../Details/Data';
+import { LinkItems, MainItems } from '../Details/Data';
 import { useRouter } from 'next/router';
+import { BsDot } from 'react-icons/bs';
 
 export default function Sidebar({ children }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -44,10 +48,75 @@ export default function Sidebar({ children }) {
 
 const SidebarContent = ({ onClose, ...rest }) => {
     const router = useRouter();
+    const [openIndex, setOpenIndex] = useState(-1);
 
-    const handleRoute = (to) => {
+    const handleNavigation = (to) => {
         router.push(to);
     }
+    const handleItemClick = (index) => {
+        if (openIndex === index) {
+            setOpenIndex(null);
+        } else {
+            setOpenIndex(index);
+        }
+    };
+    const NavItem = ({ icon, children, ...rest }) => {
+        const { updateTitle } = useDetailContext();
+        return (
+            <Box
+                as="a"
+                href="#"
+                style={{ textDecoration: 'none' }}
+                _focus={{ boxShadow: 'none', color: '#55DF01' }}
+
+            >
+                <Flex
+                    border={'1px solid black'}
+                    align="center"
+                    px="4"
+                    py="3"
+                    role="group"
+                    cursor="pointer"
+                    fontSize={'1rem'}
+                    {...rest}
+
+                >
+                    {icon &&
+                        <Icon as={icon} mr="2" boxSize={5} />
+                    }
+                    {children}
+
+                </Flex>
+            </Box>
+        );
+    };
+
+    const NavSubItem = ({ children, ...rest }) => {
+        const { updateTitle } = useDetailContext();
+        return (
+            <Box
+                as='a'
+                href="#"
+                style={{ textDecoration: 'none' }}
+                _focus={{ boxShadow: 'none', color: '#55DF01' }}
+
+            >
+                <Flex
+                    border={'1px solid black'}
+                    align="center"
+                    role="group"
+                    cursor="pointer"
+                    fontSize={'1rem'}
+                    {...rest}
+
+                >
+                    <Icon as={BsDot} boxSize={5} />
+                    {children}
+                </Flex>
+            </Box>
+        );
+    };
+
     return (
         <Box
             transition="3s ease"
@@ -74,10 +143,29 @@ const SidebarContent = ({ onClose, ...rest }) => {
             </Flex>
             <Box color={'whiteAlpha.600'}>
                 {MainItems.map((link, index) => (
-                    <Stack direction={'column'} key={index} onClick={() => handleRoute(link.to)}>
+                    <Stack direction={'column'} key={index} onClick={link.subItems ? () => handleItemClick(index) : () => handleNavigation(link.to)} >
                         <NavItem icon={link.Icon}>
                             {link.name}
                         </NavItem>
+                        {link.subItems &&
+                            <Collapse in={openIndex === index}>
+                                <UnorderedList>
+                                    {link.subItems.map((sublink, subIndex) => (
+                                        <ListItem listStyleType={'none'} key={subIndex}>
+                                            <Box
+                                                fontSize="0.8rem"
+                                                p={1}
+                                                pl={8}
+                                                onClick={() => handleNavigation(sublink.to)}>
+                                                <NavSubItem>
+                                                    {sublink.name}
+                                                </NavSubItem>
+                                            </Box>
+                                        </ListItem>
+                                    ))}
+                                </UnorderedList>
+                            </Collapse>
+                        }
                     </Stack>
                 ))}
             </Box>
@@ -85,32 +173,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
     );
 };
 
-const NavItem = ({ icon, children, ...rest }) => {
-    const { updateTitle } = useDetailContext();
-    return (
-        <Box
-            as="a"
-            href="#"
-            style={{ textDecoration: 'none' }}
-            _focus={{ boxShadow: 'none', color: '#55DF01' }}
-        >
-            <Flex
-                border={'1px solid black'}
-                align="center"
-                px="4"
-                py="3"
-                role="group"
-                cursor="pointer"
-                fontSize={'1rem'}
-                {...rest}
 
-            >
-                <Icon as={icon} mr="2" boxSize={5} />
-                {children}
-            </Flex>
-        </Box>
-    );
-};
 
 const MobileNav = ({ onOpen, ...rest }) => {
     return (

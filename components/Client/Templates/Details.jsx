@@ -16,6 +16,7 @@ import { LinkItems } from '../Details/Data';
 export default function Details() {
     const { title } = useDetailContext();
     return (
+
         <Box
             display="flex"
             flexDirection="column"

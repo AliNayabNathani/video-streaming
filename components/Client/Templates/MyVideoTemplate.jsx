@@ -41,7 +41,7 @@ export default function MyVideoTemplate({ children }) {
                 <HStack justifyContent={'space-between'} mb={'2rem'}>
                     <Heading size={'lg'}>My Videos</Heading>
                     <Button leftIcon={<AiOutlinePlus />} onClick={() => handleNavigation('/Client/AddVideo')}>
-                        Add New Video
+                        Publish
                     </Button>
                 </HStack>
                 <ContentBar text='Video' data={NavData} />

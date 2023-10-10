@@ -90,34 +90,36 @@ export const Invoices = () => {
     return (
         <Flex direction={{ base: 'column-reverse', md: 'row' }}>
             <Box width={{ base: 'auto', md: '100%' }}>
-                <Stack direction={{ base: 'column', md: 'row' }} my={5} justifyContent={'space-between'}>
+                <Box direction={{ base: 'column', md: 'row' }} my={5}>
                     <Text fontSize={'1.2rem'} fontWeight={'bold'}>Invoice List</Text>
-                    <Stack alignItems={'center'} direction={{ base: 'column', md: 'row' }}>
-                        <Checkbox width={['100%', 'auto']}>Select all</Checkbox>
-                        <Flex width={['100%', 'auto']} h={'2.5rem'} alignItems={'center'} justifyContent={'space-between'} className="custom-datepicker">
-                            <DatePicker
-                                className="datepicker"
-                                selected={startDate}
-                                onChange={(date) => setStartDate(date)}
-                            />
-                            <Icon as={AiOutlineCalendar} />
-                        </Flex>
-                        <Menu>
-                            <MenuButton width='100%' p={2} _active={{ bg: '#232323' }} _hover={{ bg: '#232323' }} textAlign={'center'} borderRadius={'5px'} as={Box} bg="rgba(255, 255, 255, 0.48)">
-                                <HStack justifyContent={'space-between'}>
-                                    <Text>{optionValue}</Text>
-                                    <Icon as={ChevronDownIcon} />
-                                </HStack>
-                            </MenuButton>
-                            <MenuList p={0} m={0}>
-                                <MenuItem onClick={() => handleSelectChange('Yearly')} value="Yearly">Yearly</MenuItem>
-                                <MenuItem onClick={() => handleSelectChange('Monthly')} value="Monthly">Monthly</MenuItem>
-                                <MenuItem onClick={() => handleSelectChange('Weekly')} value="Weekly">Weekly</MenuItem>
-                                <MenuItem onClick={() => handleSelectChange('Daily')} value="Daily">Daily</MenuItem>
-                            </MenuList>
-                        </Menu>
+                    <Stack alignItems={'center'} justifyContent={'space-between'} direction={{ base: 'column', md: 'row' }}>
+                        <Checkbox colorScheme='customGreen' size={'lg'} width={['100%', 'auto']}>Select all</Checkbox>
+                        <HStack>
+                            <Flex width={['100%', 'auto']} h={'2.5rem'} alignItems={'center'} justifyContent={'space-between'} className="custom-datepicker">
+                                <DatePicker
+                                    className="datepicker"
+                                    selected={startDate}
+                                    onChange={(date) => setStartDate(date)}
+                                />
+                                <Icon as={AiOutlineCalendar} />
+                            </Flex>
+                            <Menu>
+                                <MenuButton width='200px' p={2} _active={{ bg: '#232323' }} _hover={{ bg: '#232323' }} textAlign={'center'} borderRadius={'5px'} as={Box} bg={'#414141'}>
+                                    <HStack justifyContent={'space-between'}>
+                                        <Text>{optionValue}</Text>
+                                        <Icon as={ChevronDownIcon} />
+                                    </HStack>
+                                </MenuButton>
+                                <MenuList p={0} m={0}>
+                                    <MenuItem onClick={() => handleSelectChange('Yearly')} value="Yearly">Yearly</MenuItem>
+                                    <MenuItem onClick={() => handleSelectChange('Monthly')} value="Monthly">Monthly</MenuItem>
+                                    <MenuItem onClick={() => handleSelectChange('Weekly')} value="Weekly">Weekly</MenuItem>
+                                    <MenuItem onClick={() => handleSelectChange('Daily')} value="Daily">Daily</MenuItem>
+                                </MenuList>
+                            </Menu>
+                        </HStack>
                     </Stack>
-                </Stack>
+                </Box>
                 <TableTemplate data={InvoiceData} columns={InvoiceColumns} />
             </Box >
         </Flex>

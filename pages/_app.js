@@ -1,27 +1,52 @@
 import { useRouter } from "next/router";
-import AdminLayout from "./Admin/AdminLayout";
-import ClientLayout from "./Client/ClientLayout";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { useEffect, useState } from "react";
+import { Provider, useSelector } from "react-redux";
+import store from "../features/store";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import AdminLayout from "../components/Admin/AdminLayout";
+import ClientLayout from "../components/Client/ClientLayout";
+import UnauthorizedPage from "./Unauthorized";
+
+const CustomRouteWrapper = ({ Component, pageProps }) => {
+  const router = useRouter();
+  const [userRole, setUserRole] = useState();
+  const route = router.route;
+  let Layout = ClientLayout;
+  if (route.startsWith("/Admin")) {
+    Layout = AdminLayout;
+  } else {
+    Layout = ClientLayout;
+  }
+  const isRouteAccessible = () => {
+    const route = router.route;
+    console.log(route);
+    if ((route.startsWith("/Admin") && roleId == 1) || roleId == 3) {
+      return true;
+    }
+    if (route.startsWith("/Client") && roleId == 3) {
+      return true;
+    }
+    if (route == "/") {
+      return true;
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    if (!isRouteAccessible) {
+      router.push("/Unauthorized");
+    }
+  });
+  return <Layout Component={Component} pageProps={pageProps} />;
+};
 
 function MyApp({ Component, pageProps }) {
-  const router = useRouter();
-  const Layout = router.pathname.startsWith("/Admin")
-    ? AdminLayout
-    : ClientLayout;
-
   return (
-    <UserProvider>
-      <Layout Component={Component} pageProps={pageProps} />
-    </UserProvider>
-    // <Auth0Provider
-    //     domain="dev-g47ngs10wcqmnpfs.us.auth0.com"
-    //     clientId="adb38ErO5bDrRS3ICJsRDrYBtUxOpOlX"
-    //     authorizationParams={{
-    //         redirect_uri: window.location.origin
-    //     }}
-    // >
-    //     <Component {...pageProps} />
-    // </Auth0Provider>
+    <Provider store={store}>
+      <CustomRouteWrapper Component={Component} pageProps={pageProps} />
+    </Provider>
   );
 }
 

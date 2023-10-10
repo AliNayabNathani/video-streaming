@@ -1,171 +1,581 @@
-import { Box, Button, Checkbox, FormLabel, HStack, Heading, Icon, Image, Input, Select, Stack, Text, Textarea, VStack, useColorModeValue } from "@chakra-ui/react";
-import { useState } from "react";
-import { AiTwotoneFile } from 'react-icons/ai';
-import { PinkButton } from "../../Reusable Components/MainButton";
+import {
+    Box, Button, Checkbox, FormLabel, HStack, Heading, Icon, Image, Input, Menu, MenuButton, MenuItem, MenuList, Select, Stack, Text, Textarea, VStack, useColorModeValue, useDisclosure, Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+} from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
+import { AiOutlineCloseCircle, AiOutlineInfoCircle, } from 'react-icons/ai';
+import { FaPlus } from "react-icons/fa";
+import { useDetailContext } from "../../Context/context";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { BiPlay } from "react-icons/bi";
+import { Tooltip } from "recharts";
+import videojs from "video.js";
+
+const Video = ({ src, onOptions, poster, name }) => {
+    const videoRef = useRef(null);
+
+    const [streamButton, setStreamButton] = useState(<BiPlay />);
+    useEffect(() => {
+        const videoJsOptions = {
+            autoplay: false,
+            muted: true,
+            controls: false,
+            responsive: true,
+            fluid: true,
+            sources: [
+                {
+                    src,
+                    type: "video/mp4",
+                    poster,
+                },
+            ],
+        };
+
+        const player = videojs(videoRef.current, videoJsOptions, function () {
+            // Player is ready
+        });
+
+        // Add event listeners
+        player.on("play", () => {
+            // Video play event
+        });
+
+        player.on("pause", () => {
+            // Video pause event
+        });
+
+        player.on("ended", () => {
+            // Video ended event
+        });
+
+        return () => {
+            // Cleanup and dispose of the player
+            if (player) {
+                player.dispose();
+            }
+        };
+    }, []);
+
+    const handleOptions = () => {
+        // Implement your logic to show options, e.g., open a modal
+        console.log("Options clicked");
+    };
+
+    const togglePlayPause = () => {
+        if (videoRef.current) {
+            // Check if the video is paused and toggle accordingly
+            if (videoRef.current.paused) {
+                videoRef.current.play();
+                setStreamButton(BiPause); // Set the button icon to pause
+            } else {
+                videoRef.current.pause();
+                setStreamButton(BiPlay); // Set the button icon to play
+            }
+        }
+    };
+
+    return (
+        <Box>
+            <video
+                ref={videoRef}
+                className="video-js vjs-default-skin"
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                poster={poster}
+            />
+            <HStack p={2} bg={"whiteAlpha.100"} justifyContent={"space-between"}>
+                <Stack>
+                    <Button
+                        borderRadius={"20px"}
+                        size={"sm"}
+                        bg={"blackAlpha.600"}
+                        color="white"
+                        onClick={togglePlayPause}
+                    >
+                        {streamButton}
+                    </Button>
+                </Stack>
+                <HStack>
+                    <Tooltip hasArrow label={name} bg="white">
+                        <Button
+                            borderRadius={"20px"}
+                            size={"sm"}
+                            bg={"blackAlpha.600"}
+                            color="white"
+                            p={0}
+                            onClick={handleOptions}
+                        >
+                            <AiOutlineInfoCircle />
+                        </Button>
+                    </Tooltip>
+                    <Button
+                        borderRadius={"20px"}
+                        size={"sm"}
+                        bg={"blackAlpha.600"}
+                        color="white"
+                        p={0}
+                        onClick={handleOptions}
+                    >
+                        <BsThreeDotsVertical />
+                    </Button>
+                </HStack>
+            </HStack>
+        </Box>
+    );
+};
 
 const FormLabelOutline = ({ children }) => (
-    <FormLabel width={'50%'} textDecor={'underline'} textAlign={'start'}>
+    <Text width={'100%'} color={'white'} textAlign={'start'} fontSize={'1rem'} fontWeight={'bold'}>
         {children}
-    </FormLabel>
+    </Text>
 )
 
-const WhiteOutline = () => (
-    <HStack width={'100%'} bg={'white'} border={'2px solid black'}>
-        <Box height={'100%'}>
-            <UploadOutline />
+const UploadEpisodeOutline = ({ episodeData, setEpisodeData }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+
+    function EpisodeModal({ isOpen, onClose, episodeData, setEpisodeData }) {
+        const [tempEpisodeData, setTempEpisodeData] = useState({
+            title: '',
+            src: '',
+            poster: ''
+        });
+
+        console.log('Temp: ', tempEpisodeData);
+        console.log('Episode: ', episodeData);
+        const handleEpisodeData = (e) => {
+            setTempEpisodeData({ ...tempEpisodeData, [e.target.name]: e.target.value });
+        }
+
+        const handleEpisodeUpload = () => {
+            setEpisodeData([...episodeData, tempEpisodeData]);
+            onClose();
+        }
+
+        const clearEpisodeData = () => {
+            tempEpisodeData({
+                title: '',
+                src: '',
+                poster: ''
+            });
+        }
+        return (
+            <>
+                <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent bg={'#232323'}>
+                        <ModalHeader>Modal Title</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <Text>Enter Title</Text>
+                            <Input value={tempEpisodeData.title} name="title" onChange={handleEpisodeData} />
+                            <Text>Select Video</Text>
+                            <Input value={tempEpisodeData.src} name="src" onChange={handleEpisodeData} type="file" accept="video/*" />
+                            <Text>Select thumbnail</Text>
+                            <Input value={tempEpisodeData.poster} name='poster' onChange={handleEpisodeData} type="file" accept="image/*" />
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <Button mr={3} onClick={handleEpisodeUpload}>
+                                Upload
+                            </Button>
+                            <Button mr={3} onClick={clearEpisodeData}>
+                                clear
+                            </Button>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
+            </>
+        )
+    }
+
+    return (
+        <Box >
+            <VStack alignItems={['center', 'flex-start']} p={6}>
+                <Stack direction={'row-reverse'}>
+                    <HStack>
+                        <Button
+                            bg={'#414141'}
+                            color={'#55DF01'}
+                            fontSize={'inherit'}
+                            textDecor={'underline'}
+                            w={'150px'} h={'150px'}
+                            onClick={onOpen}
+                        >
+                            Upload File
+                        </Button>
+                    </HStack>
+                    <EpisodeModal episodeData={episodeData} setEpisodeData={setEpisodeData} isOpen={isOpen} onClose={onClose} />
+                </Stack>
+            </VStack>
         </Box>
-        <VStack>
-            <Input textDecor={'underline'} outline={'none'} border={'none'} placeholder="Add Title" />
-            < Input textDecor={'underline'} outline={'none'} border={'none'} placeholder="Add Length" />
-            <Input textDecor={'underline'} outline={'none'} border={'none'} placeholder="Add Description" />
-        </VStack>
-    </HStack>
-)
+    );
+}
+
+const VideoOutline = ({ index, setEpisodeData, episodeData, visibleVideoOutlines, setVisibleVideoOutlines }) => {
+    const handleDelete = () => {
+        setVisibleVideoOutlines((prevVisibleVideoOutlines) => {
+            return prevVisibleVideoOutlines.filter((video, i) => i !== index);
+        });
+
+        episodeData.forEach((_, index) => {
+            episodeData.splice(index);
+        })
+    };
 
 
-const UploadOutline = () => {
-    const [uploadedImage, setUploadedImage] = useState(null);
+    return (
+        <HStack width={'100%'} bg={'whiteAlpha.400'} p={8} border={'2px solid black'}>
+            <Box height={'100%'}>
+                <UploadEpisodeOutline />
+            </Box>
+            <VStack w={'100%'} ml={'1rem'} alignSelf={'flex-start'}>
+                <Input _placeholder={{ color: 'white' }} name="title" variant={'unstyled'} placeholder="Add Title" />
+                <Input _placeholder={{ color: 'white' }} name="Length" variant={'unstyled'} placeholder="Add Length" />
+                <Input _placeholder={{ color: 'white' }} name="desc" variant={'unstyled'} placeholder="Add Description" />
+            </VStack>
+            <Icon onClick={handleDelete} cursor={'pointer'} color={'black'} as={AiOutlineCloseCircle} alignSelf={'flex-start'} boxSize={7} />
+        </HStack>
+    );
+}
 
-    const handleImageUpload = (e) => {
-        // Stop the event propagation to prevent multiple file input clicks
-        e.stopPropagation();
-        setUploadedImage(<Icon as={AiTwotoneFile} />);
+const TrailerOutline = ({ index, setTrailerOutlines, trailerData, setTrailerData }) => {
+    console.log(trailerData);
+    const handleDelete = () => {
+        setTrailerOutlines((prevtrailerOutlines) => {
+            return prevtrailerOutlines.filter((trailer, i) => i !== index);
+        });
+
+        trailerData.forEach((_, index) => {
+            trailerData.splice(index, 1);
+        });
     };
     return (
-        <VStack alignItems={['center', 'flex-start']}>
-            {!uploadedImage && (
-                <HStack>
-                    <Button
-                        bg={'white'}
-                        color="black"
-                        onClick={() => document.getElementById('fileInput').click()}
+        <Box key={index} bg={'whiteAlpha.400'} w={'100%'} p={4}>
+            <Icon onClick={handleDelete} w={'100%'} cursor={'pointer'} color={'black'} as={AiOutlineCloseCircle} boxSize={7} />
+            <VStack alignItems={['center', 'flex-start']}>
+                <Stack direction={'row-reverse'}>
+                    <Box
+                        border={"1px solid transparent"}
+                        borderRadius={5}
+                        cursor={"pointer"}
+                        _hover={{ scale: "1.5" }}
+                        width={["100%", "200px"]}
+                        mr={"1rem"}
                     >
-                        Choose File
-                    </Button>
-                    <input
-                        type="file"
-                        id="fileInput"
-                        style={{ display: 'none' }}
-                        accept="videos/*"
-                        onChange={handleImageUpload}
-                    />
-                </HStack>
-            )}
-            {uploadedImage && (
-                <Icon
-                    as={AiTwotoneFile}
-                    boxSize="50px"
-                    borderRadius="full"
-                    ml={2}
-                />
-            )}
-        </VStack>
+                        <Video src={trailerData[0].src} poster={trailerData[0].poster} name={trailerData[0].title} />
+                    </Box>
+                </Stack>
+                <Text>{trailerData[0].title}</Text>
+            </VStack>
+        </Box>
+    );
+}
+
+const UploadOutline = ({ trailerData, setTrailerData, setTrailerOutlines, trailerOutline }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+
+    function TrailerModal({ isOpen, onClose, trailerData, setTrailerData }) {
+        const [tempTrailerData, setTempTrailerData] = useState({
+            title: '',
+            src: '',
+            poster: ''
+        });
+
+        console.log('Temp: ', tempTrailerData);
+        console.log('Trailer: ', trailerData);
+        const handleTrailerData = (e) => {
+            setTempTrailerData({ ...tempTrailerData, [e.target.name]: e.target.value });
+        }
+
+        const handleTrailerUpload = () => {
+            setTrailerData([...trailerData, tempTrailerData]);
+            setTrailerOutlines([...trailerOutline, <TrailerOutline key={index} trailerData={trailerData} />])
+            onClose();
+        }
+
+        const clearTrailerData = () => {
+            tempTrailerData({
+                title: '',
+                src: '',
+                poster: ''
+            });
+        }
+        return (
+            <>
+                <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent bg={'#232323'}>
+                        <ModalHeader>Modal Title</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <Text>Enter Title</Text>
+                            <Input value={tempTrailerData.title} name="title" onChange={handleTrailerData} />
+                            <Text>Select Video</Text>
+                            <Input value={tempTrailerData.src} name="src" onChange={handleTrailerData} type="file" accept="video/*" />
+                            <Text>Select thumbnail</Text>
+                            <Input value={tempTrailerData.poster} name='poster' onChange={handleTrailerData} type="file" accept="image/*" />
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <Button mr={3} onClick={handleTrailerUpload}>
+                                Upload
+                            </Button>
+                            <Button mr={3} onClick={clearTrailerData}>
+                                clear
+                            </Button>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
+            </>
+        )
+    }
+
+    return (
+        <Box >
+            <VStack alignItems={['center', 'flex-start']} p={6}>
+                <Stack direction={'row-reverse'}>
+                    <HStack>
+                        <Button
+                            bg={'#414141'}
+                            color={'#55DF01'}
+                            fontSize={'inherit'}
+                            textDecor={'underline'}
+                            w={'150px'} h={'150px'}
+                            onClick={onOpen}
+                        >
+                            Upload File
+                        </Button>
+                    </HStack>
+                    <TrailerModal trailerData={trailerData} setTrailerData={setTrailerData} isOpen={isOpen} onClose={onClose} />
+                </Stack>
+            </VStack>
+        </Box>
     );
 }
 
 export default function AddVideo() {
+    const [visibleVideoOutlines, setVisibleVideoOutlines] = useState([]);
+    const [trailerOutline, setTrailerOutlines] = useState([]);
+    const [trailerData, setTrailerData] = useState([]);
+    const [episodeData, setEpisodeData] = useState([]);
+    const handleAddButtonClick = () => {
+        // setVisibleVideoOutlines([...visibleVideoOutlines, <VideoOutline key={visibleVideoOutlines.length} />]);
+    };
+
+    const [input, setInput] = useState({
+        title: "",
+        rentAmount: "",
+        purchaseAmount: "",
+        addGenre: "",
+        description: "",
+        castDetails: "",
+        category: "",
+        country: "",
+        language: "",
+        type: "",
+    });
+
+    const handleSubmit = () => {
+
+    }
+
+    const [errors, setErrors] = useState({
+        title: "",
+        rentAmount: "",
+        purchaseAmount: "",
+        addGenre: "",
+        description: "",
+        castDetails: "",
+        category: "",
+        country: "",
+        language: "",
+        type: "",
+    });
+
+    const handleInput = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        console.log(value);
+        setInput({ ...input, [name]: value });
+        console.log(input);
+    }
+
+    const handleSelectChange = (e, selectedValue) => {
+        const name = e.target.name;
+        console.log(selectedValue);
+        setInput({ ...input, [name]: selectedValue });
+        console.log(input);
+    }
+
     return (
         <>
-            <Box bg={useColorModeValue('gray.100', 'gray.900')}>
-                <Box pb={{ base: '0', md: '5rem' }} mx={{ base: '0', md: '10rem' }} >
-                    <Heading py={'3rem'} textAlign={'center'} textDecor={'underline'}>Upload New Video</Heading>
-                    <Stack justifyContent={'space-between'} direction={{ base: 'column', md: 'row' }}>
-                        <VStack spacing={'1rem'}>
-                            <HStack width={'100%'}>
-                                <FormLabelOutline>Title</FormLabelOutline>
-                                <Input bg={'white'} textAlign={'end'} />
-                            </HStack>
-                            <HStack width={'100%'}>
-                                <FormLabelOutline>Rent Amount</FormLabelOutline>
-                                <Input bg={'white'} textAlign={'end'} type="number" />
-                            </HStack>
-                            <HStack width={'100%'}>
-                                <FormLabelOutline>Purchasing Amount</FormLabelOutline>
-                                <Input bg={'white'} textAlign={'end'} type="number" />
-                            </HStack>
-                            <HStack width={'100%'}>
-                                <FormLabelOutline>Add Genre</FormLabelOutline>
-                                <Input bg={'white'} textAlign={'end'} />
-                            </HStack>
-                            <HStack width={'100%'}>
-                                <FormLabelOutline>Description</FormLabelOutline>
-                                <Textarea bg={'white'} />
-                            </HStack>
-                            <HStack width={'100%'}>
-                                <FormLabelOutline>Cast/Crew Details</FormLabelOutline>
-                                <Textarea bg={'white'} />
-                            </HStack>
-                            <HStack width={'100%'}>
-                                <FormLabelOutline>Category</FormLabelOutline>
-                                <Select bg={'white'}>
-                                    <option value="Short Film">Short film</option>
-                                    <option value="Educational">Educational</option>
-                                </Select>
-                            </HStack>
-                            <HStack width={'100%'}>
-                                <FormLabelOutline>Country/Region</FormLabelOutline>
-                                <Select bg={'white'}>
-                                    <option value="US">US</option>
-                                    <option value="Africa">Africa</option>
-                                    <option value="UK">UK</option>
-                                </Select>
-                            </HStack>
-                            <HStack width={'100%'}>
-                                <FormLabelOutline>Language</FormLabelOutline>
-                                <Select bg={'white'}>
-                                    <option value="English">English</option>
-                                    <option value="Swahili">Swahili</option>
-                                    <option value="French">French</option>
-                                </Select>
-                            </HStack>
-                            <HStack width={'100%'}>
-                                <FormLabelOutline>Select Type</FormLabelOutline>
-                                <Select bg={'white'}>
-                                    <option value="Series">Series</option>
-                                    <option value="Series">Movie</option>
-                                </Select>
-                            </HStack>
-                        </VStack>
+            <Box p={'3rem'} mt={'2rem'} bg={'#232323'}>
+                <Stack justifyContent={'space-between'} direction={{ base: 'column', md: 'row' }}>
+                    <VStack width={['100%', '40%']} alignItems={'flex-start'}>
 
 
-                        <VStack>
-                            <VStack>
-                                <HStack width={'100%'}>
-                                    <FormLabelOutline>Trailers (if any)</FormLabelOutline>
-                                    <UploadOutline />
-                                </HStack>
-                                <VStack>
-                                    <FormLabel>Trailer Langauge (Optional)</FormLabel>
-                                    <Select bg={'white'} placeholder="select language">
-                                        <option value="English">English</option>
-                                        <option value="Swahili">Swahili</option>
-                                        <option value="French">French</option>
-                                    </Select>
-                                </VStack>
+                        <FormLabelOutline>Title</FormLabelOutline>
+                        <Input name={'title'} value={input.title} onChange={handleInput} bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
+
+
+                        <FormLabelOutline>Rent Amount</FormLabelOutline>
+                        <Input name="rentAmount" value={input.rentAmount} onChange={handleInput} type="number" bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
+
+
+
+                        <FormLabelOutline>Purchasing Amount</FormLabelOutline>
+                        <Input name="purchaseAmount" value={input.purchaseAmount} onChange={handleInput} type="number" bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
+
+
+
+                        <FormLabelOutline>Add Genre</FormLabelOutline>
+                        <Input name="addGenre" value={input.addGenre} onChange={handleInput} bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
+
+
+
+                        <FormLabelOutline>Description</FormLabelOutline>
+                        <Textarea name="description" value={input.description} onChange={handleInput} bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
+
+
+
+                        <FormLabelOutline>Cast/Crew Details</FormLabelOutline>
+                        <Textarea name="castDetails" value={input.castDetails} onChange={handleInput} bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
+
+
+
+                        <FormLabelOutline>Category</FormLabelOutline>
+                        <Menu>
+                            <MenuButton name="category" w={'100%'} p={2} borderRadius={'5px'} as={Box} bg="rgba(255, 255, 255, 0.24)">{input.category ? input.category : 'educational'} </MenuButton>
+                            <MenuList p={0} m={0}>
+                                <MenuItem name="category" onClick={(e) => handleSelectChange(e, 'Educational')} value="Educational">Educational</MenuItem>
+                                <MenuItem name="category" onClick={(e) => handleSelectChange(e, 'Short Film')} value="Short Film">Short Film</MenuItem>
+                            </MenuList>
+                        </Menu>
+
+
+                        <FormLabelOutline>Country/Region</FormLabelOutline>
+                        <Menu>
+                            <MenuButton name="country" w={'100%'} p={2} borderRadius={'5px'} as={Box} bg="rgba(255, 255, 255, 0.24)">
+                                {input.country ? input.country : 'US'}
+                            </MenuButton>
+                            <MenuList p={0} m={0}>
+                                <MenuItem name="country" onClick={(e) => handleSelectChange(e, 'US')} value="US">US</MenuItem>
+                                <MenuItem name="country" onClick={(e) => handleSelectChange(e, 'Africa')} value="Africa">Africa</MenuItem>
+                                <MenuItem name="country" onClick={(e) => handleSelectChange(e, 'UK')} value="UK">UK</MenuItem>
+                            </MenuList>
+                        </Menu>
+
+
+                        <FormLabelOutline>Language</FormLabelOutline>
+
+
+                        <FormLabelOutline>Select Type</FormLabelOutline>
+                        <Menu>
+                            <MenuButton name="type" w={'100%'} p={2} borderRadius={'5px'} as={Box} bg="rgba(255, 255, 255, 0.24)">
+                                {input.type ? input.type : 'Movie'}
+                            </MenuButton>
+                            <MenuList p={0} m={0}>
+                                <MenuItem name="type" onClick={(e) => handleSelectChange(e, 'Movie')} value="Movie">Movie</MenuItem>
+                                <MenuItem name="type" onClick={(e) => handleSelectChange(e, 'Series')} value="Series">Series</MenuItem>
+                            </MenuList>
+                        </Menu>
+                    </VStack>
+
+
+                    <VStack width={['100%', '50%']} alignItems={'flex-start'}>
+
+                        <FormLabelOutline>Trailers (if any)</FormLabelOutline>
+                        <HStack w={'100%'} overflowX={'auto'}>
+                            {trailerOutline.map((data, index) => (
+                                <TrailerOutline
+                                    index={index}
+                                    setTrailerOutlines={setTrailerOutlines}
+                                    setTrailerData={setTrailerData}
+                                    trailerData={trailerData}
+                                    key={index}
+                                />
+                            ))}
+                            <VStack alignItems={'flex-start'} bg={'whiteAlpha.400'} w={'100%'} p={8}>
+                                <UploadOutline trailerData={trailerData} setTrailerData={setTrailerData} trailerOutline={trailerOutline} setTrailerOutlines={setTrailerOutlines} />
                             </VStack>
-                            <HStack width={'100%'}>
-                                <FormLabelOutline>Upload Episodes</FormLabelOutline>
-                                <VStack width={'100%'}>
-                                    <WhiteOutline />
-                                    <Text bg={'white'}>Add New Episode</Text>
-                                    <FormLabelOutline>Add Audio File</FormLabelOutline>
-                                    <UploadOutline />
-                                    <FormLabelOutline>Trailers (if any)</FormLabelOutline>
-                                    <Select bg={'white'} placeholder="select language">
-                                        <option value="English">English</option>
-                                        <option value="Swahili">Swahili</option>
-                                        <option value="French">French</option>
-                                    </Select>
-                                </VStack>
-                            </HStack >
-                            <HStack mt={'3rem'} justifyContent={'center'}>
-                                <PinkButton>Cancel</PinkButton>
-                                <PinkButton>Submit</PinkButton>
-                            </HStack>
-                        </VStack>
-                    </Stack>
-                </Box>
-            </Box>
+                        </HStack>
+
+
+                        <FormLabel>Trailer Langauge (Optional)</FormLabel>
+                        <Menu>
+                            <MenuButton name="language" w={'100%'} p={2} borderRadius={'5px'} as={Box} bg={'whiteAlpha.400'}>
+                                {input.language ? input.language : 'English'}
+                            </MenuButton>
+                            <MenuList p={0} m={0}>
+                                <MenuItem name="language" onClick={(e) => handleSelectChange(e, 'English')} value="English">English</MenuItem>
+                                <MenuItem name="language" onClick={(e) => handleSelectChange(e, 'Swahili')} value="Swahili">Swahili</MenuItem>
+                                <MenuItem name="language" onClick={(e) => handleSelectChange(e, 'French')} value="French">French</MenuItem>
+                            </MenuList>
+                        </Menu>
+
+
+                        <FormLabelOutline>Upload Episodes</FormLabelOutline>
+
+                        {/* {visibleVideoOutlines.map((video, index) => (
+                            <VideoOutline
+                                visibleVideoOutlines={visibleVideoOutlines}
+                                setVisibleVideoOutlines={setVisibleVideoOutlines}
+                                episodeData={episodeData}
+                                setEpisodeData={setEpisodeData}
+                                index={index}
+                                key={index}
+                            />
+                        ))} */}
+
+                        <Button
+                            fontSize={'1.1rem'}
+                            justifyContent={'space-between'}
+                            width={'100%'}
+                            onClick={handleAddButtonClick}
+                            rightIcon={<FaPlus size={20} />}
+                        >
+                            Add New Episodes</Button>
+
+                        <HStack>
+                            <Text
+                                color={'#55DF01'}
+                                textDecor={'underline'}
+                                onClick={() => document.getElementById('fileInput').click()}
+                            >
+                                Add Audio File
+                            </Text>
+                            <input
+                                type="file"
+                                id="audioInput"
+                                style={{ display: 'none' }}
+                                accept="audio/*"
+                            />
+                        </HStack>
+
+                        <Menu>
+                            <MenuButton name="language" w={'100%'} p={2} borderRadius={'5px'} as={Box} bg={'whiteAlpha.400'}>
+                                {input.language ? input.language : 'English'}
+                            </MenuButton>
+                            <MenuList p={0} m={0}>
+                                <MenuItem name="language" onClick={(e) => handleSelectChange(e, 'English')} value="English">English</MenuItem>
+                                <MenuItem name="language" onClick={(e) => handleSelectChange(e, 'Swahili')} value="Swahili">Swahili</MenuItem>
+                                <MenuItem name="language" onClick={(e) => handleSelectChange(e, 'French')} value="French">French</MenuItem>
+                            </MenuList>
+                        </Menu>
+
+                        <HStack w={'100%'} >
+                            <Button variant={'outline'} w={'50%'}>Cancel</Button>
+                            <Button w={'50%'}>Submit</Button>
+                        </HStack>
+                    </VStack>
+                </Stack>
+            </Box >
         </>
     )
 }

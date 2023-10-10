@@ -10,7 +10,8 @@ import { useDetailContext } from "../../components/Client/Context/context";
 import { ContentBar } from "../../components/Client/Reusable Components/ContentBar";
 import queryString from "query-string";
 import { useRouter } from "next/router";
-
+import { useUser } from '@auth0/nextjs-auth0/client';
+import axios from "axios";
 
 const DashboardNavData = [
     {
@@ -35,24 +36,24 @@ const DashboardNavData = [
     }
 ];
 
-export default function Dashboard({ location }) {
+export default function Dashboard() {
     const { subTitle } = useDetailContext();
-    // const { code } = queryString.parse(location.search);
     const router = useRouter();
-    const { code } = router.query;
-    const [userData, setUserData] = useState([]);
 
-    useEffect(() => {
-        fetch(`http://localhost:3001/Client/Dashboard?code=${code}`, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-            }
-        })
-            .then(res => res.json())
-            .then(res => setUserData(JSON.stringify(res)))
-    }, [code]);
+    // useEffect(() => {
+    //     axios.get('http://localhost:3001/api/protected')
+    //         .then(response => {
+    //             // Handle the successful response here
+    //             setUserData(JSON.stringify(response.data));
+    //         })
+    //         .catch(error => {
+    //             // Handle errors here
+    //             console.error('Error fetching data:', error);
+    //         });
+    // }, []);
+    // if (isLoading) return <div>Loading...</div>;
+    // if (error) return <div>{error.message}</div>;
+
     return (
         <MainTemplate>
             <Box mx={{ base: '0', md: '3rem' }} width={'100%'}>
@@ -61,16 +62,12 @@ export default function Dashboard({ location }) {
                     <Button>Export CSV</Button>
                 </HStack>
                 <ContentBar text="Dashboard" data={DashboardNavData} />
-                <h5>{userData}</h5>
                 <Box>
                     {DashboardNavData.map((navItem, index) => (
                         <React.Fragment key={index}>
                             {navItem.name === subTitle && navItem.to && React.createElement(navItem.to)}
                         </React.Fragment>
                     ))}
-                </Box>
-                <Box>
-                    {userData}
                 </Box>
             </Box>
         </MainTemplate>

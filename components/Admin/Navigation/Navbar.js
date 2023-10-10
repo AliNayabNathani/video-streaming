@@ -1,3 +1,5 @@
+"use client";
+
 import {
   IconButton,
   Avatar,
@@ -33,6 +35,7 @@ import { FiMenu, FiChevronDown } from "react-icons/fi";
 import { useRouter } from "next/router";
 import "./Navbar.css";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const LinkItems = [
   { name: "Dashboard", icon: BiBarChartSquare, to: "/Admin/" },
@@ -51,10 +54,18 @@ const LinkItems = [
     to: "/Admin/ContentApproval",
   },
   { name: "Coupons Management", icon: ImTicket, to: "/Admin/Coupons" },
-  { name: "Packages Management", icon: AiOutlineDropbox, to: "/Admin/Packages" },
+  {
+    name: "Packages Management",
+    icon: AiOutlineDropbox,
+    to: "/Admin/Packages",
+  },
   { name: "Content Management", icon: AiFillFile, to: "/Admin/Content" },
   { name: "Reports", icon: FaFileAlt, to: "/Admin/SubscriptionReport" },
-  { name: "Custom Push Notifications", icon: BsFillBellFill, to: "/Admin/Notif" },
+  {
+    name: "Custom Push Notifications",
+    icon: BsFillBellFill,
+    to: "/Admin/Notif",
+  },
 ];
 const ReportItems = [
   { name: "Subscription Payment Report", to: "/Admin/SubscriptionReport" },
@@ -81,7 +92,7 @@ function SidebarContent({ onClose, ...rest }) {
 
   const handleNavigation = (to) => {
     router.push(to);
-  }
+  };
 
   return (
     <Box
@@ -105,7 +116,11 @@ function SidebarContent({ onClose, ...rest }) {
       {LinkItems.map((link, index) => (
         <Box
           key={link.name}
-          onClick={link.name !== 'Reports' ? () => handleNavigation(link.to) : () => handleItemClick(index)} // Use router.push to navigate
+          onClick={
+            link.name !== "Reports"
+              ? () => handleNavigation(link.to)
+              : () => handleItemClick(index)
+          } // Use router.push to navigate
           to
         >
           <NavItem px={4} py={2} to icon={link.icon}>
@@ -116,7 +131,7 @@ function SidebarContent({ onClose, ...rest }) {
             <Collapse in={openItem === index}>
               <UnorderedList>
                 {ReportItems.map((Report, subIndex) => (
-                  <ListItem p={1} listStyleType={'none'} key={subIndex}>
+                  <ListItem p={1} listStyleType={"none"} key={subIndex}>
                     <Box
                       key={Report.name}
                       fontSize="0.8rem"
@@ -126,9 +141,7 @@ function SidebarContent({ onClose, ...rest }) {
                       mx={3}
                       icon={null}
                     >
-                      <NavItem>
-                        {Report.name}
-                      </NavItem>
+                      <NavItem>{Report.name}</NavItem>
                     </Box>
                   </ListItem>
                 ))}
@@ -183,6 +196,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
     avatar:
       "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9",
   };
+  const user = useSelector((state) => state.auth);
 
   return (
     <Flex
@@ -214,8 +228,8 @@ const MobileNav = ({ onOpen, ...rest }) => {
         justifyContent={"space-between"}
         spacing={{ base: "0", md: "6" }}
       > */}
-      <Text className="hide-on-small">
-        Hi {dummyUser.name}!! Welcome to administrative panel
+      <Text suppressHydrationWarning={true} className="hide-on-small">
+        Hi {user?.user?.user?.name}!! Welcome to administrative panel
       </Text>
 
       <Flex>
@@ -239,7 +253,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
             <HStack align={"flex-end"} alignItems={"center"}>
               <Avatar size={"sm"} src={dummyUser.avatar} />
               <Text className="hide-on-small" alignSelf={"center"}>
-                {dummyUser.email}
+                {user?.user?.user?.email}
               </Text>
               <Box display={{ base: "none", md: "flex" }}>
                 <FiChevronDown />

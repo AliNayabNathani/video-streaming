@@ -8,12 +8,7 @@ import { useRouter } from "next/router";
 export default function Catalog() {
     const [isApproved, setIsApproved] = useState(true);
     const router = useRouter();
-    const handleRoute = (to, index) => {
-        router.push({
-            pathname: to,
-            query: { index: JSON.stringify(index) } // Convert data to a string if it's an object
-        });
-    }
+
 
     return (
         <Box>

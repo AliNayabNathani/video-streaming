@@ -12,10 +12,30 @@ const customTheme = extendTheme({
   },
   components: {
     Input: {
+      baseStyle: {
+        bg: '#414141',
+      },
       variants: {
         outline: {
           bg: "rgba(255, 255, 255, 0.24)",
           borderColor: 'transparent',
+        },
+      },
+    },
+    Text: {
+      baseStyle: {
+        color: '#9c9c9c'
+      }
+    },
+    OrderedList: {
+      baseStyle: {
+        color: '#9c9c9c',
+      },
+    },
+    Radio: {
+      baseStyle: {
+        _checked: {
+          backgroundColor: "#55DF01", // Set the background color when checked
         },
       },
     },
@@ -67,16 +87,20 @@ const customTheme = extendTheme({
     },
     Menu: {
       baseStyle: {
+        button: {
+          color: '#9c9c9c',
+        },
         list: {
+          color: '#9c9c9c',
           bg: "#414141",
           borderColor: 'transparent', // Border color of the menu
         },
         item: {
-          bg: "rgba(255, 255, 255, 0.24)",
+          bg: "#414141",
           color: 'black',
           _hover: {
             bg: "#232323",
-            color: "white", // Text color of menu items on hover
+            color: "#9c9c9c",
           },
         },
       },
@@ -88,12 +112,12 @@ const customTheme = extendTheme({
   },
   colors: {
     customGreen: {
-      500: "#55DF01", // Define the desired color value
+      500: "#55DF01",
     },
     customGray: {
       600: 'rgba(255, 255, 255, 0.48)',
     },
-
+    lighterGray: '#9c9c9c',
     // ...other color schemes...
   },
 });
