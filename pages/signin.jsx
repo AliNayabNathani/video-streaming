@@ -34,6 +34,7 @@ export default function SignIn() {
   useEffect(() => {
     if (isError) {
       alert(message);
+      dispatch(reset());
     }
     console.log(roleId);
     if (isSuccess || user) {
@@ -41,13 +42,9 @@ export default function SignIn() {
         router.push("/Admin/");
       } else if (roleId == 4) {
         router.push("/Client/Overview");
-      } else {
-        router.push("/UnAuthorized");
       }
     }
-
-    dispatch(reset());
-  }, [user, isError, isSuccess, message, router, dispatch]);
+  }, [user, isError, isSuccess, message, router]);
 
   const handleLogin = (e) => {
     e.preventDefault();

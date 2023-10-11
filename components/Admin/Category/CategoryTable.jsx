@@ -19,6 +19,10 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import ReactPaginate from "react-paginate";
 import axios from "axios";
 import { server } from "../../server";
+<<<<<<< HEAD
+=======
+import "./Table.css";
+>>>>>>> c5b32bbbd0b725268a02c8dbd3a69a0fd9b24db4
 
 const CategoryData = [
   {

@@ -1,1 +1,1 @@
-export const server = "http://localhost:5000/api/v1/";
+export const server = "https://videeo-server.onrender.com/api/v1/";

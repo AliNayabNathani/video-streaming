@@ -13,8 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { generateHideOnMobileCSS } from "../../components/Client/GlobalCSS/GlobalCSSStye";
-import "./style.css";
+import "./Style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { register, reset } from "../features/auth/authSlice";
 import Spinner from "../components/spinner";
@@ -96,7 +95,6 @@ export default function SignIn() {
           alignItems={"center"}
           direction={{ base: "column", md: "row" }}
         >
-          {/* <style>{generateHideOnMobileCSS()}</style> */}
           <VStack
             alignItems={"center"}
             alignSelf={"center"}

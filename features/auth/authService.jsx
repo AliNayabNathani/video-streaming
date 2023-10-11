@@ -1,11 +1,10 @@
 import axios from "axios";
 import { userData } from "../../components/Admin/Tables/UserTableData";
-
-const API_URL = "http://localhost:5000/api/v1/auth/";
+import { server } from "../../components/server";
 
 //Register User
 const register = async (userData) => {
-  const res = await axios.post(API_URL + "register", userData);
+  const res = await axios.post(server + "auth/register", userData);
 
   if (res.data) {
     localStorage.setItem("User", JSON.stringify(res.data));
@@ -16,7 +15,7 @@ const register = async (userData) => {
 
 //Login User
 const login = async (userData) => {
-  const res = await axios.post(API_URL + "login", userData, {
+  const res = await axios.post(server + "auth/login", userData, {
     headers: {
       "Content-type": "application/json",
     },
@@ -31,7 +30,7 @@ const login = async (userData) => {
 
 const logout = async () => {
   localStorage.removeItem("User");
-  await axios.get(API_URL + "logout");
+  await axios.get(server + "auth/logout");
 };
 
 const authService = {

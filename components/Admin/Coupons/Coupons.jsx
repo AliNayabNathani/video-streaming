@@ -5,6 +5,7 @@ import { HeaderModalButtons } from "../SmallReusableComponents/HeaderModalButton
 import CouponTable from "./CouponTable";
 
 export default function Coupons() {
+<<<<<<< HEAD
   return (
     <>
       <HeaderModalButtons
@@ -16,3 +17,14 @@ export default function Coupons() {
     </>
   );
 }
+=======
+    return (
+        <>
+            <HeaderModalButtons heading={'Coupons Management'} button1={'Add Coupons'} />
+            <SearchBar />
+            <CouponTable />
+
+        </>
+    );
+}
+>>>>>>> c5b32bbbd0b725268a02c8dbd3a69a0fd9b24db4
