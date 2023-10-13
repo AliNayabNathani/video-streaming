@@ -114,6 +114,32 @@ const ShowAddUserModal = ({ isOpen, onClose }) => {
 };
 
 const HeaderButtons = ({ onOpen }) => {
+
+  const CreatorExportCsv = async () => {
+    const response = await axios
+      .get(server + `users/content-creator-csv`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then((res) => {
+        const blob = new Blob([res.data], { type: "text/csv" });
+        console.log(blob);
+        // Create a temporary URL and initiate the download
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = "contentcreators.csv";
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
   return (
     <Stack
       justifyContent={["center", "space-between"]}
@@ -124,7 +150,7 @@ const HeaderButtons = ({ onOpen }) => {
     >
       <PageHeading text="Content Creator Management" />
       <Stack direction={["column", "row"]} align={["center", "flex-end"]}>
-        <Button size={{ base: "sm", md: "md" }} variant={"outline"}>
+        <Button size={{ base: "sm", md: "md" }} variant={"outline"} onClick={CreatorExportCsv}>
           Export CSV
         </Button>
         <Button

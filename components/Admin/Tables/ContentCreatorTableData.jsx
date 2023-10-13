@@ -1,92 +1,241 @@
 import { useEffect, useState } from "react";
 import { useSearchContext } from "../Context api/Context";
-import { Actions } from "../SmallReusableComponents/Action";
-import { TableTemplate } from "./Table";
+import { Actions, ToggleButton } from "../SmallReusableComponents/Action";
 import axios from "axios";
 import { server } from "../../server";
+import ReactPaginate from "react-paginate";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import "./Table.css";
+import { BiEdit } from "react-icons/bi";
+import { AiOutlineDelete } from "react-icons/ai";
+import { useRouter } from "next/router";
+import { HiOutlineEye } from "react-icons/hi";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+  Button,
+  HStack,
+  Box,
+} from "@chakra-ui/react";
+const deleteCreator = (id) => {
+  axios
+    .delete(server + `users/contentcreator/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    })
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
 
-// const ContentCreatorData = [
-//   {
-//     Creator_ID: "0012",
-//     Name: "Clara",
-//     Gender: "Female",
-//     Total_Videos_Published: "30",
-//     Subscribed_Users: "200",
-//     Status: "Active",
-//   },
-//   {
-//     Creator_ID: "0014",
-//     Name: "Matthew",
-//     Gender: "Male",
-//     Total_Videos_Published: "25",
-//     Subscribed_Users: "150",
-//     Status: "Suspended",
-//   },
-//   {
-//     Creator_ID: "0018",
-//     Name: "Sophia",
-//     Gender: "Female",
-//     Total_Videos_Published: "40",
-//     Subscribed_Users: "180",
-//     Status: "Active",
-//   },
-//   {
-//     Creator_ID: "0022",
-//     Name: "William",
-//     Gender: "Male",
-//     Total_Videos_Published: "22",
-//     Subscribed_Users: "120",
-//     Status: "Suspended",
-//   },
-//   {
-//     Creator_ID: "0026",
-//     Name: "Oliver",
-//     Gender: "Male",
-//     Total_Videos_Published: "18",
-//     Subscribed_Users: "90",
-//     Status: "Active",
-//   },
-//   {
-//     Creator_ID: "0030",
-//     Name: "Emma",
-//     Gender: "Female",
-//     Total_Videos_Published: "35",
-//     Subscribed_Users: "210",
-//     Status: "Suspended",
-//   },
-//   {
-//     Creator_ID: "0034",
-//     Name: "Liam",
-//     Gender: "Male",
-//     Total_Videos_Published: "28",
-//     Subscribed_Users: "160",
-//     Status: "Active",
-//   },
-//   {
-//     Creator_ID: "0038",
-//     Name: "Ava",
-//     Gender: "Female",
-//     Total_Videos_Published: "45",
-//     Subscribed_Users: "220",
-//     Status: "Suspended",
-//   },
-//   {
-//     Creator_ID: "0042",
-//     Name: "Noah",
-//     Gender: "Male",
-//     Total_Videos_Published: "20",
-//     Subscribed_Users: "110",
-//     Status: "Active",
-//   },
-//   {
-//     Creator_ID: "0046",
-//     Name: "Sophia",
-//     Gender: "Female",
-//     Total_Videos_Published: "32",
-//     Subscribed_Users: "190",
-//     Status: "Suspended",
-//   },
-// ];
+const changeActiveStatus = (id) => {
+  axios
+    .put(server + `users/${id}/active-contentcreator`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    })
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+const TableTemplate = ({
+  data,
+  text,
+  columns,
+  itemsPerPage,
+}) => {
+  var num = 0;
+  itemsPerPage = itemsPerPage || 10;
+  const [currentPage, setCurrentPage] = useState(0);
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const slicedData = data?.slice(startIndex, endIndex);
+  const { searchQuery } = useSearchContext();
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+  const handleNavigation = (to, router) => {
+    router.push(to);
+  };
+
+  const Actions = (id, item) => {
+    console.log('data', item)
+    const columnId = id.columnId;
+    console.log('data', columnId)
+    const router = useRouter();
+    return (
+      <HStack align={"center"} justifyContent={"space-between"}>
+        <Box onClick={() => handleNavigation("/Admin/ContentCreatorDetails", router)}>
+          <HiOutlineEye cursor={"pointer"} size={25} />
+        </Box>
+        <BiEdit cursor={"pointer"} size={25} />
+        <AiOutlineDelete
+          onClick={() => deleteCreator(columnId)}
+          cursor={"pointer"}
+          size={25}
+        />
+        <ToggleButton
+          columnId={columnId}
+          changeStatus={changeActiveStatus}
+          data={item}
+          cursor={"pointer"}
+        />
+      </HStack>
+    );
+  };
+
+  const totalPages = Math.ceil(data?.length / itemsPerPage);
+
+  return (
+    <>
+      <TableContainer
+        mt={"1rem"}
+        borderRadius={"10px"}
+        borderWidth={"2px"}
+        borderColor={"blackAlpha.600"}
+        bg={"#232323"}
+        p={4}
+      >
+        <Table>
+          {text ? <TableCaption>{text}</TableCaption> : null}
+          <Thead bg={"#181818"}>
+            <Tr>
+              {columns.map((c) => (
+                <Th
+                  textAlign={"center"}
+                  maxWidth={"10rem"}
+                  px={"10px"}
+                  borderRight={"1px"}
+                  borderColor={"blackAlpha.600"}
+                  color="white"
+                  key={c}
+                >
+                  {c}
+                </Th>
+              ))}
+              {Actions ? (
+                <Th
+                  textAlign={"center"}
+                  borderRight={"1px"}
+                  borderColor={"blackAlpha.600"}
+                  color="white"
+                >
+                  Actions
+                </Th>
+              ) : null}
+            </Tr>
+          </Thead>
+
+          <Tbody>
+            {slicedData?.map((item, index) => {
+              num++;
+
+              return (
+                <Tr
+                  style={
+                    num % 2 === 0
+                      ? { background: "#232323" }
+                      : { background: "#323232" }
+                  }
+                  key={index}
+                >
+                  {columns.map((column) => {
+                    return (
+                      <Td
+                        textAlign={"center"}
+                        borderRight={"1px"}
+                        borderBottom={0}
+                        borderColor={"blackAlpha.600"}
+                        key={column}
+                      >
+                        {item[column]}
+                      </Td>
+                    );
+                  })}
+                  {Actions ? (
+                    <Td
+                      textAlign={"center"}
+                      borderBottom={0}
+                      borderRight={"1px"}
+                      borderColor={"blackAlpha.600"}
+                    >
+                      {" "}
+                      <Actions item={item} columnId={item.id} />{" "}
+                    </Td>
+                  ) : null}
+                </Tr>
+              );
+            })}
+          </Tbody>
+        </Table>
+      </TableContainer>
+      {itemsPerPage >= 10 ? (
+        <>
+          <ReactPaginate
+            previousLabel={
+              currentPage === 0 ? (
+                <Button
+                  bg={"#232323"}
+                  leftIcon={<ChevronLeftIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage - 1 })}
+                  isDisabled
+                ></Button>
+              ) : (
+                <Button
+                  bg={"#232323"}
+                  _hover={{ bg: "#323232" }}
+                  leftIcon={<ChevronLeftIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage - 1 })}
+                ></Button>
+              )
+            }
+            nextLabel={
+              currentPage === totalPages - 1 ? (
+                <Button
+                  bg={"#232323"}
+                  rightIcon={<ChevronRightIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage + 1 })}
+                  isDisabled
+                ></Button>
+              ) : (
+                <Button
+                  bg={"#232323"}
+                  _hover={{ bg: "#323232" }}
+                  rightIcon={<ChevronRightIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage + 1 })}
+                ></Button>
+              )
+            }
+            breakLabel={"..."}
+            pageCount={Math.ceil(data?.length / itemsPerPage)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination"}
+            activeClassName={"active"}
+          />
+        </>
+      ) : null}
+    </>
+  );
+};
 
 const ContentCreatorColumn = [
   "id",

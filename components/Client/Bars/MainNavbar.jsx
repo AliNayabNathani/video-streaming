@@ -157,7 +157,6 @@ export default function Nav() {
                                         <Text textDecor={'underline'} color={'#55DF01'}>Mark all Read </Text>
                                     </HStack>
                                 </MenuItem>
-
                                 {NotifData.map((data) => (
                                     <>
                                         <MenuItem p={5} bg={'#323232'} color={'white'}>
@@ -169,8 +168,6 @@ export default function Nav() {
                                         <Divider />
                                     </>
                                 ))}
-
-
                             </MenuList>
                         </Menu>
 
