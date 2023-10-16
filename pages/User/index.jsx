@@ -1,34 +1,41 @@
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import { Box, Button, HStack, Heading, Image, Input, Stack, VStack } from '@chakra-ui/react';
-import React from 'react'
+import { Box, Button, HStack, Heading, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, VStack, useDisclosure } from '@chakra-ui/react';
+import React, { useState } from 'react'
+import { OTP, SignIn, SignUp } from '../../components/User/AuthModal';
 
-const Navbar = ({ onOpen }) => {
+const Navbar = ({ onOpen, setAuthChoice }) => {
 
+    const handleClick = () => {
+        setAuthChoice('Login')
+        onOpen();
+    }
     return (
         <HStack p={['1rem', '3rem']} w={'full'} justifyContent={'space-between'}>
             <Image w={'150px'} h={'50px'} src='/assests/videe0/Logo/Black _ White/sideBarLogo.png' />
-            <Button w={['30%', '15%', '10%']} onClick={onOpen}>Sign In</Button>
+            <Button w={['30%', '15%', '10%']} onClick={handleClick}>Sign In</Button>
         </HStack>
     );
 }
 
-const Modal = ({ isOpen, onClose }) => {
+const UserModal = ({ isOpen, onClose, authChoice, setAuthChoice }) => {
+
+    console.log(authChoice);
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>Modal Title</ModalHeader>
+            <ModalContent h={'auto'} w={'100%'} bg={'black'}>
                 <ModalCloseButton />
-                <ModalBody>
-                    <Lorem count={2} />
+                <ModalBody justifyContent={'center'} alignItems={'center'}>
+                    {authChoice === 'Login' ? (
+                        <SignIn setAuthChoice={setAuthChoice} />
+                    ) : authChoice === 'Signup' ? (
+                        <SignUp setAuthChoice={setAuthChoice} />
+                    ) : authChoice === 'OTP' ? (
+                        <OTP setAuthChoice={setAuthChoice} />
+                    ) : null}
+
                 </ModalBody>
 
-                <ModalFooter>
-                    <Button colorScheme='blue' mr={3} onClick={onClose}>
-                        Close
-                    </Button>
-                    <Button variant='ghost'>Secondary Action</Button>
-                </ModalFooter>
             </ModalContent>
         </Modal>
     )
@@ -36,10 +43,10 @@ const Modal = ({ isOpen, onClose }) => {
 
 const Index = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
-
+    const [authChoice, setAuthChoice] = useState('Login');
     return (
-        <Box h={'100vh'}>
-            <Navbar onOpen={onOpen} />
+        <Box h={'100vh'} w={'100%'}>
+            <Navbar setAuthChoice={setAuthChoice} onOpen={onOpen} />
             <VStack h={'70vh'} spacing={'2rem'} justifyContent={'center'} alignItems={'center'}>
                 <Heading size={'3xl'}>Unlimited Movies, TV Shows and more</Heading>
                 <Heading color={'#fff'} fontWeight={'normal'} size={'lg'}>Watch Anywhere. Cancel Anytime</Heading>
@@ -48,10 +55,12 @@ const Index = () => {
                     <Input w={'50%'} border={'1px solid transparent'} bg={'#414141'} placeholder='Email Address' />
                     <Button w={'20%'} rightIcon={<ChevronRightIcon boxSize={6} />}>Get Started</Button>
                 </Stack>
-                <Modal isOpen={isOpen} onClose={onClose} />
+                <UserModal authChoice={authChoice} setAuthChoice={setAuthChoice} isOpen={isOpen} onClose={onClose} />
             </VStack>
         </Box>
     )
 }
+
+export { Navbar };
 
 export default Index

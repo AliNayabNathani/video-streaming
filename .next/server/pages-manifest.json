@@ -2,5 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/User": "pages/User.js"
+  "/User/Dashboard": "pages/User/Dashboard.js",
+  "/Client/MyChannels": "pages/Client/MyChannels.js",
+  "/User/Preview": "pages/User/Preview.js"
 }
