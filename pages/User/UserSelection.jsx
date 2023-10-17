@@ -1,3 +1,4 @@
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Avatar, Box, Button, Center, GridItem, HStack, Heading, Icon, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, SimpleGrid, Text, VStack } from '@chakra-ui/react'
 import { Router, useRouter } from 'next/router';
 import React from 'react'
@@ -30,7 +31,7 @@ const userDetails = [
 
 ]
 
-const Navbar = () => {
+export const Navbar = () => {
     const user = useSelector((state) => state.auth);
     return (
         <HStack p={['1rem', '2rem']} w={'full'} justifyContent={'space-between'}>
@@ -54,16 +55,19 @@ const Navbar = () => {
                 <Text display={['none', 'flex']} color={'#fff'}> {userDetails[0]?.name}</Text>
                 <Menu>
                     <MenuButton
+                        alignItems={'center'}
                         as={Button}
                         rounded={'full'}
                         variant={'link'}
                         cursor={'pointer'}
-                        minW={0}>
+                        minW={0}
+                        justifyContent={'center'}>
                         <Avatar
                             size={'md'}
                             rounded={'full'}
                             src={userDetails[0].src}
                         />
+                        <Icon mt={'10px'} as={ChevronDownIcon} color={'#55DF01'} boxSize={8} />
                     </MenuButton>
                     <MenuList alignItems={'center'}>
                         <br />

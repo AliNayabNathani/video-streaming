@@ -132,7 +132,7 @@ const ChannelOutline = ({ data, showName, setShowName }) => {
         else {
             setShowName(name);
         }
-        await axios.get(server + `creator/mychannel/${data.id}`, {
+        await axios.get(server + `creator/mychannel/${data?.id}`, {
             method: "GET",
             withCredentials: true,
         })

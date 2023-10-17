@@ -141,7 +141,7 @@ const Movies = () => {
     )
 }
 
-const Video = ({ src, onOptions, poster, name }) => {
+export const Video = ({ src, onOptions, poster, name }) => {
     const videoRef = useRef(null);
     const count = useRef(0);
     const [streamButton, setStreamButton] = useState(<BiPlay />);

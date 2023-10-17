@@ -25,3 +25,16 @@
 .striped-menu .striped-item:nth-child(odd):hover .striped-icon {
   color: #414141;
 }
+
+.custom-datepicker {
+  outline: none;
+  border: 1px solid #323232;
+  padding: 0.7rem;
+  border-radius: 5px;
+  background-color: #232323;
+}
+
+.datepicker {
+  outline: none;
+  background-color: #232323;
+}

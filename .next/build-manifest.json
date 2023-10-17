@@ -15,15 +15,10 @@
     "static/chunks/main-app.js"
   ],
   "pages": {
-    "/Client/MyChannels": [
+    "/User/PPV": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/Client/MyChannels.js"
-    ],
-    "/User/Dashboard": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/User/Dashboard.js"
+      "static/chunks/pages/User/PPV.js"
     ],
     "/User/Preview": [
       "static/chunks/webpack.js",
