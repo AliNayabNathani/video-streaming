@@ -24,6 +24,7 @@ import {
 import axios from "axios";
 import { server } from "../../components/server";
 import { useState } from "react";
+
 const ShowAddUserModal = ({ isOpen, onClose }) => {
   const [userInfo, setUserInfo] = useState({
     name: "",
@@ -114,6 +115,31 @@ const ShowAddUserModal = ({ isOpen, onClose }) => {
 };
 
 const HeaderButtons = ({ onOpen }) => {
+  const CreatorExportCsv = async () => {
+    const response = await axios
+      .get(server + `users/content-creator-csv`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then((res) => {
+        const blob = new Blob([res.data], { type: "text/csv" });
+        console.log(blob);
+        // Create a temporary URL and initiate the download
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = "creators.csv";
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
   return (
     <Stack
       justifyContent={["center", "space-between"]}
@@ -124,7 +150,11 @@ const HeaderButtons = ({ onOpen }) => {
     >
       <PageHeading text="Content Creator Management" />
       <Stack direction={["column", "row"]} align={["center", "flex-end"]}>
-        <Button size={{ base: "sm", md: "md" }} variant={"outline"}>
+        <Button
+          onClick={CreatorExportCsv}
+          size={{ base: "sm", md: "md" }}
+          variant={"outline"}
+        >
           Export CSV
         </Button>
         <Button
@@ -132,7 +162,7 @@ const HeaderButtons = ({ onOpen }) => {
           size={{ base: "sm", md: "md" }}
           variant={"solid"}
         >
-          Add User
+          Add Content Creator
         </Button>
       </Stack>
     </Stack>

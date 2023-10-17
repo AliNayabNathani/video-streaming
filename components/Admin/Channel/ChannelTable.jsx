@@ -1,78 +1,213 @@
-import { HStack } from "@chakra-ui/react";
-import { TableTemplate } from "../Tables/Table";
-import { HiOutlineEye } from "react-icons/hi";
-import {
-  ToggleButton,
-  handleNavigation,
-} from "../SmallReusableComponents/Action";
-import { useRouter } from "next/router";
 import { useSearchContext } from "../Context api/Context";
 import { useEffect, useState } from "react";
-import { server } from "../../server";
 import axios from "axios";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+  Button,
+  Box,
+  HStack,
+} from "@chakra-ui/react";
 
-const ChannelData = [
-  {
-    Channel_ID: "1230",
-    Channel_Title: "Food Vlog",
-    Creator_Name: "John Dee",
-    Created_Date: "11/22/2022",
-  },
-  {
-    Channel_ID: "1231",
-    Channel_Title: "Travel Adventures",
-    Creator_Name: "Jane Smith",
-    Created_Date: "10/15/2022",
-  },
-  {
-    Channel_ID: "1232",
-    Channel_Title: "Gaming Fun",
-    Creator_Name: "Mike Johnson",
-    Created_Date: "09/03/2022",
-  },
-  {
-    Channel_ID: "1233",
-    Channel_Title: "Cooking Delights",
-    Creator_Name: "Emily Williams",
-    Created_Date: "08/27/2022",
-  },
-  {
-    Channel_ID: "1234",
-    Channel_Title: "Fitness Journey",
-    Creator_Name: "Alex Turner",
-    Created_Date: "07/11/2022",
-  },
-  {
-    Channel_ID: "1235",
-    Channel_Title: "Tech Talk",
-    Creator_Name: "David Brown",
-    Created_Date: "06/08/2022",
-  },
-  {
-    Channel_ID: "1236",
-    Channel_Title: "Artistic Creations",
-    Creator_Name: "Sophia Davis",
-    Created_Date: "05/02/2022",
-  },
-  {
-    Channel_ID: "1237",
-    Channel_Title: "Fashion Updates",
-    Creator_Name: "Olivia Lee",
-    Created_Date: "04/18/2022",
-  },
-  {
-    Channel_ID: "1238",
-    Channel_Title: "Comedy Central",
-    Creator_Name: "William Clark",
-    Created_Date: "03/25/2022",
-  },
-  {
-    Channel_ID: "1239",
-    Channel_Title: "Music Vibes",
-    Creator_Name: "Ella Martinez",
-    Created_Date: "02/07/2022",
-  },
-];
+import ReactPaginate from "react-paginate";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import "./Table.css";
+import { BiEdit } from "react-icons/bi";
+import { AiOutlineDelete } from "react-icons/ai";
+import { useRouter } from "next/router";
+import { HiOutlineEye } from "react-icons/hi";
+import { ToggleButton } from "../SmallReusableComponents/Action";
+import { server } from "../../server";
+
+const changeActiveStatus = (id) => {
+  axios
+    .put(server + `users/${id}/active-channel`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    })
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
+  var num = 0;
+  itemsPerPage = itemsPerPage || 10;
+  const [currentPage, setCurrentPage] = useState(0);
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const slicedData = data?.slice(startIndex, endIndex);
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+  const handleNavigation = (to, router) => {
+    router.push(to);
+  };
+
+  const Actions = ({ item }) => {
+    const columnId = item.id;
+    const router = useRouter();
+    return (
+      <HStack align={"center"} justifyContent={"space-around"}>
+        <Box onClick={() => handleNavigation("/Admin/ChannelDetails", router)}>
+          <HiOutlineEye cursor={"pointer"} size={25} />
+        </Box>
+        <ToggleButton
+          columnId={columnId}
+          changeStatus={changeActiveStatus}
+          data={item}
+          cursor={"pointer"}
+        />
+      </HStack>
+    );
+  };
+
+  const totalPages = Math.ceil(data?.length / itemsPerPage);
+
+  return (
+    <>
+      <TableContainer
+        mt={"1rem"}
+        borderRadius={"10px"}
+        borderWidth={"2px"}
+        borderColor={"blackAlpha.600"}
+        bg={"#232323"}
+        p={4}
+      >
+        <Table>
+          {text ? <TableCaption>{text}</TableCaption> : null}
+          <Thead bg={"#181818"}>
+            <Tr>
+              {columns.map((c) => (
+                <Th
+                  textAlign={"center"}
+                  maxWidth={"10rem"}
+                  px={"10px"}
+                  borderRight={"1px"}
+                  borderColor={"blackAlpha.600"}
+                  color="white"
+                  key={c}
+                >
+                  {c}
+                </Th>
+              ))}
+              {Actions ? (
+                <Th
+                  textAlign={"center"}
+                  borderRight={"1px"}
+                  borderColor={"blackAlpha.600"}
+                  color="white"
+                >
+                  Actions
+                </Th>
+              ) : null}
+            </Tr>
+          </Thead>
+
+          <Tbody>
+            {slicedData?.map((item, index) => {
+              num++;
+
+              return (
+                <Tr
+                  style={
+                    num % 2 === 0
+                      ? { background: "#232323" }
+                      : { background: "#323232" }
+                  }
+                  key={index}
+                >
+                  {columns.map((column) => {
+                    return (
+                      <Td
+                        textAlign={"center"}
+                        borderRight={"1px"}
+                        borderBottom={0}
+                        borderColor={"blackAlpha.600"}
+                        key={column}
+                      >
+                        {item[column]}
+                      </Td>
+                    );
+                  })}
+                  {Actions ? (
+                    <Td
+                      textAlign={"center"}
+                      borderBottom={0}
+                      borderRight={"1px"}
+                      borderColor={"blackAlpha.600"}
+                    >
+                      {" "}
+                      <Actions item={item} columnId={item.id} />{" "}
+                    </Td>
+                  ) : null}
+                </Tr>
+              );
+            })}
+          </Tbody>
+        </Table>
+      </TableContainer>
+      {itemsPerPage >= 10 ? (
+        <>
+          <ReactPaginate
+            previousLabel={
+              currentPage === 0 ? (
+                <Button
+                  bg={"#232323"}
+                  leftIcon={<ChevronLeftIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage - 1 })}
+                  isDisabled
+                ></Button>
+              ) : (
+                <Button
+                  bg={"#232323"}
+                  _hover={{ bg: "#323232" }}
+                  leftIcon={<ChevronLeftIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage - 1 })}
+                ></Button>
+              )
+            }
+            nextLabel={
+              currentPage === totalPages - 1 ? (
+                <Button
+                  bg={"#232323"}
+                  rightIcon={<ChevronRightIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage + 1 })}
+                  isDisabled
+                ></Button>
+              ) : (
+                <Button
+                  bg={"#232323"}
+                  _hover={{ bg: "#323232" }}
+                  rightIcon={<ChevronRightIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage + 1 })}
+                ></Button>
+              )
+            }
+            breakLabel={"..."}
+            pageCount={Math.ceil(data?.length / itemsPerPage)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination"}
+            activeClassName={"active"}
+          />
+        </>
+      ) : null}
+    </>
+  );
+};
 
 const ChannelColumn = ["id", "name", "creator_name", "createdAt"];
 
@@ -121,16 +256,14 @@ export default function ChannelTable() {
     fetchData();
   }, []);
   channelData?.sort((a, b) => parseInt(a.id) - parseInt(b.id));
-  console.log(channelData);
+  console.log(searchQuery);
   const filterData = () => {
     if (searchQuery) {
       return channelData.filter(
         (data) =>
-          data.Channel_ID.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          data.Channel_Title.toLowerCase().includes(
-            searchQuery.toLowerCase()
-          ) ||
-          data.Creator_Name.toLowerCase().includes(searchQuery.toLowerCase())
+          data.id.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+          data.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          data.creator_name.toLowerCase().includes(searchQuery?.toLowerCase())
       );
     }
     return channelData;
@@ -139,8 +272,6 @@ export default function ChannelTable() {
     <TableTemplate
       data={searchQuery?.length > 0 && isFilter ? filterData() : channelData}
       columns={ChannelColumn}
-      Actions={ChannelActions}
-      to={"/Admin/ChannelDetails"}
     />
   );
 }

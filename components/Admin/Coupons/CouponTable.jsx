@@ -1,97 +1,268 @@
-import { TableTemplate } from "../Tables/Table";
-import { BiEdit } from "react-icons/bi";
-import { AiOutlineDelete } from "react-icons/ai";
-import { HStack } from "@chakra-ui/react";
 import { ToggleButton } from "../SmallReusableComponents/Action";
 import { useSearchContext } from "../Context api/Context";
 import { useEffect, useState } from "react";
 import { server } from "../../server";
 import axios from "axios";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+  Button,
+  HStack,
+} from "@chakra-ui/react";
 
-<<<<<<< HEAD
+import ReactPaginate from "react-paginate";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import "./Table.css";
+import { BiEdit } from "react-icons/bi";
+import { AiOutlineDelete } from "react-icons/ai";
+import { useRouter } from "next/router";
+const deleteCoupon = (id) => {
+  axios
+    .delete(server + `users/coupon/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    })
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+const changeActiveStatus = (id) => {
+  axios
+    .put(server + `users/${id}/active-coupon`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    })
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+const UserExportCsv = async () => {
+  const response = await axios
+    .get(server + `users/export-users-csv`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    })
+    .then((res) => {
+      const blob = new Blob([res.data], { type: "text/csv" });
+      console.log(blob);
+      // Create a temporary URL and initiate the download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = url;
+      a.download = "users.csv";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
+  var num = 0;
+  itemsPerPage = itemsPerPage || 10;
+  const [currentPage, setCurrentPage] = useState(0);
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const slicedData = data?.slice(startIndex, endIndex);
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+  const handleNavigation = (to, router) => {
+    router.push(to);
+  };
+
+  const Actions = ({ item }) => {
+    const columnId = item.id;
+    const router = useRouter();
+    return (
+      <HStack align={"center"} justifyContent={"space-between"}>
+        <BiEdit cursor={"pointer"} size={25} />
+        <AiOutlineDelete
+          onClick={() => deleteUser(columnId)}
+          cursor={"pointer"}
+          size={25}
+        />
+      </HStack>
+    );
+  };
+
+  const totalPages = Math.ceil(data?.length / itemsPerPage);
+
+  return (
+    <>
+      <TableContainer
+        mt={"1rem"}
+        borderRadius={"10px"}
+        borderWidth={"2px"}
+        borderColor={"blackAlpha.600"}
+        bg={"#232323"}
+        p={4}
+      >
+        <Table>
+          {text ? <TableCaption>{text}</TableCaption> : null}
+          <Thead bg={"#181818"}>
+            <Tr>
+              {columns.map((c) => (
+                <Th
+                  textAlign={"center"}
+                  maxWidth={"10rem"}
+                  px={"10px"}
+                  borderRight={"1px"}
+                  borderColor={"blackAlpha.600"}
+                  color="white"
+                  key={c}
+                >
+                  {c}
+                </Th>
+              ))}
+              <Th
+                textAlign={"center"}
+                borderRight={"1px"}
+                borderColor={"blackAlpha.600"}
+                color="white"
+              >
+                Actions
+              </Th>
+              <Th
+                textAlign={"center"}
+                borderColor={"blackAlpha.600"}
+                color={"white"}
+              >
+                Availability
+              </Th>
+            </Tr>
+          </Thead>
+
+          <Tbody>
+            {slicedData?.map((item, index) => {
+              num++;
+
+              return (
+                <Tr
+                  style={
+                    num % 2 === 0
+                      ? { background: "#232323" }
+                      : { background: "#323232" }
+                  }
+                  key={index}
+                >
+                  {columns.map((column) => {
+                    return (
+                      <Td
+                        textAlign={"center"}
+                        borderRight={"1px"}
+                        borderBottom={0}
+                        borderColor={"blackAlpha.600"}
+                        key={column}
+                      >
+                        {item[column]}
+                      </Td>
+                    );
+                  })}
+                  {Actions ? (
+                    <Td
+                      textAlign={"center"}
+                      borderBottom={0}
+                      borderRight={"1px"}
+                      borderColor={"blackAlpha.600"}
+                    >
+                      {" "}
+                      <Actions item={item} columnId={item.id} />{" "}
+                    </Td>
+                  ) : null}
+                  <Td
+                    textAlign={"center"}
+                    borderColor={"blackAlpha.600"}
+                    borderBottom={0}
+                  >
+                    {" "}
+                    <ToggleButton
+                      columnId={item.id}
+                      changeStatus={changeActiveStatus}
+                      data={item}
+                      cursor={"pointer"}
+                    />
+                  </Td>
+                </Tr>
+              );
+            })}
+          </Tbody>
+        </Table>
+      </TableContainer>
+      {itemsPerPage >= 10 ? (
+        <>
+          <ReactPaginate
+            previousLabel={
+              currentPage === 0 ? (
+                <Button
+                  bg={"#232323"}
+                  leftIcon={<ChevronLeftIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage - 1 })}
+                  isDisabled
+                ></Button>
+              ) : (
+                <Button
+                  bg={"#232323"}
+                  _hover={{ bg: "#323232" }}
+                  leftIcon={<ChevronLeftIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage - 1 })}
+                ></Button>
+              )
+            }
+            nextLabel={
+              currentPage === totalPages - 1 ? (
+                <Button
+                  bg={"#232323"}
+                  rightIcon={<ChevronRightIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage + 1 })}
+                  isDisabled
+                ></Button>
+              ) : (
+                <Button
+                  bg={"#232323"}
+                  _hover={{ bg: "#323232" }}
+                  rightIcon={<ChevronRightIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage + 1 })}
+                ></Button>
+              )
+            }
+            breakLabel={"..."}
+            pageCount={Math.ceil(data?.length / itemsPerPage)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination"}
+            activeClassName={"active"}
+          />
+        </>
+      ) : null}
+    </>
+  );
+};
 const CouponTableColumn = ["name", "createdAt", "value", "Expiry_Date"];
-=======
-const CouponTableData = [
-  {
-    Coupon_ID: "001",
-    Coupon_Name: "Coupon1",
-    Date_Of_Entry: "10/11/2022",
-    Discount: "10%",
-    Expiry_Date: "20/11/2022",
-  },
-  {
-    Coupon_ID: "002",
-    Coupon_Name: "Coupon2",
-    Date_Of_Entry: "10/11/2022",
-    Discount: "15%",
-    Expiry_Date: "25/11/2022",
-  },
-  {
-    Coupon_ID: "003",
-    Coupon_Name: "Coupon3",
-    Date_Of_Entry: "11/11/2022",
-    Discount: "20%",
-    Expiry_Date: "30/11/2022",
-  },
-  {
-    Coupon_ID: "004",
-    Coupon_Name: "Coupon4",
-    Date_Of_Entry: "11/11/2022",
-    Discount: "12%",
-    Expiry_Date: "22/11/2022",
-  },
-  {
-    Coupon_ID: "005",
-    Coupon_Name: "Coupon5",
-    Date_Of_Entry: "12/11/2022",
-    Discount: "8%",
-    Expiry_Date: "24/11/2022",
-  },
-  {
-    Coupon_ID: "006",
-    Coupon_Name: "Coupon6",
-    Date_Of_Entry: "12/11/2022",
-    Discount: "25%",
-    Expiry_Date: "26/11/2022",
-  },
-  {
-    Coupon_ID: "007",
-    Coupon_Name: "Coupon7",
-    Date_Of_Entry: "13/11/2022",
-    Discount: "30%",
-    Expiry_Date: "28/11/2022",
-  },
-  {
-    Coupon_ID: "008",
-    Coupon_Name: "Coupon8",
-    Date_Of_Entry: "13/11/2022",
-    Discount: "5%",
-    Expiry_Date: "21/11/2022",
-  },
-  {
-    Coupon_ID: "009",
-    Coupon_Name: "Coupon9",
-    Date_Of_Entry: "14/11/2022",
-    Discount: "18%",
-    Expiry_Date: "27/11/2022",
-  },
-  {
-    Coupon_ID: "010",
-    Coupon_Name: "Coupon10",
-    Date_Of_Entry: "14/11/2022",
-    Discount: "22%",
-    Expiry_Date: "29/11/2022",
-  },
-];
-
-const CouponTableColumn = [
-  "Coupon_ID",
-  "Coupon_Name",
-  "Date_Of_Entry",
-  "Discount",
-  "Expiry_Date",
-];
->>>>>>> c5b32bbbd0b725268a02c8dbd3a69a0fd9b24db4
 
 const CouponAction = () => (
   <HStack justifyContent={"space-around"}>
@@ -100,7 +271,6 @@ const CouponAction = () => (
   </HStack>
 );
 
-const CouponAvailability = () => <ToggleButton />;
 export default function CouponTable() {
   const { searchQuery, isFilter } = useSearchContext();
   const [couponData, setContentData] = useState();
@@ -144,8 +314,6 @@ export default function CouponTable() {
     <TableTemplate
       data={searchQuery?.length > 0 && isFilter ? filterData() : couponData}
       columns={CouponTableColumn}
-      Actions={CouponAction}
-      Availability={CouponAvailability}
     />
   );
 }

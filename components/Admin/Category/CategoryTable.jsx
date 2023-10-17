@@ -19,75 +19,29 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import ReactPaginate from "react-paginate";
 import axios from "axios";
 import { server } from "../../server";
-<<<<<<< HEAD
-=======
 import "./Table.css";
->>>>>>> c5b32bbbd0b725268a02c8dbd3a69a0fd9b24db4
+import { useRouter } from "next/router";
 
-const CategoryData = [
-  {
-    Category_Name: "Category 1",
-    Sub_Categories: [
-      {
-        Sub_Category_name: "Sub Category 1",
-        Sub_Category_desc: "This is Sub Category 1",
+const deleteCategory = (id) => {
+  axios
+    .delete(server + `users/category/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
       },
-      {
-        Sub_Category_name: "Sub Category 2",
-        Sub_Category_desc: "This is Sub Category 2",
-      },
-      {
-        Sub_Category_name: "Sub Category 3",
-        Sub_Category_desc: "This is Sub Category 3",
-      },
-    ],
-  },
-  {
-    Category_Name: "Category 2",
-    Sub_Categories: [
-      {
-        Sub_Category_name: "Sub Category 1",
-        Sub_Category_desc: "This is Sub Category 1",
-      },
-      {
-        Sub_Category_name: "Sub Category 2",
-        Sub_Category_desc: "This is Sub Category 2",
-      },
-    ],
-  },
-  {
-    Category_Name: "Category 3",
-    Sub_Categories: [
-      {
-        Sub_Category_name: "Sub Category 1",
-        Sub_Category_desc: "This is Sub Category 1",
-      },
-      {
-        Sub_Category_name: "Sub Category 2",
-        Sub_Category_desc: "This is Sub Category 2",
-      },
-      {
-        Sub_Category_name: "Sub Category 3",
-        Sub_Category_desc: "This is Sub Category 3",
-      },
-    ],
-  },
-  {
-    Category_Name: "Category 4",
-    Sub_Categories: [
-      {
-        Sub_Category_name: "Sub Category 1",
-        Sub_Category_desc: "This is Sub Category 1",
-      },
-    ],
-  },
-];
+      withCredentials: true,
+    })
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
 
 const TableTemplate = ({
   data,
   text,
   columns,
-  Actions,
   to,
   Availability,
   itemsPerPage,
@@ -99,12 +53,27 @@ const TableTemplate = ({
   const endIndex = startIndex + itemsPerPage;
   const slicedData = data?.slice(startIndex, endIndex);
   const { searchQuery } = useSearchContext();
-  console.log(slicedData);
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
 
   const totalPages = Math.ceil(data?.length / itemsPerPage);
+
+  const Actions = ({ item }) => {
+    const columnId = item.id;
+
+    const router = useRouter();
+    return (
+      <HStack align={"center"} justifyContent={"space-between"}>
+        <BiEdit cursor={"pointer"} size={25} />
+        <AiOutlineDelete
+          onClick={() => deleteCategory(columnId)}
+          cursor={"pointer"}
+          size={25}
+        />
+      </HStack>
+    );
+  };
 
   return (
     <>
@@ -150,7 +119,6 @@ const TableTemplate = ({
             {slicedData?.map((item, index) => {
               return item.subcategories?.map((sub, index) => {
                 num++;
-                console.log(item);
                 return (
                   <Tr
                     style={
@@ -193,7 +161,7 @@ const TableTemplate = ({
                         borderColor={"blackAlpha.600"}
                       >
                         {" "}
-                        <Actions to={to} />{" "}
+                        <Actions item={item} />{" "}
                       </Td>
                     ) : null}
                   </Tr>
@@ -289,13 +257,6 @@ const CategoryColumns = ["name", "Sub_Category", "Description"];
 //     );
 // };
 
-const CategoryActions = () => (
-  <HStack align={"center"} justifyContent={"space-around"}>
-    <BiEdit cursor={"pointer"} size={25} />
-    <AiOutlineDelete cursor={"pointer"} size={25} />
-  </HStack>
-);
-
 export default function CategoryTable({ categoryData, setCategoryData }) {
   const { searchQuery, isFilter } = useSearchContext();
   useEffect(() => {
@@ -336,7 +297,6 @@ export default function CategoryTable({ categoryData, setCategoryData }) {
     <TableTemplate
       data={searchQuery?.length > 0 && isFilter ? filterData() : categoryData}
       columns={CategoryColumns}
-      Actions={CategoryActions}
     />
     // <CategoryTableTemp data={CategoryData} />
   );

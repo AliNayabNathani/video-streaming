@@ -112,21 +112,13 @@ const UserExportCsv = async () => {
     });
 };
 
-const TableTemplate = ({
-  data,
-  text,
-  columns,
-  to,
-  Availability,
-  itemsPerPage,
-}) => {
+const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
   var num = 0;
   itemsPerPage = itemsPerPage || 10;
   const [currentPage, setCurrentPage] = useState(0);
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const slicedData = data?.slice(startIndex, endIndex);
-  const { searchQuery } = useSearchContext();
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
@@ -134,8 +126,8 @@ const TableTemplate = ({
     router.push(to);
   };
 
-  const Actions = (id, item) => {
-    const columnId = id.columnId;
+  const Actions = ({ item }) => {
+    const columnId = item.id;
     const router = useRouter();
     return (
       <HStack align={"center"} justifyContent={"space-between"}>
@@ -436,12 +428,11 @@ const HeaderButtons = ({ onOpen }) => {
     </Stack>
   );
 };
-
 export default function UserManagement() {
   const { searchQuery, isFilter } = useSearchContext();
+  console.log("query: ", searchQuery);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [userData, setUserData] = useState([]);
-  console.log(userData);
   const user = useSelector((state) => state.user);
   useEffect(() => {
     const fetchData = async () => {

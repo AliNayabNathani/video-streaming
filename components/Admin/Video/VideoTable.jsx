@@ -1,105 +1,228 @@
 import { ToggleButton } from "../SmallReusableComponents/Action";
-import { TableTemplate } from "../Tables/Table";
-import { HiOutlineEye } from "react-icons/hi";
-import { AiOutlineDelete } from "react-icons/ai";
-import { HStack } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { useSearchContext } from "../Context api/Context";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { server } from "../../server";
-const VideoTableData = [
-  {
-    Video_ID: "1230",
-    Video_Title: "Food Vlog",
-    Content_Views: "2560",
-    Creator_Name: "John Dee",
-    Rented_Amount: "$500",
-    Purchasing_Amount: "$300",
-    Uploaded_Date: "11/22/2022",
-  },
-  {
-    Video_ID: "1231",
-    Video_Title: "Travel Adventure",
-    Content_Views: "1800",
-    Creator_Name: "Emma Smith",
-    Rented_Amount: "$400",
-    Purchasing_Amount: "$250",
-    Uploaded_Date: "10/15/2022",
-  },
-  {
-    Video_ID: "1232",
-    Video_Title: "Fitness Routine",
-    Content_Views: "3200",
-    Creator_Name: "Alex Johnson",
-    Rented_Amount: "$450",
-    Purchasing_Amount: "$280",
-    Uploaded_Date: "09/28/2022",
-  },
-  {
-    Video_ID: "1233",
-    Video_Title: "Cooking Masterclass",
-    Content_Views: "4200",
-    Creator_Name: "Sophia Williams",
-    Rented_Amount: "$550",
-    Purchasing_Amount: "$330",
-    Uploaded_Date: "08/10/2022",
-  },
-  {
-    Video_ID: "1234",
-    Video_Title: "Nature Exploration",
-    Content_Views: "2800",
-    Creator_Name: "Daniel Brown",
-    Rented_Amount: "$420",
-    Purchasing_Amount: "$270",
-    Uploaded_Date: "07/05/2022",
-  },
-  {
-    Video_ID: "1235",
-    Video_Title: "Art and Creativity",
-    Content_Views: "1500",
-    Creator_Name: "Olivia Martinez",
-    Rented_Amount: "$380",
-    Purchasing_Amount: "$240",
-    Uploaded_Date: "06/18/2022",
-  },
-  {
-    Video_ID: "1236",
-    Video_Title: "Science Explained",
-    Content_Views: "3900",
-    Creator_Name: "William Jackson",
-    Rented_Amount: "$520",
-    Purchasing_Amount: "$310",
-    Uploaded_Date: "05/09/2022",
-  },
-  {
-    Video_ID: "1237",
-    Video_Title: "Music Jam Session",
-    Content_Views: "2100",
-    Creator_Name: "Ava Garcia",
-    Rented_Amount: "$470",
-    Purchasing_Amount: "$290",
-    Uploaded_Date: "04/14/2022",
-  },
-  {
-    Video_ID: "1238",
-    Video_Title: "Language Learning",
-    Content_Views: "3300",
-    Creator_Name: "Liam White",
-    Rented_Amount: "$490",
-    Purchasing_Amount: "$320",
-    Uploaded_Date: "03/22/2022",
-  },
-  {
-    Video_ID: "1239",
-    Video_Title: "Tech Reviews",
-    Content_Views: "2700",
-    Creator_Name: "Ella Adams",
-    Rented_Amount: "$430",
-    Purchasing_Amount: "$260",
-    Uploaded_Date: "02/07/2022",
-  },
-];
+
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+  Button,
+  Box,
+  HStack,
+} from "@chakra-ui/react";
+
+import ReactPaginate from "react-paginate";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import "./Table.css";
+import { BiEdit } from "react-icons/bi";
+import { AiOutlineDelete } from "react-icons/ai";
+import { useRouter } from "next/router";
+import { HiOutlineEye } from "react-icons/hi";
+
+const deleteUser = (id) => {
+  axios
+    .delete(server + `users/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    })
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+const changeActiveStatus = (id) => {
+  axios
+    .put(server + `users/${id}/active`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    })
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
+  var num = 0;
+  itemsPerPage = itemsPerPage || 10;
+  const [currentPage, setCurrentPage] = useState(0);
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const slicedData = data?.slice(startIndex, endIndex);
+  const { searchQuery } = useSearchContext();
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+  const handleNavigation = (to, router) => {
+    router.push(to);
+  };
+
+  const Actions = ({ item }) => {
+    const columnId = item.id;
+    console.log(columnId);
+    const router = useRouter();
+    return (
+      <HStack align={"center"} justifyContent={"space-between"}>
+        <Box onClick={() => handleNavigation("/Admin/VideoDetails", router)}>
+          <HiOutlineEye cursor={"pointer"} size={25} />
+        </Box>
+        <AiOutlineDelete cursor={"pointer"} size={25} />
+        <ToggleButton columnId={columnId} data={item} cursor={"pointer"} />
+      </HStack>
+    );
+  };
+
+  const totalPages = Math.ceil(data?.length / itemsPerPage);
+
+  return (
+    <>
+      <TableContainer
+        mt={"1rem"}
+        borderRadius={"10px"}
+        borderWidth={"2px"}
+        borderColor={"blackAlpha.600"}
+        bg={"#232323"}
+        p={4}
+      >
+        <Table>
+          {text ? <TableCaption>{text}</TableCaption> : null}
+          <Thead bg={"#181818"}>
+            <Tr>
+              {columns.map((c) => (
+                <Th
+                  textAlign={"center"}
+                  maxWidth={"10rem"}
+                  px={"10px"}
+                  borderRight={"1px"}
+                  borderColor={"blackAlpha.600"}
+                  color="white"
+                  key={c}
+                >
+                  {c}
+                </Th>
+              ))}
+              {Actions ? (
+                <Th
+                  textAlign={"center"}
+                  borderRight={"1px"}
+                  borderColor={"blackAlpha.600"}
+                  color="white"
+                >
+                  Actions
+                </Th>
+              ) : null}
+            </Tr>
+          </Thead>
+
+          <Tbody>
+            {slicedData?.map((item, index) => {
+              num++;
+
+              return (
+                <Tr
+                  style={
+                    num % 2 === 0
+                      ? { background: "#232323" }
+                      : { background: "#323232" }
+                  }
+                  key={index}
+                >
+                  {columns.map((column) => {
+                    return (
+                      <Td
+                        textAlign={"center"}
+                        borderRight={"1px"}
+                        borderBottom={0}
+                        borderColor={"blackAlpha.600"}
+                        key={column}
+                      >
+                        {item[column]}
+                      </Td>
+                    );
+                  })}
+                  {Actions ? (
+                    <Td
+                      textAlign={"center"}
+                      borderBottom={0}
+                      borderRight={"1px"}
+                      borderColor={"blackAlpha.600"}
+                    >
+                      {" "}
+                      <Actions item={item} columnId={item.id} />{" "}
+                    </Td>
+                  ) : null}
+                </Tr>
+              );
+            })}
+          </Tbody>
+        </Table>
+      </TableContainer>
+      {itemsPerPage >= 10 ? (
+        <>
+          <ReactPaginate
+            previousLabel={
+              currentPage === 0 ? (
+                <Button
+                  bg={"#232323"}
+                  leftIcon={<ChevronLeftIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage - 1 })}
+                  isDisabled
+                ></Button>
+              ) : (
+                <Button
+                  bg={"#232323"}
+                  _hover={{ bg: "#323232" }}
+                  leftIcon={<ChevronLeftIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage - 1 })}
+                ></Button>
+              )
+            }
+            nextLabel={
+              currentPage === totalPages - 1 ? (
+                <Button
+                  bg={"#232323"}
+                  rightIcon={<ChevronRightIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage + 1 })}
+                  isDisabled
+                ></Button>
+              ) : (
+                <Button
+                  bg={"#232323"}
+                  _hover={{ bg: "#323232" }}
+                  rightIcon={<ChevronRightIcon />}
+                  onClick={() => handlePageClick({ selected: currentPage + 1 })}
+                ></Button>
+              )
+            }
+            breakLabel={"..."}
+            pageCount={Math.ceil(data?.length / itemsPerPage)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination"}
+            activeClassName={"active"}
+          />
+        </>
+      ) : null}
+    </>
+  );
+};
 
 const VideoTableColumns = [
   "id",
@@ -110,25 +233,6 @@ const VideoTableColumns = [
   "purchasing_amount",
   "createdAt",
 ];
-
-const VideoActions = ({ to }) => {
-  const router = useRouter();
-  const handleNavigation = (to) => {
-    router.push(to);
-  };
-
-  return (
-    <HStack justifyContent={"space-around"}>
-      <HiOutlineEye
-        onClick={() => handleNavigation(to)}
-        cursor={"pointer"}
-        size={25}
-      />
-      <AiOutlineDelete cursor={"pointer"} size={25} />
-      <ToggleButton cursor={"pointer"} />
-    </HStack>
-  );
-};
 
 export default function VideoTable() {
   const { searchQuery, isFilter } = useSearchContext();
@@ -142,8 +246,14 @@ export default function VideoTable() {
           },
           withCredentials: true,
         });
-        console.log(response);
-        setVideoData(response.data.videos);
+        const modifiedData = await response.data.videos.map((item) => {
+          const datePart = item.createdAt.split("T")[0];
+          return {
+            ...item,
+            createdAt: datePart,
+          };
+        });
+        setVideoData(modifiedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -169,8 +279,6 @@ export default function VideoTable() {
     <TableTemplate
       data={searchQuery?.length > 1 && isFilter ? filterData() : videoData}
       columns={VideoTableColumns}
-      Actions={VideoActions}
-      to="/Admin/VideoDetails"
     />
   );
 }

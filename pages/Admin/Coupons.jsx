@@ -1,5 +1,4 @@
 import CouponTable from "../../components/Admin/Coupons/CouponTable";
-<<<<<<< HEAD
 import { SearchBar } from "../../components/Admin/SmallReusableComponents/SearchBar";
 import {
   Button,
@@ -144,17 +143,3 @@ export default function Coupons() {
     </>
   );
 }
-=======
-import { HeaderModalButtons } from "../../components/Admin/SmallReusableComponents/HeaderModalButtons";
-import { SearchBar } from "../../components/Admin/SmallReusableComponents/SearchBar";
-
-export default function Coupons() {
-    return (
-        <>
-            <HeaderModalButtons heading={'Coupons Management'} button1={'Add Coupons'} />
-            <SearchBar />
-            <CouponTable />
-        </>
-    );
-}
->>>>>>> c5b32bbbd0b725268a02c8dbd3a69a0fd9b24db4
