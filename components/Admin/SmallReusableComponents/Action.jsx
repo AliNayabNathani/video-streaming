@@ -5,7 +5,6 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { FiToggleLeft, FiToggleRight } from "react-icons/fi";
 import { useRouter } from "next/router";
-import axios from "axios";
 
 const handleNavigation = (to, router) => {
   router.push(to);

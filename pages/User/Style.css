@@ -1,0 +1,40 @@
+.scrollable-container {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  overflow: -moz-scrollbars-none; /* Firefox */
+}
+
+.scrollable-container::-webkit-scrollbar {
+  display: none; /* Webkit (Safari, Chrome) */
+}
+
+.striped-menu > :nth-child(even) {
+  background-color: #232323;
+}
+.striped-menu:hover > :nth-child(even):hover {
+  background-color: #414141;
+}
+
+.striped-item:nth-child(odd) .striped-text {
+  color: white;
+}
+.striped-item:nth-child(odd) .striped-icon {
+  color: white;
+}
+
+.striped-menu .striped-item:nth-child(odd):hover .striped-icon {
+  color: #414141;
+}
+
+.custom-datepicker {
+  outline: none;
+  border: 1px solid #323232;
+  padding: 0.7rem;
+  border-radius: 5px;
+  background-color: #232323;
+}
+
+.datepicker {
+  outline: none;
+  background-color: #232323;
+}

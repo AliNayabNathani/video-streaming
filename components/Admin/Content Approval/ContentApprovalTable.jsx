@@ -12,8 +12,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { AddModal } from "../Category/Modal/AddModal";
-import { ContentApprovalButtons } from "../SmallReusableComponents/Action";
+import {
+  ContentApprovalButtons,
+  ToggleButton,
+} from "../SmallReusableComponents/Action";
 import { useSearchContext } from "../Context api/Context";
 import axios from "axios";
 import { server } from "../../server";
@@ -238,14 +240,6 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
   );
 };
 
-const ContentApprovalTableColumns = [
-  "name",
-  "creator_name",
-  "rented_amount",
-  "purchasing_amount",
-  "createdAt",
-];
-
 const ContentAprrovalModal = ({ isOpen, onClose, item }) => (
   <>
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -320,6 +314,14 @@ const ContentAprrovalModal = ({ isOpen, onClose, item }) => (
   </>
 );
 
+const ContentApprovalTableColumns = [
+  "name",
+  "creator_name",
+  "rented_amount",
+  "purchasing_amount",
+  "createdAt",
+];
+
 const ContentApprovalTable = () => {
   const { searchQuery, isFilter } = useSearchContext();
   const [contentData, setContentData] = useState();
@@ -332,6 +334,7 @@ const ContentApprovalTable = () => {
           },
           withCredentials: true,
         });
+        console.log(response.data);
         const modifiedData = await response.data.videos.map((item) => {
           const datePart = item.createdAt.split("T")[0];
           return {
@@ -348,7 +351,7 @@ const ContentApprovalTable = () => {
     fetchData();
   }, []);
   contentData?.sort((a, b) => parseInt(a.id) - parseInt(b.id));
-
+  console.log(contentData);
   const filterData = () => {
     if (searchQuery) {
       return contentData.filter(

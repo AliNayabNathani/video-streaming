@@ -1,4 +1,3 @@
-"use client";
 
 import {
   IconButton,
@@ -24,18 +23,39 @@ import {
   Show,
   ListItem,
   UnorderedList,
+  Heading,
+  Divider,
 } from "@chakra-ui/react";
 
 import { BiBarChartSquare, BiWindow } from "react-icons/bi";
-import { FaUserAlt, FaFileAlt } from "react-icons/fa";
+import { FaUserAlt, FaFileAlt, FaRegUserCircle } from "react-icons/fa";
 import { AiFillPlayCircle, AiFillFile, AiOutlineDropbox } from "react-icons/ai";
 import { ImTicket } from "react-icons/im";
 import { BsFillBellFill } from "react-icons/bs";
-import { FiMenu, FiChevronDown } from "react-icons/fi";
+import { FiMenu, FiChevronDown, FiBell } from "react-icons/fi";
 import { useRouter } from "next/router";
 import "./Navbar.css";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+
+const NotifData = [
+  {
+    msg: 'New Video Uploaded',
+    desc: 'Mark has uploaded a new video: "Exploring the Great Outdoors"'
+  },
+  {
+    msg: 'Comment on Your Video',
+    desc: 'You have a new comment on your video: "How to Bake the Perfect Cake"'
+  },
+  {
+    msg: 'Channel Subscription',
+    desc: 'User123 has subscribed to your channel!'
+  },
+  {
+    msg: 'Video Purchased',
+    desc: 'You have successfuly Purchased the Video: "Great Web of lies"'
+  }
+];
 
 const LinkItems = [
   { name: "Dashboard", icon: BiBarChartSquare, to: "/Admin/" },
@@ -197,7 +217,11 @@ const MobileNav = ({ onOpen, ...rest }) => {
       "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9",
   };
   const user = useSelector((state) => state.auth);
+  const router = useRouter();
 
+  const handleProfileRoute = () => {
+    router.push('/Admin/Profile');
+  }
   return (
     <Flex
       ml={{ base: 0, md: "20rem" }}
@@ -233,41 +257,55 @@ const MobileNav = ({ onOpen, ...rest }) => {
       </Text>
 
       <Flex>
-        <IconButton
-          size="lg"
-          mr={"2rem"}
-          borderRadius={"0"}
-          borderX={"1px solid white"}
-          variant="ghost"
-          color={"white"}
-          _hover={{ bg: "white", color: "#232323" }}
-          aria-label="open menu"
-          icon={<BsFillBellFill />}
-        />
+
         <Menu>
           <MenuButton
-            py={2}
-            transition="all 0.3s"
-            _focus={{ boxShadow: "none" }}
+            cursor={'pointer'}
+            minW={0}
           >
-            <HStack align={"flex-end"} alignItems={"center"}>
-              <Avatar size={"sm"} src={dummyUser.avatar} />
-              <Text className="hide-on-small" alignSelf={"center"}>
-                {user?.user?.user?.email}
-              </Text>
-              <Box display={{ base: "none", md: "flex" }}>
-                <FiChevronDown />
-              </Box>
-            </HStack>
+            <Box >
+              <Icon
+                mr={"2rem"}
+                borderRadius={"0"}
+                borderX={"1px solid white"}
+                boxSize={6}
+                variant="ghost"
+                color={"whiteAlpha.600"}
+                _hover={{ color: "#55DF01" }}
+                aria-label="open menu"
+                cursor={'pointer'}
+                as={FiBell}
+              />
+            </Box>
           </MenuButton>
-          <MenuList bg={"black"}>
-            <MenuItem bg={"black"}>Profile</MenuItem>
-            <MenuItem bg={"black"}>Settings</MenuItem>
-            <MenuItem bg={"black"}>Billing</MenuItem>
-            <MenuDivider />
-            <MenuItem bg={"black"}>Sign out</MenuItem>
+
+          <MenuList w={'600px'} p={0} m={0}>
+            <MenuItem p={3} color={'white'} bg={'#232323'}>
+              <HStack w={'100%'} justifyContent={'space-between'}>
+                <Heading size={'md'}>Notifications</Heading>
+                <Text textDecor={'underline'} color={'#55DF01'}>Mark all Read </Text>
+              </HStack>
+            </MenuItem>
+            {NotifData.map((data) => (
+              <>
+                <MenuItem p={5} bg={'#323232'} color={'white'}>
+                  <Box>
+                    <Heading color={'#55DF01'} size={'md'}>{data.msg}</Heading>
+                    <Text fontSize={'0.9rem'}>{data.desc}</Text>
+                  </Box>
+                </MenuItem>
+                <Divider />
+              </>
+            ))}
           </MenuList>
         </Menu>
+
+        <Icon as={FaRegUserCircle}
+          color={'#55DF01'}
+          cursor={'pointer'}
+          boxSize={10}
+          onClick={handleProfileRoute}
+        />
       </Flex>
       {/* </HStack> */}
     </Flex>
