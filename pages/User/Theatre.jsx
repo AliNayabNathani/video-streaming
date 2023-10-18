@@ -6,21 +6,17 @@ import {
     HStack,
     Heading,
     Icon,
-    Image,
     Stack,
     Text,
-    Tooltip,
     VStack,
     useDisclosure,
     Modal,
-    ModalOverlay,
     ModalContent,
-    ModalHeader,
-    ModalFooter,
     ModalBody,
     ModalCloseButton,
+    Divider,
 } from "@chakra-ui/react";
-import { AiOutlineHeart, AiOutlineInfoCircle, AiOutlineSetting, AiOutlineShareAlt } from "react-icons/ai";
+import { AiOutlineHeart } from "react-icons/ai";
 import { BiLike, BiPause, BiPlay } from "react-icons/bi";
 import React, { useRef, useEffect, useState } from "react";
 import videojs from "video.js";
@@ -31,52 +27,7 @@ import { FiDownload, FiEdit3, FiShoppingBag } from "react-icons/fi";
 import { VideoPlayer } from "../../components/Client/Reusable Components/VideoPlayer";
 import { Video } from "./Dashboard";
 import './Style.css';
-
-const EpisodeData = [
-    {
-        name: 'Dark',
-        src: 'https://vjs.zencdn.net/v/oceans.mp4',
-        poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
-        episodes: [
-            {
-                name: 'Episode 1',
-                Duration: '25',
-                src: 'https://vjs.zencdn.net/v/oceans.mp4',
-                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
-                desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque veniam aperiam explicabo similique reprehenderit eligendi. Aliquam ad atque tempore in. Accusamus ipsum tempore animi sapiente veritatis ipsam similique blanditiis inventore!"
-
-            },
-            {
-                name: 'Episode 2',
-                Duration: '30',
-                src: 'https://vjs.zencdn.net/v/oceans.mp4',
-                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
-                desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque veniam aperiam explicabo similique reprehenderit eligendi. Aliquam ad atque tempore in. Accusamus ipsum tempore animi sapiente veritatis ipsam similique blanditiis inventore!"
-            },
-            {
-                name: 'Episode 3',
-                Duration: '30',
-                src: 'https://vjs.zencdn.net/v/oceans.mp4',
-                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
-                desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque veniam aperiam explicabo similique reprehenderit eligendi. Aliquam ad atque tempore in. Accusamus ipsum tempore animi sapiente veritatis ipsam similique blanditiis inventore!"
-            },
-            {
-                name: 'Episode 4',
-                Duration: '30',
-                src: 'https://vjs.zencdn.net/v/oceans.mp4',
-                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
-                desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque veniam aperiam explicabo similique reprehenderit eligendi. Aliquam ad atque tempore in. Accusamus ipsum tempore animi sapiente veritatis ipsam similique blanditiis inventore!"
-            },
-            {
-                name: 'Episode 5',
-                Duration: '30',
-                src: 'https://vjs.zencdn.net/v/oceans.mp4',
-                poster: 'https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8',
-                desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque veniam aperiam explicabo similique reprehenderit eligendi. Aliquam ad atque tempore in. Accusamus ipsum tempore animi sapiente veritatis ipsam similique blanditiis inventore!"
-            },
-        ]
-    },
-];
+import { InfoIcon } from "@chakra-ui/icons";
 
 const ShowInfo = [
     {
@@ -110,7 +61,6 @@ const ShowInfo = [
         poster: '/assests/Shows/mandalorian-small.jpg',
     }
 ];
-
 
 const MainVideo = ({ src, onOptions, poster, name }) => {
     const videoRef = useRef(null);
@@ -177,7 +127,6 @@ const MainVideo = ({ src, onOptions, poster, name }) => {
 
 
     return (
-
         <Box position="relative" overflow={'hidden'}>
             <style>
                 {`
@@ -199,7 +148,7 @@ const MainVideo = ({ src, onOptions, poster, name }) => {
             />
             <Button
                 position="absolute"
-                top="30%"
+                top="50%"
                 left="50%"
                 boxSize={16}
                 transform="translate(-50%, -50%)"
@@ -222,61 +171,7 @@ const InfoOutline = ({ children }) => (
 
 )
 
-const Episodes = () => {
-    return (
-        <>
-            {EpisodeData.map((data) => {
-                return data.episodes.map((episode, index) => (
-                    <Stack h={'100%'} key={index} spacing={'3rem'} cursor={'pointer'} my={'1rem'} justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
-                        <Box
-                            maxWidth="100%" // Ensure the player doesn't exceed its original size
-                            height={{ base: "100%", md: 'auto' }}
-                        >
-                            <VideoPlayer
-                                poster={episode.poster}
-                                name={episode.name}
-                                src={episode.src} />
-                        </Box>
-                        <VStack h={'100%'} alignItems={'flex-start'} justifyContent={'space-between'}>
-                            <Heading size={'md'}>{episode.name}</Heading>
-                            <Text>{episode.Duration} min</Text>
-                            <Text>{episode.desc}</Text>
-                        </VStack>
-                        <Stack direction={{ base: 'row', md: 'column' }} alignSelf={['center', 'normal']}>
-                            <Icon as={FiDownload} boxSize={6} />
-                        </Stack>
-                    </Stack>
-                ))
-            })}
-        </>
-    );
-}
-
-const Similar_Titles = () => {
-    return (
-        <>
-            <HStack maxW="100%" overflowX="auto" className="scrollable-container" spacing={'1rem'}>
-                {ShowInfo.map((data, index) => (
-                    <Box
-                        key={index}
-                        mt={"2rem"}
-                        border={"1px solid transparent"}
-                        cursor={"pointer"}
-                        _hover={{ scale: "1.5" }}
-                        height={'auto'} minW={["80%", "300px"]}
-                        mr={"1rem"}
-                    >
-                        <Video src={data.src} poster={data.poster} name={data.name} />
-                        <Text>Dark</Text>
-                    </Box>
-                ))}
-            </HStack>
-
-        </>
-    );
-}
-
-const Trailers = () => {
+const TheatreMovies = () => {
     return (
         <HStack maxW="100%" overflowX="auto" className="scrollable-container" spacing={'1rem'}>
             {ShowInfo.map((data, index) => (
@@ -293,37 +188,6 @@ const Trailers = () => {
                 </Box>
             ))}
         </HStack>
-    );
-}
-
-const Crew = () => {
-    return (
-        <>
-            <Text fontSize={'1.2rem'} color={'white'} mb={'1rem'}><b>Cast: </b>Tom cruise, Angelina Jolie, Brad pitt</Text>
-            <Text fontSize={'1.2rem'} color={'white'} mb={'1rem'}><b>Genre:</b> Thriller</Text>
-            <Text fontSize={'1.2rem'} color={'white'} mb={'1rem'}><b>Documentary</b></Text>
-        </>
-    );
-}
-
-const EpisodeOutline = ({ children, setContent, text }) => {
-    const handleClick = (text) => {
-        setContent(text);
-    }
-
-    return (
-        <Button
-            _active={{ color: '#55DF01', border: '1px solid #55DF01' }}
-            width={'80%'}
-            bg={'transparent'}
-            fontWeight={['normal', 'bold']}
-            border={'1px solid #232323'}
-            color={'white'} onClick={() => handleClick(text)}
-            borderRadius={'0'} py={4} px={2}
-            fontSize={{ base: 'sm', md: 'md' }}
-        >
-            {children}
-        </Button>
     );
 }
 
@@ -359,9 +223,8 @@ function PurchaseModal({ onClose, isOpen }) {
     )
 }
 
-const Preview = () => {
+const Theatre = () => {
     const [isReadMoreOpen, setisReadMoreOpen] = useState(false);
-    const [content, setContent] = useState('Episodes');
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const toggleReadMore = () => {
@@ -381,8 +244,8 @@ const Preview = () => {
             >
                 <MainVideo src={'https://vjs.zencdn.net/v/oceans.mp4'} poster={'/assests/Shows/dark.png'} name={'Dark'} />
             </Box>
-            <Box mx={['1rem', '2rem']}>
 
+            <Box mx={['1rem', '2rem']}>
                 <VStack w={'100%'} alignItems={'flex-start'} >
                     <Heading fontWeight={'semibold'} textAlign={'start'} size={'lg'}>Preview</Heading>
                     <HStack spacing={'0.5rem'}>
@@ -444,48 +307,19 @@ const Preview = () => {
                             <Text marginLeft={'0.5rem'}>Rate</Text>
                         </Flex>
                         <Flex alignItems={'center'}>
-                            <AiOutlineShareAlt size={16} />
-                            <Text marginLeft={'0.5rem'}>Share</Text>
+                            <InfoIcon size={16} />
+                            <Text marginLeft={'0.5rem'}>Info</Text>
                         </Flex>
                     </HStack>
                 </VStack>
-
-
-                <Flex alignItems={'center'}>
-                    <Flex width={'100%'} py={['auto', '2rem']} borderRight={'2px solid black'}>
-                        <EpisodeOutline text='Episodes' setContent={setContent}>
-                            Episodes
-                        </EpisodeOutline>
-
-                        <EpisodeOutline text='Similar titles' setContent={setContent}>
-                            Similar Titles
-                        </EpisodeOutline>
-
-                        <EpisodeOutline text='Trailers' setContent={setContent}>
-                            Trailers
-                        </EpisodeOutline>
-
-                        <EpisodeOutline text='Crew' setContent={setContent}>
-                            Cast/Crew
-                        </EpisodeOutline>
-
-                    </Flex>
-                </Flex>
-                {content === 'Episodes' ? (
-                    <Episodes />
-                ) : content === 'Similar titles' ? (
-                    <Similar_Titles />
-                ) : content === 'Trailers' ? (
-                    <Trailers />
-                ) : content === 'Crew' ? (
-                    <Crew />
-                ) :
-                    null
-                }
+                <Divider my={8} />
+                <TheatreMovies />
             </Box>
+
+
             <PurchaseModal onClose={onClose} isOpen={isOpen} />
         </UserTemplate>
     )
 }
 
-export default Preview
+export default Theatre

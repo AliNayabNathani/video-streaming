@@ -1,8 +1,10 @@
 import React from 'react'
-import { Avatar, Box, Button, Center, HStack, Icon, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text } from '@chakra-ui/react';
-import { FiBell, FiSearch } from 'react-icons/fi';
-import { AiOutlineLine } from 'react-icons/ai';
+import { Avatar, Box, Button, Center, Divider, HStack, Icon, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text } from '@chakra-ui/react';
+import { FiBell, FiKey, FiSearch } from 'react-icons/fi';
+import { AiOutlineLine, AiOutlinePlayCircle, AiOutlineYoutube } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+import { BsDownload } from 'react-icons/bs';
 
 const Navbar = () => {
     const user = useSelector((state) => state.auth);
@@ -19,23 +21,6 @@ const Navbar = () => {
                 <a style={{ cursor: 'pointer' }}>Browse by Language</a>
             </HStack>
 
-            {/* <Menu display={['block', 'none']}>
-                <MenuButton
-                    as={Button}
-                    rounded={'full'}
-                    variant={'link'}
-                    cursor={'pointer'}
-                    minW={0}>
-                </MenuButton>
-                <MenuList alignItems={'center'}>
-                    <MenuItem>Home</MenuItem>
-                    <MenuItem>TV Shows</MenuItem>
-                    <MenuItem>Movies</MenuItem>
-                    <MenuItem>New & Popular</MenuItem>
-                    <MenuItem>MyList</MenuItem>
-                    <MenuItem>Browse by Language</MenuItem>
-                </MenuList>
-            </Menu> */}
             <HStack w={'20%'} justifyContent={'flex-end'}>
                 <Icon _hover={{ color: "#55DF01" }}
                     aria-label="open menu"
@@ -65,24 +50,30 @@ const Navbar = () => {
                             rounded={'full'}
                             src={'/assests/People/cena.jpg'}
                         />
+                        <ChevronDownIcon mt={2} color={'#55DF01'} boxSize={8} />
                     </MenuButton>
-                    <MenuList alignItems={'center'}>
-                        <br />
-                        <Center>
-                            <Avatar
-                                size={'2xl'}
-                                src={'/assests/People/cena.jpg'}
-                            />
-                        </Center>
-                        <br />
-                        <Center>
-                            <p></p>
-                        </Center>
-                        <br />
-                        <MenuDivider />
-                        <MenuItem>Your Servers</MenuItem>
-                        <MenuItem>Account Settings</MenuItem>
-                        <MenuItem>Logout</MenuItem>
+                    <MenuList bg={'#232323'} alignItems={'center'}>
+
+                        <MenuItem p={4} color={'white'} bg={'#232323'}>
+                            <BsDownload />
+                            <Text ml={4} color={'white'}>Downloads</Text>
+                        </MenuItem>
+                        <Divider bg={'#303030'} />
+                        <MenuItem p={4} color={'white'} bg={'#232323'}>
+                            <AiOutlineYoutube />
+                            <Text ml={4} color={'white'}>Subscription</Text>
+                        </MenuItem>
+                        <Divider bg={'#303030'} />
+                        <MenuItem p={4} color={'white'} bg={'#232323'}>
+                            <FiKey />
+                            <Text ml={4} color={'white'}>Rented Vidoes</Text>
+                        </MenuItem>
+                        <Divider bg={'#303030'} />
+                        <MenuItem p={4} color={'white'} bg={'#232323'}>
+                            <AiOutlinePlayCircle />
+                            <Text ml={4} color={'white'}>Purchased Vidoes</Text>
+                        </MenuItem>
+                        <Divider bg={'#303030'} />
                     </MenuList>
                 </Menu>
                 <Image />
@@ -93,12 +84,12 @@ const Navbar = () => {
 
 const UserTemplate = ({ children }) => {
     return (
-        <>
+        <Box maxW={'100vw'}>
             <Navbar />
 
             {children}
 
-        </>
+        </Box>
     )
 }
 
