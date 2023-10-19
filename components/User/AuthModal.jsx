@@ -1,29 +1,58 @@
-import { Box, Button, Checkbox, HStack, Heading, Icon, Image, Input, Stack, Text, VStack } from '@chakra-ui/react'
-import React, { useRef, useState } from 'react'
+import { Box, Button, Checkbox, HStack, Heading, Icon, Image, Input, Select, Stack, Text, VStack } from '@chakra-ui/react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AiFillApple, AiFillFacebook } from 'react-icons/ai'
 import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import { register, reset } from '../../features/auth/authSlice';
 
 const GoogleIcon = () => {
     return (
-
         <Image boxSize={8} src='/assests/videe0/google_icon_geeksvgs.com.svg' />
-
     );
 }
 
 const SignIn = ({ setAuthChoice }) => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const { user, isLoading, isSuccess, message, isError } = useSelector(
+        (state) => state.auth
+    );
+    const roleId = user?.user?.roleId;
+    useEffect(() => {
+        if (isError) {
+            alert(message);
+            dispatch(reset());
+        }
+        console.log(roleId);
+        if (isSuccess || user) {
+            if (roleId == 2) {
+                router.push("/User/");
+            }
+        }
+    }, [user, isError, isSuccess, message, router]);
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+        const userData = {
+            email,
+            password,
+        };
+        dispatch(login(userData));
+    };
     return (
         <Box h={'100%'} bg={'black'}>
             <VStack h={'100%'} justifyContent={'center'} p={'2rem'} alignContent={'center'} spacing={'2rem'}>
                 <Heading size='lg'>Log In</Heading>
                 <Box w={'100%'}>
                     <Text color={'#fff'} mb={'0.5rem'}>E-mail</Text>
-                    <Input bg={'#fff'} w={'100%'} border={'none'} placeholder='@email.com' />
+                    <Input bg={'#fff'} w={'100%'} border={'none'} placeholder='@email.com' onChange={(e) => setEmail(e.target.value)} />
                     <Text color={'#fff'} mb={'0.5rem'}>Password</Text>
-                    <Input bg={'#fff'} w={'100%'} border={'none'} placeholder='Enter your password' />
+                    <Input bg={'#fff'} w={'100%'} border={'none'} placeholder='Enter your password' onChange={(e) => setPassword(e.target.value)} />
                 </Box>
 
-                <Button w={'100%'}>Log In</Button>
+                <Button w={'100%'} onClick={handleLogin}>Log In</Button>
 
                 <Box textAlign={'center'} w={'100%'}>
                     <Text color={'#fff'} mb={'0.5rem'}>If you don't have a account then <a style={{ color: '#55DF01', cursor: 'pointer' }} onClick={() => setAuthChoice('Signup')}>Register</a></Text>
@@ -40,25 +69,94 @@ const SignIn = ({ setAuthChoice }) => {
 }
 
 const SignUp = ({ setAuthChoice }) => {
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const { user, isLoading, isSuccess, message, isError } = useSelector(
+        (state) => state.auth
+    );
+    const [Info, SetInfo] = useState({
+        name: "",
+        password: "",
+        email: "",
+        gender: "",
+        mobile_number: "",
+        confirm_password: "",
+    });
+
+    const { name, password, email, mobile_number, confirm_password, gender } = Info;
+    useEffect(() => {
+        const roleId = user?.user?.roleId;
+        if (isError) {
+            alert(message);
+        }
+
+        if (isSuccess || user) {
+            if (roleId == 2) {
+                router.push("/User/");
+            }
+        }
+
+        dispatch(reset());
+    }, [user, isError, isSuccess, message, router, dispatch]);
+
+    const HandleSubmit = (e) => {
+        if (password != confirm_password) {
+            alert('Password don`t match');
+            return;
+        }
+        e.preventDefault();
+        const userData = {
+            name,
+            email,
+            password,
+            mobile_number,
+            gender,
+        };
+        dispatch(register(userData));
+    };
+
+    const HandleChange = (e) => {
+        const { name, value } = e.target;
+        console.log(Info);
+        SetInfo({
+            ...Info,
+            [name]: value,
+        });
+    };
     return (
         <Box h={'100%'} bg={'black'}>
             <VStack h={'100%'} w={'100%'} justifyContent={'center'} p={'2rem'} alignContent={'center'} spacing={'2rem'}>
                 <Heading size='md'>Sign Up</Heading>
                 <Box w={'100%'}>
-                    <Text color={'#fff'} mb={'0.5rem'}>E-mail</Text>
-                    <Input mb={'0.5rem'} bg={'#fff'} w={'100%'} placeholder='@email.com' />
+                    <Text color={'#fff'} mb={'0.5rem'} >Name</Text>
+                    <Input mb={'0.5rem'} color={'black'} bg={'#fff'} name="name" w={'100%'} placeholder='John Doe' onChange={HandleChange} />
+
+                    <Text color={'#fff'} mb={'0.5rem'} >E-mail</Text>
+                    <Input mb={'0.5rem'} color={'black'} bg={'#fff'} name="email" type='email' w={'100%'} placeholder='@email.com' onChange={HandleChange} />
+
+                    <Text color={'#fff'} mb={'0.5rem'} >Gender</Text>
+                    <Select name="gender" color={'black'} bg={'#fff'} value={Info.gender} onChange={HandleChange}>
+                        <option bg={'#fff'} color={'black'} name='Male'>Male</option>
+                        <option bg={'#fff'} color={'black'} name='Female'>Female</option>
+                        <option bg={'#fff'} color={'black'} name='Other' >Other</option>
+                    </Select>
+
                     <Text color={'#fff'} mb={'0.5rem'}>Phone Number</Text>
-                    <Input mb={'0.5rem'} bg={'#fff'} w={'100%'} placeholder='Enter your number' />
+                    <Input mb={'0.5rem'} color={'black'} bg={'#fff'} name="mobile_number" type='number' w={'100%'} placeholder='Enter your number' onChange={HandleChange} />
+
                     <Text color={'#fff'} mb={'0.5rem'}>Password</Text>
-                    <Input mb={'0.5rem'} bg={'#fff'} w={'100%'} placeholder='Password' />
+                    <Input mb={'0.5rem'} color={'black'} bg={'#fff'} type='password' name='password' w={'100%'} placeholder='Password' onChange={HandleChange} />
+
                     <Text color={'#fff'} mb={'0.5rem'}>Confirm Password</Text>
-                    <Input mb={'0.5rem'} bg={'#fff'} w={'100%'} placeholder='Password' />
+                    <Input mb={'0.5rem'} color={'black'} bg={'#fff'} w={'100%'} type='password' name='confirm_password' placeholder='Password' onChange={HandleChange} />
+
                     <div style={{ fontSize: "12px" }}>
                         <Checkbox colorScheme={'customGreen'} color={'#9c9c9c'} size={'sm'} >Agree to the terms & conditions and privacy policy</Checkbox>
                     </div>
                 </Box>
 
-                <Button w={'100%'} onClick={() => setAuthChoice('OTP')}>Sign Up</Button>
+                {/* <Button w={'100%'} onClick={() => setAuthChoice('OTP')}>Sign Up</Button> */}
+                <Button w={'100%'} onClick={HandleSubmit}>Sign Up</Button>
 
                 <Box textAlign={'center'} w={'100%'}>
                     <Text color={'#fff'} mb={'1rem'}> Or Sign Up using </Text>

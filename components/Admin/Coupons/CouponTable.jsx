@@ -54,32 +54,6 @@ const changeActiveStatus = (id) => {
     });
 };
 
-const UserExportCsv = async () => {
-  const response = await axios
-    .get(server + `users/export-users-csv`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    })
-    .then((res) => {
-      const blob = new Blob([res.data], { type: "text/csv" });
-      console.log(blob);
-      // Create a temporary URL and initiate the download
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.href = url;
-      a.download = "users.csv";
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-};
-
 const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
   var num = 0;
   itemsPerPage = itemsPerPage || 10;

@@ -31,6 +31,8 @@ import { FiDownload, FiEdit3, FiShoppingBag } from "react-icons/fi";
 import { VideoPlayer } from "../../components/Client/Reusable Components/VideoPlayer";
 import { Video } from "./Dashboard";
 import './Style.css';
+import axios from "axios";
+import { server } from "../../components/server";
 
 const EpisodeData = [
     {
@@ -222,32 +224,40 @@ const InfoOutline = ({ children }) => (
 
 )
 
-const Episodes = () => {
+const Episodes = ({ episodesData }) => {
+
     return (
         <>
-            {EpisodeData.map((data) => {
-                return data.episodes.map((episode, index) => (
+            {episodesData?.map((episode, index) => {
+                const apiUrl = `${server, episode.poster}`;
+                console.log(apiUrl);
+                const correctedUrl = apiUrl.replace(/\/+/g, '/');
+
+                console.log(correctedUrl);
+                return (
                     <Stack h={'100%'} key={index} spacing={'3rem'} cursor={'pointer'} my={'1rem'} justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
                         <Box
                             maxWidth="100%" // Ensure the player doesn't exceed its original size
                             height={{ base: "100%", md: 'auto' }}
                         >
                             <VideoPlayer
-                                poster={episode.poster}
-                                name={episode.name}
-                                src={episode.src} />
+                                poster={episode?.poster}
+                                name={episode?.title}
+                                src={episode?.file} />
                         </Box>
+                        <Image src={`${server}${episode.poster}`} />
                         <VStack h={'100%'} alignItems={'flex-start'} justifyContent={'space-between'}>
-                            <Heading size={'md'}>{episode.name}</Heading>
-                            <Text>{episode.Duration} min</Text>
-                            <Text>{episode.desc}</Text>
+                            <Heading size={'md'}>{episode?.title}</Heading>
+                            <Text>{episode?.Duration} min</Text>
+                            <Text>{episode?.description}</Text>
                         </VStack>
                         <Stack direction={{ base: 'row', md: 'column' }} alignSelf={['center', 'normal']}>
                             <Icon as={FiDownload} boxSize={6} />
                         </Stack>
                     </Stack>
-                ))
-            })}
+                );
+            })
+            }
         </>
     );
 }
@@ -276,10 +286,10 @@ const Similar_Titles = () => {
     );
 }
 
-const Trailers = () => {
+const Trailers = ({ trailersData }) => {
     return (
         <HStack maxW="100%" overflowX="auto" className="scrollable-container" spacing={'1rem'}>
-            {ShowInfo.map((data, index) => (
+            {trailersData.map((data, index) => (
                 <Box
                     key={index}
                     mt={"2rem"}
@@ -289,7 +299,7 @@ const Trailers = () => {
                     height={'auto'} minW={["80%", "300px"]}
                     mr={"1rem"}
                 >
-                    <Video src={data.src} poster={data.poster} name={data.name} />
+                    <Video src={data.file} poster={data.poster} name={data.title} />
                 </Box>
             ))}
         </HStack>
@@ -363,10 +373,36 @@ const Preview = () => {
     const [isReadMoreOpen, setisReadMoreOpen] = useState(false);
     const [content, setContent] = useState('Episodes');
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [videoData, setVideoData] = useState();
+    const [episodesData, setEpisodesData] = useState();
+    const [trailersData, setTrailersData] = useState();
+
+    useEffect(() => {
+        axios.get(server + 'creator/myvideo/1', {
+            headers: {
+                "Content-type": "application/json",
+            },
+            withCredentials: true,
+        })
+            .then((resp) => setVideoData(resp?.data.video))
+            .catch((err) => console.log(err));
+    }, []);
+
+    useEffect(() => {
+        if (videoData) {
+            setTrailersData(videoData.trailers);
+            setEpisodesData(videoData.episodes);
+        }
+    }, [videoData]);
+
+    console.log(videoData);
+    console.log(episodesData)
+    console.log(trailersData);
 
     const toggleReadMore = () => {
         setisReadMoreOpen(!isReadMoreOpen);
     };
+
     return (
         <UserTemplate>
             <Box
@@ -392,7 +428,6 @@ const Preview = () => {
                         <InfoOutline>HD</InfoOutline>
                     </HStack>
                 </VStack>
-
 
                 <VStack w={'100%'} alignItems={['center', 'flex-start']}>
                     <Stack w={'100%'} direction={['column', 'row']} my={'1rem'} spacing={'1rem'} justifyContent={'space-between'} alignItems={'center'} >
@@ -421,7 +456,7 @@ const Preview = () => {
 
                     <Box w={['100%', '40%']}>
                         <Collapse startingHeight={'20'} in={isReadMoreOpen}>
-                            <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni fuga dignissimos aliquam sit, facilis deserunt ratione est laudantium dolores aut recusandae vel libero. Delectus error maiores, reprehenderit minima qui laboriosam?</Text>
+                            <Text>{videoData?.description}</Text>
                         </Collapse>
                         {!isReadMoreOpen && (
                             <Button onClick={toggleReadMore} size="sm" variant="link">
@@ -472,11 +507,11 @@ const Preview = () => {
                     </Flex>
                 </Flex>
                 {content === 'Episodes' ? (
-                    <Episodes />
+                    <Episodes episodesData={episodesData} />
                 ) : content === 'Similar titles' ? (
                     <Similar_Titles />
                 ) : content === 'Trailers' ? (
-                    <Trailers />
+                    <Trailers trailersData={trailersData} />
                 ) : content === 'Crew' ? (
                     <Crew />
                 ) :

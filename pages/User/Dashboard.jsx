@@ -28,6 +28,8 @@ import { BsDownload, BsThreeDotsVertical } from "react-icons/bs";
 import "./Style.css";
 import { MdCancel } from "react-icons/md";
 import { useRouter } from "next/router";
+import axios from "axios";
+import { server } from "../../components/server";
 
 const ShowInfo = [
   {
@@ -338,6 +340,20 @@ export const Video = ({ src, onOptions, poster, name }) => {
 };
 
 const Channels = () => {
+  const [channelData, setChannelData] = useState();
+
+  useEffect(() => {
+    axios.get(server + 'user/getAllChannels', {
+      headers: {
+        "Content-type": "application/json",
+      },
+      withCredentials: true,
+    })
+      .then((resp) => setChannelData(resp?.data?.ChannelVideos))
+      .catch((err) => console.log(err));
+  }, []);
+
+
   return (
     <>
       <Box px={["2rem", "5rem"]}>
@@ -349,24 +365,29 @@ const Channels = () => {
             className="scrollable-container"
             spacing={"1rem"}
           >
-            {MovieInfo.map((index) => (
-              <Box
-                key={index}
-                mt={"2rem"}
-                border={"1px solid transparent"}
-                cursor={"pointer"}
-                _hover={{ scale: "1.5" }}
-                height={"auto"}
-                minW={["80%", "300px"]}
-                mr={"1rem"}
-              >
-                <Video
-                  src={"https://vjs.zencdn.net/v/oceans.mp4"}
-                  poster={"/assests/Shows/dark-small.jpg"}
-                  name={"Dark"}
-                />
-              </Box>
-            ))}
+            {channelData?.map((data, index) => {
+              const poster = data[0].videos[0].episodes[0].poster;
+              const video = data[0].videos[0].episodes[0].file;
+              console.log(poster, video);
+              return (
+                <Box
+                  key={index}
+                  mt={"2rem"}
+                  border={"1px solid transparent"}
+                  cursor={"pointer"}
+                  _hover={{ scale: "1.5" }}
+                  height={"auto"}
+                  minW={["80%", "300px"]}
+                  mr={"1rem"}
+                >
+                  <Video
+                    src={`https://vjs.zencdn.net/v/oceans.mp4`}
+                    poster={`../../../video-streaming-server/public/uploads/posters/new-logo.png`}
+                    name={"Dark"}
+                  />
+                </Box>
+              )
+            })}
           </HStack>
         </Box>
         <Divider my={"2rem"} />
@@ -461,6 +482,9 @@ const Carousal = () => {
 
 const Shows = () => {
   const router = useRouter();
+  const [showData, setShowData] = useState();
+
+  console.log(showData);
   return (
     <>
       <Carousal />
