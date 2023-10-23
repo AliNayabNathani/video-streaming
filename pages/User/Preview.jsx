@@ -390,8 +390,8 @@ const Preview = () => {
 
     useEffect(() => {
         if (videoData) {
-            setTrailersData(videoData.trailers);
-            setEpisodesData(videoData.episodes);
+            setTrailersData(videoData?.trailers);
+            setEpisodesData(videoData?.episodes);
         }
     }, [videoData]);
 

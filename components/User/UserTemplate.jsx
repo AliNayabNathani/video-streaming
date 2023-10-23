@@ -1,13 +1,15 @@
 import React from 'react'
 import { Avatar, Box, Button, Center, Divider, HStack, Icon, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text } from '@chakra-ui/react';
-import { FiBell, FiKey, FiSearch } from 'react-icons/fi';
+import { FiBell, FiKey, FiSearch, FiSettings } from 'react-icons/fi';
 import { AiOutlineLine, AiOutlinePlayCircle, AiOutlineYoutube } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { BsDownload } from 'react-icons/bs';
+import { useRouter } from 'next/router';
 
 const Navbar = () => {
     const user = useSelector((state) => state.auth);
+    const router = useRouter();
     return (
         <HStack p={['1rem', '2rem']} w={'full'} justifyContent={'space-between'}>
             <Image w={'150px'} h={'50px'} src='/assests/videe0/Logo/Black _ White/sideBarLogo.png' />
@@ -37,7 +39,7 @@ const Navbar = () => {
                     as={FiBell}
                 />
                 <Icon display={['none', 'flex']} boxSize={6} as={AiOutlineLine} transform="rotate(90deg)" />
-                <Text display={['none', 'flex']} color={'#fff'}> Abheesh</Text>
+                <Text display={['none', 'flex']} color={'#fff'}> {user?.user?.user?.name}</Text>
                 <Menu>
                     <MenuButton
                         as={Button}
@@ -74,6 +76,10 @@ const Navbar = () => {
                             <Text ml={4} color={'white'}>Purchased Vidoes</Text>
                         </MenuItem>
                         <Divider bg={'#303030'} />
+                        <MenuItem onClick={() => router.push('/User/Profile')} p={4} color={'white'} bg={'#232323'}>
+                            <FiSettings />
+                            <Text ml={4} color={'white'}>Settings</Text>
+                        </MenuItem>
                     </MenuList>
                 </Menu>
                 <Image />

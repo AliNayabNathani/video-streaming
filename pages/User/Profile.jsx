@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import UserTemplate from "../../components/User/UserTemplate";
 import {
   Avatar,
@@ -29,11 +29,12 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { BiExit, BiHelpCircle, BiNews, BiUser } from "react-icons/bi";
+import { BiExit, BiHelpCircle, BiImageAdd, BiNews, BiUser } from "react-icons/bi";
 import { FiSettings } from "react-icons/fi";
 import { MdCall, MdLocationOn } from "react-icons/md";
 import { BsDownload, BsFillPlusCircleFill, BsShield } from "react-icons/bs";
 import {
+  AiFillFileImage,
   AiFillFileText,
   AiOutlineArrowLeft,
   AiOutlineClockCircle,
@@ -42,19 +43,22 @@ import {
 } from "react-icons/ai";
 import { useState } from "react";
 import { HiTrash } from "react-icons/hi";
+import axios from "axios";
+import { server } from "../../components/server";
+import { useSelector } from "react-redux";
 
 const userDetails = [
   {
     name: "Abheesh",
-    src: "/assests/People/cena.jpg",
+    avatar: "/assests/People/cena.jpg",
   },
   {
     name: "Nayab",
-    src: "/assests/People/cena.jpg",
+    avatar: "/assests/People/cena.jpg",
   },
   {
     name: "Shahmir",
-    src: "/assests/People/cena.jpg",
+    avatar: "/assests/People/cena.jpg",
   },
 ];
 
@@ -498,6 +502,9 @@ const Plan = () => {
 };
 
 const Billing = () => {
+  const { user } = useSelector((state) => state.auth);
+  console.log(user.user.email);
+
   return (
     <Box w={"100%"}>
       <HStack mb={8} w={"100%"} spacing={4}>
@@ -507,11 +514,11 @@ const Billing = () => {
       <Divider my={8} />
       <Box mb={4}>
         <Text mb={2}>E-mail</Text>
-        <Input placeholder="abc@xyz.com" />
+        <Input value={user?.user?.email} placeholder="abc@xyz.com" disabled />
       </Box>
       <Box mb={4}>
         <Text mb={2}>Password</Text>
-        <Input placeholder="password" type="password" />
+        <Input placeholder="password" type="password" disabled />
       </Box>
 
       <Flex justifyContent={"center"}>
@@ -779,19 +786,44 @@ const PrivacyPolicy = () => {
 };
 
 const AddProfile = ({ isOpen, onClose, setProfileUser, profileUser }) => {
+  const [serverImage, setServerImage] = useState();
   const [selectedImage, setSelectedImage] = useState();
   const [name, setName] = useState();
+  const user = useSelector((state) => state.auth);
+  const userName = user?.user?.user?.name;
 
-  function handleFileSelect(e) {
+
+  const handleFileSelect = (e) => {
+    let imageData;
     const selectedFile = e.target.files[0];
+    setServerImage(selectedFile);
     if (selectedFile) {
       const objectURL = URL.createObjectURL(selectedFile);
       setSelectedImage(objectURL);
     }
+    const formData = new FormData();
+    formData.append('image', selectedFile);
+    axios.post(server + 'other/uploadPicture', formData)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
-  console.log(profileUser);
-  const handleAdd = () => {
-    const newProfile = { name, src: selectedImage };
+
+  const handleAdd = async () => {
+
+    const newProfile = { userName, name, avatar: serverImage.name };
+    await axios.post(server + 'user/createProfile', newProfile, {
+      headers: {
+        "Content-type": "application/json",
+      },
+      withCredentials: true,
+    })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+
     setProfileUser([...profileUser, newProfile]);
   };
   return (
@@ -804,8 +836,10 @@ const AddProfile = ({ isOpen, onClose, setProfileUser, profileUser }) => {
             Add Profile
           </Heading>
           <Box mb={4}>
-            <Text mb={2}>Name</Text>
-            <Input onChange={(e) => setName(e.target.value)} w={"100%"} />
+            <form encType="multipart/form-data">
+              <Text mb={2}>Name</Text>
+              <Input onChange={(e) => setName(e.target.value)} w={"100%"} />
+            </form>
           </Box>
 
           <Box mb={4}>
@@ -816,13 +850,14 @@ const AddProfile = ({ isOpen, onClose, setProfileUser, profileUser }) => {
                 accept="image/*"
                 display="none"
                 id="fileInput"
+                justifyContent={'center'}
                 onChange={handleFileSelect}
               />
               <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
-                Click to choose a file
+                <BiImageAdd size={64} />
               </label>
             </HStack>
-            <Flex justifyContent={"center"}>
+            <Flex justifyContent={"center"} my={4}>
               {selectedImage && (
                 <Avatar
                   size={"2xl"}
@@ -848,12 +883,38 @@ const AddProfile = ({ isOpen, onClose, setProfileUser, profileUser }) => {
 const Profile = () => {
   const [content, setContent] = useState("Account");
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const [profileUser, setProfileUser] = useState([
-    {
-      name: "",
-      src: "",
-    },
-  ]);
+  const [profileUser, setProfileUser] = useState([]);
+
+  useEffect(() => {
+    axios.get(server + 'user/getProfiles', {
+      headers: {
+        "Content-type": "application/json",
+      },
+      withCredentials: true,
+    })
+      .then((res) => {
+        const profileData = {
+          name: "",
+          avatar: "",
+        };
+        const data = res?.data?.members;
+        data.map((d) => {
+          profileData.name = d.name;
+          profileData.avatar = d.avatar;
+          console.log(profileData);
+          setProfileUser((prevProfileUser) => [
+            ...prevProfileUser, {
+              name: d.name,
+              avatar: d.avatar,
+            }]);
+        })
+      })
+      .catch((error) => {
+        console.error("Error fetching profile data:", error);
+      });
+  }, []);
+
+  console.log('Profile: ', profileUser);
   return (
     <UserTemplate>
       <Box px={16} py={8}>
@@ -863,16 +924,17 @@ const Profile = () => {
         </HStack>
 
         <HStack mx={16} spacing={16}>
-          {userDetails.map((user, index) => (
+          {profileUser.map((profile, index) => (
             <VStack
               h={"100%"}
               spacing={4}
               alignItems={"center"}
               justifyContent={"center"}
+              key={index}
             >
-              <Avatar size={"2xl"} src="/assests/People/cena.jpg" />
+              <Avatar size={"2xl"} src={`http://127.0.0.1:5000/uploads/${profile.avatar}`} />
               <Text mt={4} textAlign={"center"}>
-                {user.name}
+                {profile.name}
               </Text>
             </VStack>
           ))}
@@ -881,9 +943,11 @@ const Profile = () => {
             spacing={4}
             alignItems={"center"}
             justifyContent={"center"}
+            onClick={onOpen}
+            cursor={'pointer'}
           >
             <Icon boxSize={16} color={"#55DF01"} as={BsFillPlusCircleFill} />
-            <Text size={"lg"} color={"#55DF01"} onClick={onOpen}>
+            <Text size={"lg"} color={"#55DF01"}>
               Add Profiles
             </Text>
           </VStack>

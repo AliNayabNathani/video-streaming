@@ -343,7 +343,7 @@ const Channels = () => {
   const [channelData, setChannelData] = useState();
 
   useEffect(() => {
-    axios.get(server + 'user/getAllChannels', {
+    axios.post(server + 'user/getAllChannels', {
       headers: {
         "Content-type": "application/json",
       },

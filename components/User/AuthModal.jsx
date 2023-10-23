@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { AiFillApple, AiFillFacebook } from 'react-icons/ai'
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { register, reset } from '../../features/auth/authSlice';
+import { login, register, reset } from '../../features/auth/authSlice';
 
 const GoogleIcon = () => {
     return (
@@ -21,17 +21,19 @@ const SignIn = ({ setAuthChoice }) => {
     );
     const roleId = user?.user?.roleId;
     useEffect(() => {
+        const roleId = user?.user?.roleId;
         if (isError) {
             alert(message);
-            dispatch(reset());
         }
-        console.log(roleId);
+
         if (isSuccess || user) {
             if (roleId == 2) {
-                router.push("/User/");
+                router.push("/User/Dashboard");
             }
         }
-    }, [user, isError, isSuccess, message, router]);
+
+        dispatch(reset());
+    }, [user, isError, isSuccess, message, router, dispatch]);
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -47,9 +49,9 @@ const SignIn = ({ setAuthChoice }) => {
                 <Heading size='lg'>Log In</Heading>
                 <Box w={'100%'}>
                     <Text color={'#fff'} mb={'0.5rem'}>E-mail</Text>
-                    <Input bg={'#fff'} w={'100%'} border={'none'} placeholder='@email.com' onChange={(e) => setEmail(e.target.value)} />
+                    <Input bg={'#fff'} color={'black'} w={'100%'} border={'none'} placeholder='@email.com' onChange={(e) => setEmail(e.target.value)} />
                     <Text color={'#fff'} mb={'0.5rem'}>Password</Text>
-                    <Input bg={'#fff'} w={'100%'} border={'none'} placeholder='Enter your password' onChange={(e) => setPassword(e.target.value)} />
+                    <Input bg={'#fff'} color={'black'} w={'100%'} border={'none'} placeholder='Enter your password' onChange={(e) => setPassword(e.target.value)} />
                 </Box>
 
                 <Button w={'100%'} onClick={handleLogin}>Log In</Button>
@@ -84,6 +86,7 @@ const SignUp = ({ setAuthChoice }) => {
     });
 
     const { name, password, email, mobile_number, confirm_password, gender } = Info;
+
     useEffect(() => {
         const roleId = user?.user?.roleId;
         if (isError) {
@@ -92,7 +95,10 @@ const SignUp = ({ setAuthChoice }) => {
 
         if (isSuccess || user) {
             if (roleId == 2) {
-                router.push("/User/");
+                router.push("/User/Dashboard");
+            }
+            else {
+                alert('Not a User, Sign Up');
             }
         }
 
