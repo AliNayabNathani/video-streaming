@@ -343,16 +343,16 @@ const Channels = () => {
   const [channelData, setChannelData] = useState();
 
   useEffect(() => {
-    axios.post(server + 'user/getAllChannels', {
-      headers: {
-        "Content-type": "application/json",
-      },
-      withCredentials: true,
-    })
+    axios
+      .post(server + "user/getAllChannels", {
+        headers: {
+          "Content-type": "application/json",
+        },
+        withCredentials: true,
+      })
       .then((resp) => setChannelData(resp?.data?.ChannelVideos))
       .catch((err) => console.log(err));
   }, []);
-
 
   return (
     <>
@@ -386,7 +386,7 @@ const Channels = () => {
                     name={"Dark"}
                   />
                 </Box>
-              )
+              );
             })}
           </HStack>
         </Box>
@@ -565,14 +565,9 @@ const Dashboard = (text) => {
 
   return (
     <UserTemplate>
-      <Box px={["2rem", "5rem"]}>
+      <Box px={[4, 8]}>
         <Flex alignItems={"center"}>
-          <Flex
-            width={"100%"}
-            py={"2rem"}
-            display={{ base: "none", md: "none", lg: "none", xl: "flex" }}
-            borderRight={"2px solid black"}
-          >
+          <Flex width={"100%"} py={"2rem"} borderRight={"2px solid black"}>
             <Button
               _active={{ color: "#55DF01" }}
               width={"80%"}

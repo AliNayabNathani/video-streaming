@@ -30,7 +30,13 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { BiExit, BiHelpCircle, BiImageAdd, BiNews, BiUser } from "react-icons/bi";
+import {
+  BiExit,
+  BiHelpCircle,
+  BiImageAdd,
+  BiNews,
+  BiUser,
+} from "react-icons/bi";
 import { FiSettings } from "react-icons/fi";
 import { MdCall, MdLocationOn } from "react-icons/md";
 import { BsDownload, BsFillPlusCircleFill, BsShield } from "react-icons/bs";
@@ -192,11 +198,20 @@ const Account = () => {
 
   return (
     <Box w={"100%"} px={[0, 8]} mx={[0, 8]}>
-      <Flex alignContent={'center'} my={8} justifyContent={'flex-start'}>
+      <Flex alignContent={"center"} my={8} justifyContent={"flex-start"}>
         <AiOutlineArrowLeft size={32} />
-        <Heading size={'lg'} ml={4}>Account</Heading>
+        <Heading size={"lg"} ml={4}>
+          Account
+        </Heading>
       </Flex>
-      <Stack pb={8} direction={['column', 'row']} w={"100%"} my={4} borderRight={"2px solid black"}>
+      <Stack
+        pb={8}
+        direction={["column", "row"]}
+        w={"100%"}
+        my={4}
+        spacing={[2, 0]}
+        borderRight={"2px solid black"}
+      >
         <EpisodeOutline text="Plan" setContent={setAccountContent}>
           Plan
         </EpisodeOutline>
@@ -221,20 +236,21 @@ const Account = () => {
           Delete Account
         </EpisodeOutline>
       </Stack>
-
-      {AccountContent === "Plan" ? (
-        <Plan />
-      ) : AccountContent === "Billing" ? (
-        <Billing />
-      ) : AccountContent === "Membership" ? (
-        <Membership />
-      ) : AccountContent === "Security" ? (
-        <Security />
-      ) : AccountContent === "Setting" ? (
-        <Settings />
-      ) : AccountContent === "Delete Account" ? (
-        <Delete />
-      ) : null}
+      <Box maxW={"100%"} px={[0, 8]} mx={[4, 8]}>
+        {AccountContent === "Plan" ? (
+          <Plan />
+        ) : AccountContent === "Billing" ? (
+          <Billing />
+        ) : AccountContent === "Membership" ? (
+          <Membership />
+        ) : AccountContent === "Security" ? (
+          <Security />
+        ) : AccountContent === "Setting" ? (
+          <Settings />
+        ) : AccountContent === "Delete Account" ? (
+          <Delete />
+        ) : null}
+      </Box>
     </Box>
   );
 };
@@ -261,7 +277,7 @@ const AppSetting = () => {
     };
 
     return (
-      <HStack w={'100%'} my={8} spacing={4}>
+      <HStack w={"100%"} my={8} spacing={4}>
         <Text>Resolution: {selectedResolution}</Text>
         <Slider
           min={1}
@@ -293,7 +309,7 @@ const AppSetting = () => {
     );
   }
   return (
-    <Box w={"100%"} px={[0, 8]} mx={8}>
+    <Box maxW={"100%"} px={[0, 8]} mx={[4, 8]}>
       <HStack>
         <AiOutlineArrowLeft size={24} />
         <Heading size={"md"}>App Settings</Heading>
@@ -353,14 +369,24 @@ const AppSetting = () => {
       <Heading mb={8} fontWeight={"semibold"} size={"lg"}>
         Downloads
       </Heading>
-      <HStack w={['100%', "30%"]} justifyContent={"space-between"} mb={2} spacing={4}>
+      <HStack
+        w={["100%", "30%"]}
+        justifyContent={"space-between"}
+        mb={2}
+        spacing={4}
+      >
         <AiOutlineWifi size={32} />
         <Text w={"100%"} textAlign={"start"} color={"white"}>
           Wifi Only
         </Text>
         <Switch colorScheme="customGreen" />
       </HStack>
-      <HStack w={['100%', "30%"]} justifyContent={"space-between"} mb={2} spacing={4}>
+      <HStack
+        w={["100%", "30%"]}
+        justifyContent={"space-between"}
+        mb={2}
+        spacing={4}
+      >
         <BsDownload size={32} />
         <Text w={"100%"} color={"white"}>
           Download next episode
@@ -393,8 +419,15 @@ const Help = () => {
   const [HelpContent, setHelpContent] = useState("Account");
 
   return (
-    <Box w={"100%"} px={8} mx={8}>
-      <Stack pb={8} direction={['column', 'row']} w={"100%"} my={4} borderRight={"2px solid black"}>
+    <Box w={"100%"} px={[0, 8]} mx={[0, 8]}>
+      <Stack
+        pb={8}
+        direction={["column", "row"]}
+        w={"100%"}
+        my={4}
+        spacing={[2, 0]}
+        borderRight={"2px solid black"}
+      >
         <EpisodeOutline text="Recover Password" setContent={setHelpContent}>
           Recover Password
         </EpisodeOutline>
@@ -411,23 +444,24 @@ const Help = () => {
           Support Center
         </EpisodeOutline>
       </Stack>
-
-      {HelpContent === "Recover Password" ? (
-        <RecoverPassword />
-      ) : HelpContent === "Terms and Conditions" ? (
-        <TermsConditions />
-      ) : HelpContent === "Privacy Policy" ? (
-        <PrivacyPolicy />
-      ) : HelpContent === "Support Center" ? (
-        <Support />
-      ) : null}
+      <Box maxW={"100%"} px={[0, 8]} mx={[4, 8]}>
+        {HelpContent === "Recover Password" ? (
+          <RecoverPassword />
+        ) : HelpContent === "Terms and Conditions" ? (
+          <TermsConditions />
+        ) : HelpContent === "Privacy Policy" ? (
+          <PrivacyPolicy />
+        ) : HelpContent === "Support Center" ? (
+          <Support />
+        ) : null}
+      </Box>
     </Box>
   );
 };
 
 const Contact = () => {
   return (
-    <Box w={"100%"} px={8} mx={8}>
+    <Box maxW={"100%"} px={[0, 8]} mx={[4, 8]}>
       <HStack>
         <AiOutlineArrowLeft size={24} />
         <Heading size={"md"}>Help</Heading>
@@ -438,13 +472,13 @@ const Contact = () => {
         <Text mb={2}>Describe your issue</Text>
         <Input placeholder="type your issues" />
       </Box>
-      <HStack justifyContent={"flex-end"}>
-        <Button px={16}>Submit</Button>
-        <Button px={16}>Call</Button>
-        <Button px={16} variant={"outline"}>
+      <Stack direction={["column", "row"]} justifyContent={"flex-end"}>
+        <Button px={[0, 16]}>Submit</Button>
+        <Button px={[0, 16]}>Call</Button>
+        <Button px={[0, 16]} variant={"outline"}>
           Live Chat
         </Button>
-      </HStack>
+      </Stack>
     </Box>
   );
 };
@@ -456,7 +490,7 @@ const SignOut = () => {
 
 const Plan = () => {
   return (
-    <Box w={"100%"} >
+    <Box w={"100%"}>
       <HStack mb={8} w={"100%"} spacing={4}>
         <AiOutlineArrowLeft size={24} />
         <Heading size={"md"}>Subscription Plans Details</Heading>
@@ -465,7 +499,7 @@ const Plan = () => {
         return (
           <div style={{ width: "100%" }}>
             <Divider my={4} />
-            <HStack w={['100%', "40%"]} justifyContent={"space-between"}>
+            <HStack w={["100%", "40%"]} justifyContent={"space-between"}>
               <Text fontWeight={"semibold"} color={"white"}>
                 Content Creator
               </Text>
@@ -474,7 +508,7 @@ const Plan = () => {
                 {plan.contentcreator}
               </Text>
             </HStack>
-            <HStack w={['100%', "40%"]} justifyContent={"space-between"}>
+            <HStack w={["100%", "40%"]} justifyContent={"space-between"}>
               <Text fontWeight={"semibold"} color={"white"}>
                 Plan
               </Text>
@@ -483,7 +517,7 @@ const Plan = () => {
                 ${plan.price} / month
               </Text>
             </HStack>
-            <HStack w={['100%', "40%"]} justifyContent={"space-between"}>
+            <HStack w={["100%", "40%"]} justifyContent={"space-between"}>
               <Text fontWeight={"semibold"} color={"white"}>
                 {" "}
                 Billing Date
@@ -585,14 +619,15 @@ const Security = () => {
 
   console.log(deviceData);
   useEffect(() => {
-    axios.get(server + 'user/getDevice', {
-      headers: {
-        'Content-type': 'application/json'
-      },
-      withCredentials: true
-    })
-      .then(res => setDeviceData(res?.data?.device))
-      .catch(err => console.log(err));
+    axios
+      .get(server + "user/getDevice", {
+        headers: {
+          "Content-type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then((res) => setDeviceData(res?.data?.device))
+      .catch((err) => console.log(err));
   }, []);
 
   const ActivityOutline = ({ access }) => {
@@ -620,7 +655,7 @@ const Security = () => {
         </HStack>
       </Box>
     );
-  }
+  };
 
   return (
     <Box w={"100%"}>
@@ -725,24 +760,25 @@ const RecoverPassword = () => {
 
   const handleChange = () => {
     if (newPassword == confirmPassword) {
-      axios.patch(
-        server + 'auth/changepassword',
-        {
-          userId: user?.user?.userId,
-          oldPassword,
-          newPassword,
-        },
-        {
-          headers: {
-            'Content-type': 'application/json',
+      axios
+        .patch(
+          server + "auth/changepassword",
+          {
+            userId: user?.user?.userId,
+            oldPassword,
+            newPassword,
           },
-          withCredentials: true,
-        }
-      )
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
+          {
+            headers: {
+              "Content-type": "application/json",
+            },
+            withCredentials: true,
+          }
+        )
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
     } else {
-      alert('New Password and Confirm New Password are different')
+      alert("New Password and Confirm New Password are different");
     }
   };
 
@@ -756,19 +792,36 @@ const RecoverPassword = () => {
 
       <Box w={["100%", "60%"]} my={4}>
         <Text mb={"0.5rem"}>Old Password</Text>
-        <Input onChange={(e) => setOldPasword(e.target.value)} value={oldPassword} type="password" placeholder="**********" />
+        <Input
+          onChange={(e) => setOldPasword(e.target.value)}
+          value={oldPassword}
+          type="password"
+          placeholder="**********"
+        />
       </Box>
       <Box w={["100%", "60%"]} my={4}>
         <Text mb={"0.5rem"}>New Password</Text>
-        <Input onChange={(e) => setNewPasword(e.target.value)} value={newPassword} type="password" placeholder="**********" />
+        <Input
+          onChange={(e) => setNewPasword(e.target.value)}
+          value={newPassword}
+          type="password"
+          placeholder="**********"
+        />
       </Box>
       <Box w={["100%", "60%"]} my={4}>
         <Text mb={"0.5rem"}>Confirm New Password</Text>
-        <Input onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} type="password" placeholder="**********" />
+        <Input
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          value={confirmPassword}
+          type="password"
+          placeholder="**********"
+        />
       </Box>
 
       <Flex justifyContent={"center"}>
-        <Button onClick={handleChange} px={8}>Change Password</Button>
+        <Button onClick={handleChange} px={8}>
+          Change Password
+        </Button>
       </Flex>
     </Box>
   );
@@ -777,16 +830,17 @@ const RecoverPassword = () => {
 const TermsConditions = () => {
   const [TermsConditions, setTermsConditions] = useState();
   useEffect(() => {
-    axios.get(server + 'user/gettTerms', {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      withCredentials: true
-    })
+    axios
+      .get(server + "user/gettTerms", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
       .then((res) => {
         console.log(res?.data);
         setTermsConditions(res?.data?.termsAndConditionsItem);
-      })
+      });
   }, []);
   return (
     <Box w={"100%"}>
@@ -795,9 +849,7 @@ const TermsConditions = () => {
         <Heading size={"md"}>Recover Password</Heading>
       </HStack>
       <Divider my={4} />
-      <Text>
-        {TermsConditions?.description}
-      </Text>
+      <Text>{TermsConditions?.description}</Text>
       <br />
     </Box>
   );
@@ -806,16 +858,17 @@ const TermsConditions = () => {
 const PrivacyPolicy = () => {
   const [privacyPolicy, setPrivacyPolicy] = useState();
   useEffect(() => {
-    axios.get(server + 'user/getPrivacy', {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      withCredentials: true
-    })
+    axios
+      .get(server + "user/getPrivacy", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
       .then((res) => {
         console.log(res?.data);
         setPrivacyPolicy(res?.data?.privacyPolicyItem);
-      })
+      });
   }, []);
   return (
     <Box w={"100%"}>
@@ -824,17 +877,13 @@ const PrivacyPolicy = () => {
         <Heading size={"md"}>Recover Password</Heading>
       </HStack>
       <Divider my={4} />
-      <Text>
-        {privacyPolicy?.description}
-      </Text>
+      <Text>{privacyPolicy?.description}</Text>
     </Box>
   );
 };
 
 const Support = () => {
-  return (
-    <Chatbot />
-  );
+  return <Chatbot />;
 };
 
 const AddProfile = ({ isOpen, onClose, setProfileUser, profileUser }) => {
@@ -843,7 +892,6 @@ const AddProfile = ({ isOpen, onClose, setProfileUser, profileUser }) => {
   const [name, setName] = useState();
   const user = useSelector((state) => state.auth);
   const userName = user?.user?.user?.name;
-
 
   const handleFileSelect = (e) => {
     let imageData;
@@ -854,25 +902,26 @@ const AddProfile = ({ isOpen, onClose, setProfileUser, profileUser }) => {
       setSelectedImage(objectURL);
     }
     const formData = new FormData();
-    formData.append('image', selectedFile);
-    axios.post(server + 'other/uploadPicture', formData)
+    formData.append("image", selectedFile);
+    axios
+      .post(server + "other/uploadPicture", formData)
       .then((response) => {
         console.log(response);
       })
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   const handleAdd = async () => {
-
     const newProfile = { userName, name, avatar: serverImage.name };
-    await axios.post(server + 'user/createProfile', newProfile, {
-      headers: {
-        "Content-type": "application/json",
-      },
-      withCredentials: true,
-    })
+    await axios
+      .post(server + "user/createProfile", newProfile, {
+        headers: {
+          "Content-type": "application/json",
+        },
+        withCredentials: true,
+      })
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
 
@@ -902,7 +951,7 @@ const AddProfile = ({ isOpen, onClose, setProfileUser, profileUser }) => {
                 accept="image/*"
                 display="none"
                 id="fileInput"
-                justifyContent={'center'}
+                justifyContent={"center"}
                 onChange={handleFileSelect}
               />
               <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
@@ -938,12 +987,13 @@ const Profile = () => {
   const [profileUser, setProfileUser] = useState([]);
 
   useEffect(() => {
-    axios.get(server + 'user/getProfiles', {
-      headers: {
-        "Content-type": "application/json",
-      },
-      withCredentials: true,
-    })
+    axios
+      .get(server + "user/getProfiles", {
+        headers: {
+          "Content-type": "application/json",
+        },
+        withCredentials: true,
+      })
       .then((res) => {
         const profileData = {
           name: "",
@@ -955,18 +1005,20 @@ const Profile = () => {
           profileData.avatar = d.avatar;
           console.log(profileData);
           setProfileUser((prevProfileUser) => [
-            ...prevProfileUser, {
+            ...prevProfileUser,
+            {
               name: d.name,
               avatar: d.avatar,
-            }]);
-        })
+            },
+          ]);
+        });
       })
       .catch((error) => {
         console.error("Error fetching profile data:", error);
       });
   }, []);
 
-  console.log('Profile: ', profileUser);
+  console.log("Profile: ", profileUser);
   return (
     <UserTemplate>
       <Box px={[4, 16]} py={8}>
@@ -975,7 +1027,7 @@ const Profile = () => {
           <Heading size={"lg"}>Manage Profile</Heading>
         </HStack>
 
-        <HStack mx={[4, 16]} spacing={[4, 16]} overflow={'auto'}>
+        <HStack mx={[4, 16]} spacing={[4, 16]} overflow={"auto"}>
           {profileUser.map((profile, index) => (
             <VStack
               h={"100%"}
@@ -984,7 +1036,10 @@ const Profile = () => {
               justifyContent={"center"}
               key={index}
             >
-              <Avatar size={"2xl"} src={`http://localhost:5000/uploads/${profile.avatar}`} />
+              <Avatar
+                size={"2xl"}
+                src={`http://localhost:5000/uploads/${profile.avatar}`}
+              />
               <Text mt={4} textAlign={"center"}>
                 {profile.name}
               </Text>
@@ -996,7 +1051,7 @@ const Profile = () => {
             alignItems={"center"}
             justifyContent={"center"}
             onClick={onOpen}
-            cursor={'pointer'}
+            cursor={"pointer"}
           >
             <Icon boxSize={16} color={"#55DF01"} as={BsFillPlusCircleFill} />
             <Text size={"lg"} color={"#55DF01"}>
@@ -1007,7 +1062,7 @@ const Profile = () => {
 
         <Divider my={8} />
 
-        <Stack direction={['column', 'row']}>
+        <Stack direction={["column", "row"]}>
           <Box
             mb={8}
             transition="3s ease"
@@ -1021,8 +1076,9 @@ const Profile = () => {
               <Button
                 onClick={() => setContent("Account")}
                 bg={"black"}
-                border={['2px solid #232323', 'auto']}
-                w={['100%', 'auto']}
+                justifyContent={"center"}
+                border={["2px solid #232323", "transparent"]}
+                w={"100%"}
                 color={"white"}
                 leftIcon={BiUser}
               >
@@ -1031,8 +1087,8 @@ const Profile = () => {
               <Button
                 onClick={() => setContent("App Settings")}
                 bg={"black"}
-                border={['2px solid #232323', 'auto']}
-                w={['100%', 'auto']}
+                border={["2px solid #232323", "transparent"]}
+                w={"100%"}
                 color={"white"}
                 leftIcon={FiSettings}
               >
@@ -1041,8 +1097,8 @@ const Profile = () => {
               <Button
                 onClick={() => setContent("Help")}
                 bg={"black"}
-                border={['2px solid #232323', 'auto']}
-                w={['100%', 'auto']}
+                border={["2px solid #232323", "transparent"]}
+                w={"100%"}
                 color={"white"}
                 leftIcon={BiHelpCircle}
               >
@@ -1051,8 +1107,8 @@ const Profile = () => {
               <Button
                 onClick={() => setContent("Contact")}
                 bg={"black"}
-                border={['2px solid #232323', 'auto']}
-                w={['100%', 'auto']}
+                border={["2px solid #232323", "transparent"]}
+                w={"100%"}
                 color={"white"}
                 leftIcon={MdCall}
               >
@@ -1061,8 +1117,8 @@ const Profile = () => {
               <Button
                 onClick={() => setContent("Sign out")}
                 bg={"black"}
-                border={['2px solid #232323', 'auto']}
-                w={['100%', 'auto']}
+                border={["2px solid #232323", "transparent"]}
+                w={"100%"}
                 color={"white"}
                 leftIcon={BiExit}
               >
