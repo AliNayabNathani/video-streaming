@@ -2,14 +2,21 @@ import React from 'react'
 import { Avatar, Box, Button, Center, Divider, HStack, Icon, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import { FiBell, FiKey, FiSearch, FiSettings } from 'react-icons/fi';
 import { AiOutlineLine, AiOutlinePlayCircle, AiOutlineYoutube } from 'react-icons/ai';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { BsDownload } from 'react-icons/bs';
 import { useRouter } from 'next/router';
+import { logout } from '../../features/auth/authSlice';
 
 const Navbar = () => {
     const user = useSelector((state) => state.auth);
     const router = useRouter();
+    const dispatch = useDispatch();
+
+    const handleLogout = () => {
+        dispatch(logout());
+        router.push('/User');
+    }
     return (
         <HStack p={['1rem', '2rem']} w={'full'} justifyContent={'space-between'}>
             <Image w={'150px'} h={'50px'} src='/assests/videe0/Logo/Black _ White/sideBarLogo.png' />
@@ -79,6 +86,9 @@ const Navbar = () => {
                         <MenuItem onClick={() => router.push('/User/Profile')} p={4} color={'white'} bg={'#232323'}>
                             <FiSettings />
                             <Text ml={4} color={'white'}>Settings</Text>
+                        </MenuItem>
+                        <MenuItem p={4} color={'white'} bg={'#232323'} onClick={handleLogout}>
+                            <Text ml={4} color={'white'}>Logout</Text>
                         </MenuItem>
                     </MenuList>
                 </Menu>

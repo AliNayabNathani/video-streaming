@@ -6,17 +6,17 @@ import "react-quill/dist/quill.snow.css";
 import "./TextEditor.css";
 import axios from "axios";
 import { server } from "../../components/server";
+import { Button } from "@chakra-ui/react";
 
 export default function Content() {
   const Quill =
     typeof document !== "undefined"
       ? dynamic(() => import("react-quill"), {
-          ssr: false,
-        })
+        ssr: false,
+      })
       : null;
 
   const [SelectedButton, SetSelectedButton] = useState("Terms and Conditions");
-  const [dummyText, setDummyText] = useState("");
   const [terms, setTerms] = useState();
   const [privacy, setPrivacy] = useState();
   const [aboutUs, setAboutUs] = useState();
@@ -68,7 +68,7 @@ export default function Content() {
       </div>
     );
   }
-
+  console.log(displayedText);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -89,13 +89,23 @@ export default function Content() {
 
     fetchData();
   }, []);
+
   useEffect(() => {
     // console.log("Select Button ", SelectedButton);
     if (SelectedButton === "Terms and Conditions") setDisplayedText(terms);
     else if (SelectedButton === "Privacy Policy") setDisplayedText(privacy);
     else if (SelectedButton === "About Us") setDisplayedText(aboutUs);
+
   }, [SelectedButton]);
 
+  const handleChange = () => {
+    axios.put(server + 'admin/terms-and-conditions', {
+      headers: {
+        'Content-type': 'application/json'
+      },
+      withCredentials: true
+    })
+  }
   return (
     <>
       <PageHeading text={"Content Management"} />
@@ -110,6 +120,8 @@ export default function Content() {
       {typeof document !== "undefined" ? (
         <RichTextEditor displayedText={displayedText} />
       ) : null}
+
+      <Button onClick={handleChange}>Update</Button>
     </>
   );
 }

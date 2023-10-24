@@ -27,6 +27,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Stack,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { BiExit, BiHelpCircle, BiImageAdd, BiNews, BiUser } from "react-icons/bi";
@@ -46,6 +47,7 @@ import { HiTrash } from "react-icons/hi";
 import axios from "axios";
 import { server } from "../../components/server";
 import { useSelector } from "react-redux";
+import Chatbot from "../../components/User/ChatBot";
 
 const userDetails = [
   {
@@ -175,7 +177,7 @@ const EpisodeOutline = ({ children, setContent, text }) => {
       onClick={() => handleClick(text)}
       borderRadius={"0"}
       py={4}
-      px={2}
+      px={[0, 2]}
       fontSize={{ base: "sm", md: "md" }}
       w={"100%"}
     >
@@ -189,8 +191,12 @@ const Account = () => {
   const [AccountContent, setAccountContent] = useState("Account");
 
   return (
-    <Box w={"100%"} px={8} mx={8}>
-      <Flex w={"100%"} my={4} borderRight={"2px solid black"}>
+    <Box w={"100%"} px={[0, 8]} mx={[0, 8]}>
+      <Flex alignContent={'center'} my={8} justifyContent={'flex-start'}>
+        <AiOutlineArrowLeft size={32} />
+        <Heading size={'lg'} ml={4}>Account</Heading>
+      </Flex>
+      <Stack pb={8} direction={['column', 'row']} w={"100%"} my={4} borderRight={"2px solid black"}>
         <EpisodeOutline text="Plan" setContent={setAccountContent}>
           Plan
         </EpisodeOutline>
@@ -214,7 +220,7 @@ const Account = () => {
         <EpisodeOutline text="Delete Account" setContent={setAccountContent}>
           Delete Account
         </EpisodeOutline>
-      </Flex>
+      </Stack>
 
       {AccountContent === "Plan" ? (
         <Plan />
@@ -255,7 +261,7 @@ const AppSetting = () => {
     };
 
     return (
-      <HStack my={8} spacing={4} align="center">
+      <HStack w={'100%'} my={8} spacing={4}>
         <Text>Resolution: {selectedResolution}</Text>
         <Slider
           min={1}
@@ -277,14 +283,7 @@ const AppSetting = () => {
           <SliderMark value={4} {...labelStyles}>
             4K
           </SliderMark>
-          {/* <SliderMark
-                        value={selectedResolution}
-                        textAlign='center'
-                        color='#9c9c9c'
-                        mt='-10'
-                        ml='-5'
-                        w='12'
-                    >{selectedResolution}</SliderMark> */}
+
           <SliderTrack>
             <SliderFilledTrack />
           </SliderTrack>
@@ -294,7 +293,7 @@ const AppSetting = () => {
     );
   }
   return (
-    <Box w={"100%"} px={8} mx={8}>
+    <Box w={"100%"} px={[0, 8]} mx={8}>
       <HStack>
         <AiOutlineArrowLeft size={24} />
         <Heading size={"md"}>App Settings</Heading>
@@ -354,15 +353,15 @@ const AppSetting = () => {
       <Heading mb={8} fontWeight={"semibold"} size={"lg"}>
         Downloads
       </Heading>
-      <HStack w={"30%"} justifyContent={"space-between"} mb={2} spacing={4}>
-        <AiOutlineWifi size={28} />
+      <HStack w={['100%', "30%"]} justifyContent={"space-between"} mb={2} spacing={4}>
+        <AiOutlineWifi size={32} />
         <Text w={"100%"} textAlign={"start"} color={"white"}>
           Wifi Only
         </Text>
         <Switch colorScheme="customGreen" />
       </HStack>
-      <HStack w={"30%"} justifyContent={"space-between"} mb={2} spacing={4}>
-        <BsDownload size={28} />
+      <HStack w={['100%', "30%"]} justifyContent={"space-between"} mb={2} spacing={4}>
+        <BsDownload size={32} />
         <Text w={"100%"} color={"white"}>
           Download next episode
         </Text>
@@ -395,7 +394,7 @@ const Help = () => {
 
   return (
     <Box w={"100%"} px={8} mx={8}>
-      <Flex w={"100%"} my={4} borderRight={"2px solid black"}>
+      <Stack pb={8} direction={['column', 'row']} w={"100%"} my={4} borderRight={"2px solid black"}>
         <EpisodeOutline text="Recover Password" setContent={setHelpContent}>
           Recover Password
         </EpisodeOutline>
@@ -411,7 +410,7 @@ const Help = () => {
         <EpisodeOutline text="Support Center" setContent={setHelpContent}>
           Support Center
         </EpisodeOutline>
-      </Flex>
+      </Stack>
 
       {HelpContent === "Recover Password" ? (
         <RecoverPassword />
@@ -420,7 +419,7 @@ const Help = () => {
       ) : HelpContent === "Privacy Policy" ? (
         <PrivacyPolicy />
       ) : HelpContent === "Support Center" ? (
-        <Security />
+        <Support />
       ) : null}
     </Box>
   );
@@ -457,7 +456,7 @@ const SignOut = () => {
 
 const Plan = () => {
   return (
-    <Box w={"100%"}>
+    <Box w={"100%"} >
       <HStack mb={8} w={"100%"} spacing={4}>
         <AiOutlineArrowLeft size={24} />
         <Heading size={"md"}>Subscription Plans Details</Heading>
@@ -466,7 +465,7 @@ const Plan = () => {
         return (
           <div style={{ width: "100%" }}>
             <Divider my={4} />
-            <HStack w={"40%"} justifyContent={"space-between"}>
+            <HStack w={['100%', "40%"]} justifyContent={"space-between"}>
               <Text fontWeight={"semibold"} color={"white"}>
                 Content Creator
               </Text>
@@ -475,7 +474,7 @@ const Plan = () => {
                 {plan.contentcreator}
               </Text>
             </HStack>
-            <HStack w={"40%"} justifyContent={"space-between"}>
+            <HStack w={['100%', "40%"]} justifyContent={"space-between"}>
               <Text fontWeight={"semibold"} color={"white"}>
                 Plan
               </Text>
@@ -484,7 +483,7 @@ const Plan = () => {
                 ${plan.price} / month
               </Text>
             </HStack>
-            <HStack w={"40%"} justifyContent={"space-between"}>
+            <HStack w={['100%', "40%"]} justifyContent={"space-between"}>
               <Text fontWeight={"semibold"} color={"white"}>
                 {" "}
                 Billing Date
@@ -582,30 +581,46 @@ const Membership = () => {
 };
 
 const Security = () => {
-  const ActivityOutline = ({ access }) => (
-    <Box my={4} borderRadius={8} p={8} bg={"#232323"}>
-      <HStack justifyContent={"space-between"}>
-        <Heading size={"md"}>{access.device}</Heading>
-        <Button variant={"outline"}>Sign Out</Button>
-      </HStack>
-      <Divider my={4} />
-      <HStack>
-        <BiUser color="#9c9c9c" />
-        <Text>{access.name}</Text>
-      </HStack>
-      <HStack>
-        <AiOutlineClockCircle color="#9c9c9c" />
-        <Text>
-          {" "}
-          Last watch {access.accessDate}. {access.accessTime}
-        </Text>
-      </HStack>
-      <HStack>
-        <MdLocationOn color="#9c9c9c" />
-        <Text>{access.location}</Text>
-      </HStack>
-    </Box>
-  );
+  const [deviceData, setDeviceData] = useState();
+
+  console.log(deviceData);
+  useEffect(() => {
+    axios.get(server + 'user/getDevice', {
+      headers: {
+        'Content-type': 'application/json'
+      },
+      withCredentials: true
+    })
+      .then(res => setDeviceData(res?.data?.device))
+      .catch(err => console.log(err));
+  }, []);
+
+  const ActivityOutline = ({ access }) => {
+    const date = access?.updatedAt?.slice(0, 10);
+    const time = access?.updatedAt?.slice(11, 16);
+    console.log(date, time);
+
+    return (
+      <Box my={4} borderRadius={8} p={8} bg={"#232323"}>
+        <HStack justifyContent={"space-between"}>
+          <Heading size={"md"}>{access.model || access.os}</Heading>
+          <Button variant={"outline"}>Sign Out</Button>
+        </HStack>
+        <Divider my={4} />
+        <HStack>
+          <AiOutlineClockCircle color="#9c9c9c" />
+          <Text>
+            {" "}
+            Last watch {date} {time}
+          </Text>
+        </HStack>
+        <HStack>
+          <MdLocationOn color="#9c9c9c" />
+          <Text>{access.location}</Text>
+        </HStack>
+      </Box>
+    );
+  }
 
   return (
     <Box w={"100%"}>
@@ -625,7 +640,7 @@ const Security = () => {
           security.
         </Text>
       </Box>
-      {AccessList.map((access) => (
+      {deviceData?.map((access) => (
         <ActivityOutline access={access} />
       ))}
     </Box>
@@ -703,6 +718,34 @@ const Delete = () => {
 
 //Help Sub Sections
 const RecoverPassword = () => {
+  const { user } = useSelector((state) => state.auth);
+  const [oldPassword, setOldPasword] = useState();
+  const [newPassword, setNewPasword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
+
+  const handleChange = () => {
+    if (newPassword == confirmPassword) {
+      axios.patch(
+        server + 'auth/changepassword',
+        {
+          userId: user?.user?.userId,
+          oldPassword,
+          newPassword,
+        },
+        {
+          headers: {
+            'Content-type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      )
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    } else {
+      alert('New Password and Confirm New Password are different')
+    }
+  };
+
   return (
     <Box w={"100%"}>
       <HStack mb={8} w={"100%"} spacing={4}>
@@ -713,25 +756,38 @@ const RecoverPassword = () => {
 
       <Box w={["100%", "60%"]} my={4}>
         <Text mb={"0.5rem"}>Old Password</Text>
-        <Input type="password" placeholder="**********" />
+        <Input onChange={(e) => setOldPasword(e.target.value)} value={oldPassword} type="password" placeholder="**********" />
       </Box>
       <Box w={["100%", "60%"]} my={4}>
         <Text mb={"0.5rem"}>New Password</Text>
-        <Input type="password" placeholder="**********" />
+        <Input onChange={(e) => setNewPasword(e.target.value)} value={newPassword} type="password" placeholder="**********" />
       </Box>
       <Box w={["100%", "60%"]} my={4}>
-        <Text mb={"0.5rem"}>Re-Enter New Password</Text>
-        <Input type="password" placeholder="**********" />
+        <Text mb={"0.5rem"}>Confirm New Password</Text>
+        <Input onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} type="password" placeholder="**********" />
       </Box>
 
       <Flex justifyContent={"center"}>
-        <Button px={8}>Change Password</Button>
+        <Button onClick={handleChange} px={8}>Change Password</Button>
       </Flex>
     </Box>
   );
 };
 
 const TermsConditions = () => {
+  const [TermsConditions, setTermsConditions] = useState();
+  useEffect(() => {
+    axios.get(server + 'user/gettTerms', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    })
+      .then((res) => {
+        console.log(res?.data);
+        setTermsConditions(res?.data?.termsAndConditionsItem);
+      })
+  }, []);
   return (
     <Box w={"100%"}>
       <HStack mb={8} w={"100%"} spacing={4}>
@@ -740,25 +796,27 @@ const TermsConditions = () => {
       </HStack>
       <Divider my={4} />
       <Text>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec
-        pretium metus. Nam eget urna tortor. Vivamus molestie malesuada blandit.
-        Nunc ut nulla nec nulla finibus commodo. Sed utmalesuad tellus. Ut et
-        tempor odio, ac gravida dolor. Donec bibendum porttitor ante. Maecenas
-        in congue metus. Donec in massa purus. Fusce scelerisque orci non
-        elementum bibendum. Morbi et varius orci, nec hendrerit lectus.
+        {TermsConditions?.description}
       </Text>
       <br />
-      <Text>
-        Donec enim nibh, mollis sed convallis eu, cursus ut ante. Sed
-        condimentum convallis lacinia. Praesent luctus luctus diam, a vestibulum
-        elit euismod eget. Nullam vel commodo risus. Praesent auctor nibh ut
-        tincidunt dapibus.
-      </Text>
     </Box>
   );
 };
 
 const PrivacyPolicy = () => {
+  const [privacyPolicy, setPrivacyPolicy] = useState();
+  useEffect(() => {
+    axios.get(server + 'user/getPrivacy', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    })
+      .then((res) => {
+        console.log(res?.data);
+        setPrivacyPolicy(res?.data?.privacyPolicyItem);
+      })
+  }, []);
   return (
     <Box w={"100%"}>
       <HStack mb={8} w={"100%"} spacing={4}>
@@ -767,21 +825,15 @@ const PrivacyPolicy = () => {
       </HStack>
       <Divider my={4} />
       <Text>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec
-        pretium metus. Nam eget urna tortor. Vivamus molestie malesuada blandit.
-        Nunc ut nulla nec nulla finibus commodo. Sed utmalesuad tellus. Ut et
-        tempor odio, ac gravida dolor. Donec bibendum porttitor ante. Maecenas
-        in congue metus. Donec in massa purus. Fusce scelerisque orci non
-        elementum bibendum. Morbi et varius orci, nec hendrerit lectus.
-      </Text>
-      <br />
-      <Text>
-        Donec enim nibh, mollis sed convallis eu, cursus ut ante. Sed
-        condimentum convallis lacinia. Praesent luctus luctus diam, a vestibulum
-        elit euismod eget. Nullam vel commodo risus. Praesent auctor nibh ut
-        tincidunt dapibus.
+        {privacyPolicy?.description}
       </Text>
     </Box>
+  );
+};
+
+const Support = () => {
+  return (
+    <Chatbot />
   );
 };
 
@@ -917,13 +969,13 @@ const Profile = () => {
   console.log('Profile: ', profileUser);
   return (
     <UserTemplate>
-      <Box px={16} py={8}>
+      <Box px={[4, 16]} py={8}>
         <HStack mb={8}>
           <AiOutlineArrowLeft boxSize={32} />
           <Heading size={"lg"}>Manage Profile</Heading>
         </HStack>
 
-        <HStack mx={16} spacing={16}>
+        <HStack mx={[4, 16]} spacing={[4, 16]} overflow={'auto'}>
           {profileUser.map((profile, index) => (
             <VStack
               h={"100%"}
@@ -932,7 +984,7 @@ const Profile = () => {
               justifyContent={"center"}
               key={index}
             >
-              <Avatar size={"2xl"} src={`http://127.0.0.1:5000/uploads/${profile.avatar}`} />
+              <Avatar size={"2xl"} src={`http://localhost:5000/uploads/${profile.avatar}`} />
               <Text mt={4} textAlign={"center"}>
                 {profile.name}
               </Text>
@@ -954,8 +1006,10 @@ const Profile = () => {
         </HStack>
 
         <Divider my={8} />
-        <Flex>
+
+        <Stack direction={['column', 'row']}>
           <Box
+            mb={8}
             transition="3s ease"
             borderRight="1px solid #232323"
             w={{ base: "full", md: "22rem" }}
@@ -967,6 +1021,8 @@ const Profile = () => {
               <Button
                 onClick={() => setContent("Account")}
                 bg={"black"}
+                border={['2px solid #232323', 'auto']}
+                w={['100%', 'auto']}
                 color={"white"}
                 leftIcon={BiUser}
               >
@@ -975,6 +1031,8 @@ const Profile = () => {
               <Button
                 onClick={() => setContent("App Settings")}
                 bg={"black"}
+                border={['2px solid #232323', 'auto']}
+                w={['100%', 'auto']}
                 color={"white"}
                 leftIcon={FiSettings}
               >
@@ -983,6 +1041,8 @@ const Profile = () => {
               <Button
                 onClick={() => setContent("Help")}
                 bg={"black"}
+                border={['2px solid #232323', 'auto']}
+                w={['100%', 'auto']}
                 color={"white"}
                 leftIcon={BiHelpCircle}
               >
@@ -991,6 +1051,8 @@ const Profile = () => {
               <Button
                 onClick={() => setContent("Contact")}
                 bg={"black"}
+                border={['2px solid #232323', 'auto']}
+                w={['100%', 'auto']}
                 color={"white"}
                 leftIcon={MdCall}
               >
@@ -999,6 +1061,8 @@ const Profile = () => {
               <Button
                 onClick={() => setContent("Sign out")}
                 bg={"black"}
+                border={['2px solid #232323', 'auto']}
+                w={['100%', 'auto']}
                 color={"white"}
                 leftIcon={BiExit}
               >
@@ -1018,7 +1082,7 @@ const Profile = () => {
           ) : content === "Sign out" ? (
             <SignOut />
           ) : null}
-        </Flex>
+        </Stack>
       </Box>
       <AddProfile
         isOpen={isOpen}

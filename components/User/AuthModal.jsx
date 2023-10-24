@@ -4,6 +4,8 @@ import { AiFillApple, AiFillFacebook } from 'react-icons/ai'
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, register, reset } from '../../features/auth/authSlice';
+import axios from 'axios';
+import { server } from '../server';
 
 const GoogleIcon = () => {
     return (
@@ -20,17 +22,36 @@ const SignIn = ({ setAuthChoice }) => {
         (state) => state.auth
     );
     const roleId = user?.user?.roleId;
+    const userId = user?.user?.userId;
+    console.log(userId);
     useEffect(() => {
         const roleId = user?.user?.roleId;
         if (isError) {
             alert(message);
         }
 
-        if (isSuccess || user) {
-            if (roleId == 2) {
-                router.push("/User/Dashboard");
-            }
+        async function fetchData() {
+            await axios.post(server + 'user/addDevice', { userId: userId }, {
+                headers: {
+                    "Content-type": "application/json",
+                },
+                withCredentials: true,
+            })
+                .then((res) => {
+                    console.log(res);
+                    if (res.status == 200 && roleId == 2) {
+                        router.push("/User/Dashboard");
+                    } else {
+                        dispatch(reset());
+                    }
+                })
+                .catch(err => console.log(err));
         }
+
+        if (isSuccess || user) {
+            fetchData();
+        }
+
 
         dispatch(reset());
     }, [user, isError, isSuccess, message, router, dispatch]);
