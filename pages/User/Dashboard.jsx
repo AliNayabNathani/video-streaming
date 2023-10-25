@@ -108,6 +108,20 @@ const MovieInfo = [
 ];
 
 const Movies = () => {
+  const [movies, setMovies] = useState();
+  useEffect(() => {
+    axios.get(server + 'user/getMovies', {
+      headers: {
+        'Content-type': 'application/json'
+      },
+      withCredentials: true
+    })
+      .then((res) => {
+        console.log(res.data);
+        setMovies(res.data.movies);
+      })
+      .catch(err => console.log(err));
+  }, []);
   return (
     <>
       <Box px={["2rem", "5rem"]}>
@@ -484,7 +498,19 @@ const Shows = () => {
   const router = useRouter();
   const [showData, setShowData] = useState();
 
-  console.log(showData);
+  useEffect(() => {
+    axios.get(server + 'user/getSeries', {
+      headers: {
+        'Content-type': 'application/json'
+      },
+      withCredentials: true
+    })
+      .then((res) => {
+        console.log(res.data);
+        setShowData(res.data.series);
+      })
+      .catch(err => console.log(err));
+  }, []);
   return (
     <>
       <Carousal />

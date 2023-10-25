@@ -6,15 +6,18 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
+    Flex,
 } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
-import { AiOutlineCloseCircle, AiOutlineInfoCircle, } from 'react-icons/ai';
+import { AiOutlineCloseCircle, AiOutlineInfoCircle, AiOutlineVideoCameraAdd, } from 'react-icons/ai';
 import { FaPlus } from "react-icons/fa";
 import { useDetailContext } from "../../Context/context";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { BiPlay } from "react-icons/bi";
+import { BiImageAdd, BiPlay } from "react-icons/bi";
 import { Tooltip } from "recharts";
 import videojs from "video.js";
+import axios from "axios";
+import { server } from "../../../server";
 
 const Video = ({ src, onOptions, poster, name }) => {
     const videoRef = useRef(null);
@@ -136,17 +139,65 @@ const FormLabelOutline = ({ children }) => (
 
 const UploadEpisodeOutline = ({ episodeData, setEpisodeData }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-
+    const [serverImage, setServerImage] = useState();
+    const [selectedImage, setSelectedImage] = useState();
+    const [serverVideo, setServerVideo] = useState();
+    const [selectedVideo, setSelectedVideo] = useState();
 
     function EpisodeModal({ isOpen, onClose, episodeData, setEpisodeData }) {
         const [tempEpisodeData, setTempEpisodeData] = useState({
             title: '',
             src: '',
-            poster: ''
+            poster: '',
+            description: '',
         });
 
         console.log('Temp: ', tempEpisodeData);
         console.log('Episode: ', episodeData);
+
+        const handleVideoSelect = (e) => {
+            const selectedFile = e.target.files[0];
+            console.log(selectedVideo);
+            setServerVideo(selectedFile);
+            if (selectedFile) {
+                const objectURL = URL.createObjectURL(selectedFile);
+                setSelectedVideo(objectURL);
+            }
+            const formData = new FormData();
+            formData.append("Video", selectedFile);
+            axios
+                .post(server + "other/uploadVideo", formData)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+            handleEpisodeData(e);
+        }
+
+        const handlePictureSelect = (e) => {
+
+            const selectedFile = e.target.files[0];
+            console.log(selectedImage);
+            setServerImage(selectedFile);
+            if (selectedFile) {
+                const objectURL = URL.createObjectURL(selectedFile);
+                setSelectedImage(objectURL);
+            }
+            const formData = new FormData();
+            formData.append("image", selectedFile);
+            axios
+                .post(server + "other/uploadPicture", formData)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+            handleEpisodeData(e);
+        };
+
         const handleEpisodeData = (e) => {
             setTempEpisodeData({ ...tempEpisodeData, [e.target.name]: e.target.value });
         }
@@ -160,7 +211,8 @@ const UploadEpisodeOutline = ({ episodeData, setEpisodeData }) => {
             tempEpisodeData({
                 title: '',
                 src: '',
-                poster: ''
+                poster: '',
+                description: '',
             });
         }
         return (
@@ -172,11 +224,43 @@ const UploadEpisodeOutline = ({ episodeData, setEpisodeData }) => {
                         <ModalCloseButton />
                         <ModalBody>
                             <Text>Enter Title</Text>
-                            <Input value={tempEpisodeData.title} name="title" onChange={handleEpisodeData} />
+                            <Input value={tempEpisodeData.title} name="title" onChange={handleEpisodeData} required />
                             <Text>Select Video</Text>
-                            <Input value={tempEpisodeData.src} name="src" onChange={handleEpisodeData} type="file" accept="video/*" />
+                            {/* <Input value={tempEpisodeData.src} name="src" onChange={handleEpisodeData} type="file" accept="video/*" required /> */}
+                            <HStack for="fileInput" border={"1px solid #323232"} w={"100%"} >
+                                <Input
+                                    type="file"
+                                    value={tempEpisodeData.poster}
+                                    accept="image/*"
+                                    display="none"
+                                    id="fileInput"
+                                    justifyContent={"center"}
+                                    onChange={handleVideoSelect}
+                                    required
+                                />
+                                <label htmlFor="fileInput" style={{ cursor: "pointer", marginLeft: '1rem' }}>
+                                    <AiOutlineVideoCameraAdd size={32} />
+                                </label>
+                            </HStack>
                             <Text>Select thumbnail</Text>
-                            <Input value={tempEpisodeData.poster} name='poster' onChange={handleEpisodeData} type="file" accept="image/*" />
+                            {/* <Input value={tempEpisodeData.poster} name='poster' onChange={handleEpisodeData} type="file" accept="image/*" /> */}
+                            <HStack for="fileInput" border={"1px solid #323232"} w={"100%"} >
+                                <Input
+                                    type="file"
+                                    value={tempEpisodeData.poster}
+                                    accept="image/*"
+                                    display="none"
+                                    id="fileInput"
+                                    justifyContent={"center"}
+                                    onChange={handlePictureSelect}
+                                    required
+                                />
+                                <label htmlFor="fileInput" style={{ cursor: "pointer", marginLeft: '1rem' }}>
+                                    <BiImageAdd size={32} />
+                                </label>
+                            </HStack>
+                            <Text>Enter Description</Text>
+                            <Input value={tempEpisodeData.description} name="description" onChange={handleEpisodeData} required />
                         </ModalBody>
 
                         <ModalFooter>
@@ -299,6 +383,28 @@ const UploadOutline = ({ trailerData, setTrailerData, setTrailerOutlines, traile
             onClose();
         }
 
+        const handleFileSelect = (e) => {
+
+            const selectedFile = e.target.files[0];
+            console.log(selectedFile);
+            setServerImage(selectedFile);
+            if (selectedFile) {
+                const objectURL = URL.createObjectURL(selectedFile);
+                setSelectedImage(objectURL);
+            }
+            const formData = new FormData();
+            formData.append("image", selectedFile);
+            axios
+                .post(server + "other/uploadPicture", formData)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+            handleTrailerData();
+        };
+
         const clearTrailerData = () => {
             tempTrailerData({
                 title: '',
@@ -315,11 +421,23 @@ const UploadOutline = ({ trailerData, setTrailerData, setTrailerOutlines, traile
                         <ModalCloseButton />
                         <ModalBody>
                             <Text>Enter Title</Text>
-                            <Input value={tempTrailerData.title} name="title" onChange={handleTrailerData} />
+                            <Input value={tempTrailerData.title} name="title" onChange={handleTrailerData} required />
                             <Text>Select Video</Text>
-                            <Input value={tempTrailerData.src} name="src" onChange={handleTrailerData} type="file" accept="video/*" />
+                            <Input value={tempTrailerData.src} name="src" onChange={handleTrailerData} type="file" accept="video/*" required />
                             <Text>Select thumbnail</Text>
-                            <Input value={tempTrailerData.poster} name='poster' onChange={handleTrailerData} type="file" accept="image/*" />
+                            {/* <Input name='poster' onChange={handleFileSelect} type="file" accept="image/*" /> */}
+                            <HStack for="fileInput" border={"1px solid #323232"} w={"100%"}>
+                                <Input
+                                    type="file"
+                                    value={tempTrailerData.poster}
+                                    accept="image/*"
+                                    display="none"
+                                    id="fileInput"
+                                    justifyContent={"center"}
+                                    onChange={handleFileSelect}
+                                    required
+                                />
+                            </HStack>
                         </ModalBody>
 
                         <ModalFooter>
@@ -364,8 +482,9 @@ export default function AddVideo() {
     const [trailerOutline, setTrailerOutlines] = useState([]);
     const [trailerData, setTrailerData] = useState([]);
     const [episodeData, setEpisodeData] = useState([]);
+    const [isVideoCreated, setIsVideoCreated] = useState(false);
     const handleAddButtonClick = () => {
-        // setVisibleVideoOutlines([...visibleVideoOutlines, <VideoOutline key={visibleVideoOutlines.length} />]);
+        setVisibleVideoOutlines([...visibleVideoOutlines, <VideoOutline key={visibleVideoOutlines.length} />]);
     };
 
     const [input, setInput] = useState({
@@ -380,10 +499,6 @@ export default function AddVideo() {
         language: "",
         type: "",
     });
-
-    const handleSubmit = () => {
-
-    }
 
     const [errors, setErrors] = useState({
         title: "",
@@ -413,41 +528,42 @@ export default function AddVideo() {
         console.log(input);
     }
 
+    const createVideo = () => {
+        const res = axios.post(server + 'creator/myvideo/add', input, {
+            headers: {
+                'Content-Type': 'Application/json'
+            },
+            withCredentials: true,
+        })
+        console.log(res);
+        if (res.data.status == 200) {
+            setIsVideoCreated(true);
+        }
+    }
+
     return (
         <>
             <Box p={'3rem'} mt={'2rem'} bg={'#232323'}>
                 <Stack justifyContent={'space-between'} direction={{ base: 'column', md: 'row' }}>
                     <VStack width={['100%', '40%']} alignItems={'flex-start'}>
 
-
                         <FormLabelOutline>Title</FormLabelOutline>
                         <Input name={'title'} value={input.title} onChange={handleInput} bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
-
 
                         <FormLabelOutline>Rent Amount</FormLabelOutline>
                         <Input name="rentAmount" value={input.rentAmount} onChange={handleInput} type="number" bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
 
-
-
                         <FormLabelOutline>Purchasing Amount</FormLabelOutline>
                         <Input name="purchaseAmount" value={input.purchaseAmount} onChange={handleInput} type="number" bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
-
-
 
                         <FormLabelOutline>Add Genre</FormLabelOutline>
                         <Input name="addGenre" value={input.addGenre} onChange={handleInput} bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
 
-
-
                         <FormLabelOutline>Description</FormLabelOutline>
                         <Textarea name="description" value={input.description} onChange={handleInput} bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
 
-
-
                         <FormLabelOutline>Cast/Crew Details</FormLabelOutline>
                         <Textarea name="castDetails" value={input.castDetails} onChange={handleInput} bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
-
-
 
                         <FormLabelOutline>Category</FormLabelOutline>
                         <Menu>
@@ -457,7 +573,6 @@ export default function AddVideo() {
                                 <MenuItem name="category" onClick={(e) => handleSelectChange(e, 'Short Film')} value="Short Film">Short Film</MenuItem>
                             </MenuList>
                         </Menu>
-
 
                         <FormLabelOutline>Country/Region</FormLabelOutline>
                         <Menu>
@@ -470,7 +585,6 @@ export default function AddVideo() {
                                 <MenuItem name="country" onClick={(e) => handleSelectChange(e, 'UK')} value="UK">UK</MenuItem>
                             </MenuList>
                         </Menu>
-
 
                         <FormLabelOutline>Language</FormLabelOutline>
 
@@ -485,6 +599,9 @@ export default function AddVideo() {
                                 <MenuItem name="type" onClick={(e) => handleSelectChange(e, 'Series')} value="Series">Series</MenuItem>
                             </MenuList>
                         </Menu>
+                        <Flex w={'100%'} justifyContent={'center'}>
+                            <Button onClick={createVideo}>Create Video</Button>
+                        </Flex>
                     </VStack>
 
 
@@ -522,7 +639,7 @@ export default function AddVideo() {
 
                         <FormLabelOutline>Upload Episodes</FormLabelOutline>
 
-                        {/* {visibleVideoOutlines.map((video, index) => (
+                        {visibleVideoOutlines.map((video, index) => (
                             <VideoOutline
                                 visibleVideoOutlines={visibleVideoOutlines}
                                 setVisibleVideoOutlines={setVisibleVideoOutlines}
@@ -531,7 +648,7 @@ export default function AddVideo() {
                                 index={index}
                                 key={index}
                             />
-                        ))} */}
+                        ))}
 
                         <Button
                             fontSize={'1.1rem'}

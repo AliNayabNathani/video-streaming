@@ -309,7 +309,7 @@ const AppSetting = () => {
     );
   }
   return (
-    <Box maxW={"100%"} px={[0, 8]} mx={[4, 8]}>
+    <Box maxW={"100%"} minW={'70%'} px={[0, 8]} mx={[4, 8]}>
       <HStack>
         <AiOutlineArrowLeft size={24} />
         <Heading size={"md"}>App Settings</Heading>
@@ -370,7 +370,7 @@ const AppSetting = () => {
         Downloads
       </Heading>
       <HStack
-        w={["100%", "30%"]}
+        w={["100%", "50%"]}
         justifyContent={"space-between"}
         mb={2}
         spacing={4}
@@ -382,7 +382,7 @@ const AppSetting = () => {
         <Switch colorScheme="customGreen" />
       </HStack>
       <HStack
-        w={["100%", "30%"]}
+        w={["100%", "50%"]}
         justifyContent={"space-between"}
         mb={2}
         spacing={4}
@@ -460,6 +460,30 @@ const Help = () => {
 };
 
 const Contact = () => {
+  const { user } = useSelector((state) => state.auth);
+  const userId = user?.user?.userId;
+  console.log(userId);
+  const [complaint, setComplaint] = useState();
+  const sendEmail = async () => {
+    await axios.post(server + 'user/sendTestMailToSupport', { userId, complaint }, {
+      headers: {
+        'Content-Type': 'Application/json'
+      },
+      withCredentials: true,
+    })
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+
+    await axios.post(server + 'user/sendTestMailToUser', { userId, complaint }, {
+      headers: {
+        'Content-Type': 'Application/json'
+      },
+      withCredentials: true,
+    })
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+  }
+
   return (
     <Box maxW={"100%"} px={[0, 8]} mx={[4, 8]}>
       <HStack>
@@ -470,10 +494,10 @@ const Contact = () => {
       <Divider my={8} />
       <Box my={4}>
         <Text mb={2}>Describe your issue</Text>
-        <Input placeholder="type your issues" />
+        <Input placeholder="type your issues" onChange={(e) => setComplaint(e.target.value)} />
       </Box>
       <Stack direction={["column", "row"]} justifyContent={"flex-end"}>
-        <Button px={[0, 16]}>Submit</Button>
+        <Button px={[0, 16]} onClick={sendEmail}>Submit</Button>
         <Button px={[0, 16]}>Call</Button>
         <Button px={[0, 16]} variant={"outline"}>
           Live Chat
@@ -894,7 +918,6 @@ const AddProfile = ({ isOpen, onClose, setProfileUser, profileUser }) => {
   const userName = user?.user?.user?.name;
 
   const handleFileSelect = (e) => {
-    let imageData;
     const selectedFile = e.target.files[0];
     setServerImage(selectedFile);
     if (selectedFile) {
@@ -1038,7 +1061,7 @@ const Profile = () => {
             >
               <Avatar
                 size={"2xl"}
-                src={`http://localhost:5000/uploads/${profile.avatar}`}
+                src={`http://localhost:5000/uploadPicture/${profile.avatar}`}
               />
               <Text mt={4} textAlign={"center"}>
                 {profile.name}

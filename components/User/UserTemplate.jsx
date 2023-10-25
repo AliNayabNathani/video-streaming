@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Avatar,
   Box,
@@ -59,13 +59,12 @@ const Navbar = () => {
         <a style={{ cursor: "pointer" }} href="/User/Dashboard">
           Home
         </a>
+        <a style={{ cursor: "pointer" }}>Favourites</a>
         <a style={{ cursor: "pointer" }} href="/User/PPV">
           PPV
         </a>
-        <a style={{ cursor: "pointer" }}>Favourites</a>
-        {/* <a style={{ cursor: "pointer" }}>New & Popular</a> */}
-        <a style={{ cursor: "pointer" }}>MyList</a>
-        {/* <a style={{ cursor: "pointer" }}>Browse by Language</a> */}
+        <a style={{ cursor: "pointer" }} href="/User/Friends">Friends</a>
+        <a style={{ cursor: "pointer" }} href="/User/Theatre">In Theatres</a>
       </HStack>
 
       <HStack w={"20%"} justifyContent={"flex-end"}>
@@ -173,6 +172,7 @@ const Navbar = () => {
 };
 
 const UserTemplate = ({ children }) => {
+
   return (
     <Box maxW={"100vw"}>
       <Navbar />
@@ -193,14 +193,17 @@ const UserTemplate = ({ children }) => {
         <Box textAlign={"center"} w={"25%"} p={4} border={"1px solid black"}>
           <a href="/User/Dashboard">Home</a>
         </Box>
-        <Box textAlign={"center"} w={"20%"} p={4} border={"1px solid black"}>
-          <a href="/User/PPV">PPV</a>
-        </Box>
         <Box textAlign={"center"} w={"30%"} p={4} border={"1px solid black"}>
           <a href="">Favourites</a>
         </Box>
+        <Box textAlign={"center"} w={"20%"} p={4} border={"1px solid black"}>
+          <a href="/User/PPV">PPV</a>
+        </Box>
+        <Box textAlign={"center"} w={"20%"} p={4} border={"1px solid black"}>
+          <a href="/User/Friends">Friends</a>
+        </Box>
         <Box textAlign={"center"} w={"25%"} p={4} border={"1px solid black"}>
-          <a href="">My List</a>
+          <a href="/User/Theatre">In Theaters</a>
         </Box>
       </HStack>
     </Box>

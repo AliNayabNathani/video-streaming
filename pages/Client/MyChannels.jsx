@@ -409,7 +409,7 @@ export default function Channel() {
                     <Button onClick={onOpen}>Create Channel</Button>
                 </Stack>
                 <Box>
-                    {/* {channelData?.map((data, index) => {
+                    {channelData?.map((data, index) => {
                         return (
                             <>
                                 <ChannelOutline showName={showName} setEpisodeData={setEpisodeData} data={data} setShowName={setShowName} />
@@ -443,12 +443,12 @@ export default function Channel() {
                                 }
                             </>
                         )
-                    })} */}
+                    })}
 
                     <ChannelOutline showName={showName} ChannelData={ChannelData} setShowName={setShowName} />
                     <Divider />
 
-                    {ChannelData.map((data) => {
+                    {/* {ChannelData.map((data) => {
                         if (data.name == showName) {
                             return data.episodes.map((episode, index) => (
                                 <Stack key={index} cursor={'pointer'} my={'1rem'} justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
@@ -473,7 +473,7 @@ export default function Channel() {
                                 </Stack>
                             ))
                         }
-                    })}
+                    })} */}
                 </Box>
                 <AddChannelModal isOpen={isOpen} onClose={onClose} />
             </Box>
