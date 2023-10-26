@@ -14,6 +14,7 @@ import './Style.css';
 import { AiOutlineCalendar } from "react-icons/ai";
 import { BiTime } from "react-icons/bi";
 import { BsFillTriangleFill, BsThreeDotsVertical, BsTriangle } from "react-icons/bs";
+import AddVideoTest from "../../components/Client/Main/My Video/AddVideoTest";
 
 const CastandCrew = () => {
     const [optionValue, setOptionValue] = useState('Writer');
@@ -448,7 +449,7 @@ const Availability = () => {
 const NavData = [
     {
         name: "Catalog Listing",
-        to: AddVideo
+        to: AddVideoTest
     },
     {
         name: "Cast & Crew",
