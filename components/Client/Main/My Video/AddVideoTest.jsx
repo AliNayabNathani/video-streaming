@@ -7,6 +7,7 @@ import {
     ModalBody,
     ModalCloseButton,
     Flex,
+    Spinner,
 } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineCloseCircle, AiOutlineInfoCircle, AiOutlineVideoCameraAdd, } from 'react-icons/ai';
@@ -137,6 +138,347 @@ const FormLabelOutline = ({ children }) => (
     </Text>
 )
 
+const VideoOutline = ({ index, setEpisodes, episodes }) => {
+    const [serverImage, setServerImage] = useState();
+    const [serverVideo, setServerVideo] = useState();
+    const [uploading, setUploading] = useState(false);
+    const videoInputRef = useRef(null);
+    const imageInputRef = useRef(null);
+    console.log(episodes);
+
+    const handleTitleChange = (e, index) => {
+        const newEpisodes = [...episodes];
+        newEpisodes[index].title = e.target.value;
+        setEpisodes(newEpisodes);
+    };
+
+    const handleDescriptionChange = (e, index) => {
+        const newEpisodes = [...episodes];
+        newEpisodes[index].description = e.target.value;
+        setEpisodes(newEpisodes);
+    };
+
+    const handleVideoChange = (e, index) => {
+        const selectedFile = e.target.files[0].name;
+        const newEpisodes = [...episodes];
+        newEpisodes[index].video = selectedFile;
+        setEpisodes(newEpisodes);
+    };
+
+    const handlePictureChange = (e, index) => {
+        const selectedFile = e.target.files[0].name;
+        const newEpisodes = [...episodes];
+        newEpisodes[index].poster = selectedFile;
+        setEpisodes(newEpisodes);
+    };
+
+    const handleDelete = () => {
+        const newEpisodes = [...episodes];
+        newEpisodes.splice(index, 1);
+        setEpisodes(newEpisodes);
+    };
+
+    const handlePictureSelect = (e, index) => {
+        const selectedFile = e.target === imageInputRef.current ? e.target.files[0] : null;
+        console.log('selected Image: ', selectedFile);
+        setServerImage(selectedFile);
+        if (selectedFile) {
+            const objectURL = URL.createObjectURL(selectedFile);
+        }
+        const formData = new FormData();
+        formData.append("image", selectedFile);
+        setUploading(true);
+        axios
+            .post(server + "other/uploadPicture", formData, {
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true,
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+            .finally(() => {
+                setUploading(false);
+            });
+        handlePictureChange(e, index);
+    };
+
+    function LoadingSpinner() {
+        return (
+            <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+            />
+        );
+    }
+    const handleVideoSelect = (e, index) => {
+        const selectedFile = e.target === videoInputRef.current ? e.target.files[0] : null;
+        setServerVideo(selectedFile);
+
+        const formData = new FormData();
+        formData.append("Video", selectedFile);
+        setUploading(true);
+
+        axios
+            .post(server + "other/uploadVideo", formData, {
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true,
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+            .finally(() => {
+                setUploading(false);
+            })
+        handleVideoChange(e, index)
+    }
+    return (
+        <HStack width={'100%'} bg={'whiteAlpha.400'} p={8} border={'2px solid black'}>
+            {uploading && <LoadingSpinner />}
+
+            <Box height={'100%'}>
+                <UploadEpisodeOutline />
+            </Box>
+            <VStack w={'100%'} ml={'1rem'} alignSelf={'flex-start'}>
+                <Input _placeholder={{ color: 'white' }} onChange={(e) => handleTitleChange(e, index)} name="title" variant={'unstyled'} placeholder="Add Title" />
+                <Input _placeholder={{ color: 'white' }} onChange={(e) => handleDescriptionChange(e, index)} name="desc" variant={'unstyled'} placeholder="Add Description" />
+                <HStack w={"100%"} >
+                    <label style={{ cursor: "pointer" }}>
+                        <Input
+                            type="file"
+                            accept="video/*"
+                            display="none"
+                            name="video"
+                            ref={videoInputRef}
+                            justifyContent={"center"}
+                            onChange={(e) => handleVideoSelect(e, index)}
+                            required
+                        />
+                        {serverVideo ? serverVideo.name : 'Add Video File'}
+                    </label>
+                </HStack>
+
+                <HStack w={"100%"} >
+                    <label style={{ cursor: "pointer" }}>
+                        <Input
+                            type="file"
+                            accept="image/*"
+                            display="none"
+                            name="poster"
+                            ref={imageInputRef}
+                            justifyContent={"center"}
+                            onChange={(e) => handlePictureSelect(e, index)}
+                            required
+                        />
+                        {serverImage ? serverImage.name : 'Add Picture File'}
+                    </label>
+                </HStack>
+
+            </VStack>
+            <Icon onClick={handleDelete} cursor={'pointer'} color={'black'} as={AiOutlineCloseCircle} alignSelf={'flex-start'} boxSize={7} />
+        </HStack>
+    );
+}
+
+const TrailerOutline = ({ index, setTrailers, trailers }) => {
+    const [serverImage, setServerImage] = useState();
+    const [serverVideo, setServerVideo] = useState();
+    const [uploading, setUploading] = useState(false); ``
+    const videoInputRef = useRef(null);
+    const imageInputRef = useRef(null);
+    console.log(trailers);
+
+    const handleTitleChange = (e, index) => {
+        const newTrailers = [...trailers];
+        newTrailers[index].title = e.target.value;
+        setTrailers(newTrailers);
+    };
+
+    const handleDescriptionChange = (e, index) => {
+        const newTrailers = [...trailers];
+        newTrailers[index].description = e.target.value;
+        setTrailers(newTrailers);
+    };
+
+    const handleVideoChange = (e, index) => {
+        const selectedFile = e.target.files[0].name;
+        const newTrailers = [...trailers];
+        newTrailers[index].video = selectedFile;
+        setTrailers(newTrailers);
+    };
+
+    const handlePictureChange = (e, index) => {
+        const selectedFile = e.target.files[0].name;
+        const newTrailers = [...trailers];
+        newTrailers[index].poster = selectedFile;
+        setTrailers(newTrailers);
+    };
+
+    const handleDelete = () => {
+        const newTrailers = [...trailers];
+        newTrailers.splice(index, 1);
+        setTrailers(newTrailers);
+    };
+
+    const handlePictureSelect = (e, index) => {
+        const selectedFile = e.target === imageInputRef.current ? e.target.files[0] : null;
+        console.log('selected Image: ', selectedFile);
+        setServerImage(selectedFile);
+        if (selectedFile) {
+            const objectURL = URL.createObjectURL(selectedFile);
+        }
+        const formData = new FormData();
+        formData.append("image", selectedFile);
+        setUploading(true);
+        axios
+            .post(server + "other/uploadPicture", formData, {
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true,
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+            .finally(() => {
+                setUploading(false);
+            });
+        handlePictureChange(e, index);
+    };
+
+    function LoadingSpinner() {
+        return (
+            <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+            />
+        );
+    }
+    const handleVideoSelect = (e, index) => {
+        const selectedFile = e.target === videoInputRef.current ? e.target.files[0] : null;
+        setServerVideo(selectedFile);
+
+        const formData = new FormData();
+        formData.append("Video", selectedFile);
+        setUploading(true);
+
+        axios
+            .post(server + "other/uploadVideo", formData, {
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true,
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+            .finally(() => {
+                setUploading(false);
+            })
+        handleVideoChange(e, index)
+    }
+    return (
+        <HStack width={'100%'} bg={'whiteAlpha.400'} p={8} border={'2px solid black'}>
+            {uploading && <LoadingSpinner />}
+
+            <Box height={'100%'}>
+                <Box bg={'black'}></Box>
+            </Box>
+            <VStack w={'100%'} ml={'1rem'} alignSelf={'flex-start'}>
+                <Input _placeholder={{ color: 'white' }} onChange={(e) => handleTitleChange(e, index)} name="title" variant={'unstyled'} placeholder="Add Title" />
+                <Input _placeholder={{ color: 'white' }} onChange={(e) => handleDescriptionChange(e, index)} name="desc" variant={'unstyled'} placeholder="Add Description" />
+                <HStack w={"100%"} >
+                    <label style={{ cursor: "pointer" }}>
+                        <Input
+                            type="file"
+                            accept="video/*"
+                            display="none"
+                            name="video"
+                            ref={videoInputRef}
+                            justifyContent={"center"}
+                            onChange={(e) => handleVideoSelect(e, index)}
+                            required
+                        />
+                        {serverVideo ? serverVideo.name : 'Add Video File'}
+                    </label>
+                </HStack>
+
+                <HStack w={"100%"} >
+                    <label style={{ cursor: "pointer" }}>
+                        <Input
+                            type="file"
+                            accept="image/*"
+                            display="none"
+                            name="poster"
+                            ref={imageInputRef}
+                            justifyContent={"center"}
+                            onChange={(e) => handlePictureSelect(e, index)}
+                            required
+                        />
+                        {serverImage ? serverImage.name : 'Add Picture File'}
+                    </label>
+                </HStack>
+
+            </VStack>
+            <Icon onClick={handleDelete} cursor={'pointer'} color={'black'} as={AiOutlineCloseCircle} alignSelf={'flex-start'} boxSize={7} />
+        </HStack>
+    );
+}
+
+// const TrailerOutline = ({ index, setTrailerOutlines, trailerData, setTrailerData }) => {
+//     console.log(trailerData);
+//     const handleDelete = () => {
+//         setTrailerOutlines((prevtrailerOutlines) => {
+//             return prevtrailerOutlines.filter((trailer, i) => i !== index);
+//         });
+
+//         trailerData.forEach((_, index) => {
+//             trailerData.splice(index, 1);
+//         });
+//     };
+//     return (
+//         <Box key={index} bg={'whiteAlpha.400'} w={'100%'} p={4}>
+//             <Icon onClick={handleDelete} w={'100%'} cursor={'pointer'} color={'black'} as={AiOutlineCloseCircle} boxSize={7} />
+//             <VStack alignItems={['center', 'flex-start']}>
+//                 <Stack direction={'row-reverse'}>
+//                     <Box
+//                         border={"1px solid transparent"}
+//                         borderRadius={5}
+//                         cursor={"pointer"}
+//                         _hover={{ scale: "1.5" }}
+//                         width={["100%", "200px"]}
+//                         mr={"1rem"}
+//                     >
+//                         <Video src={trailerData[0].src} poster={trailerData[0].poster} name={trailerData[0].title} />
+//                     </Box>
+//                 </Stack>
+//                 <Text>{trailerData[0].title}</Text>
+//             </VStack>
+//         </Box>
+//     );
+// }
+
 const UploadEpisodeOutline = ({ episodeData, setEpisodeData }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [serverImage, setServerImage] = useState();
@@ -151,6 +493,9 @@ const UploadEpisodeOutline = ({ episodeData, setEpisodeData }) => {
             poster: '',
             description: '',
         });
+
+        console.log('Temp: ', tempEpisodeData);
+        console.log('Episode: ', episodeData);
 
         const handleVideoSelect = (e) => {
             const selectedFile = e.target.files[0];
@@ -297,139 +642,6 @@ const UploadEpisodeOutline = ({ episodeData, setEpisodeData }) => {
     );
 }
 
-const VideoOutline = ({ index, setEpisodes, episodes, setEpisodeData, episodeData, visibleVideoOutlines, setVisibleVideoOutlines }) => {
-    const [serverImage, setServerImage] = useState();
-    const [serverVideo, setServerVideo] = useState();
-
-    const handleDelete = () => {
-        const newEpisodes = [...episodes];
-        newEpisodes.splice(index, 1);
-        setEpisodes(newEpisodes);
-    };
-
-    const handlePictureSelect = (e) => {
-        const selectedFile = e.target.files[0];
-        setServerImage(selectedFile);
-        if (selectedFile) {
-            const objectURL = URL.createObjectURL(selectedFile);
-        }
-        const formData = new FormData();
-        formData.append("image", selectedFile);
-        axios
-            .post(server + "other/uploadPicture", formData, {
-                header: {
-                    'Content-Type': 'application/json'
-                },
-                withCredentials: true,
-            })
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    };
-
-    const handleVideoSelect = (e) => {
-        const selectedFile = e.target.files[0];
-        setServerVideo(selectedFile);
-
-        const formData = new FormData();
-        formData.append("Video", selectedFile);
-        axios
-            .post(server + "other/uploadVideo", formData, {
-                header: {
-                    'Content-Type': 'application/json'
-                },
-                withCredentials: true,
-            })
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-        // handleEpisodeData(e);
-    }
-
-    return (
-        <HStack width={'100%'} bg={'whiteAlpha.400'} p={8} border={'2px solid black'}>
-            <Box height={'100%'}>
-                <UploadEpisodeOutline />
-            </Box>
-            <VStack w={'100%'} ml={'1rem'} alignSelf={'flex-start'}>
-                <Input _placeholder={{ color: 'white' }} name="title" variant={'unstyled'} placeholder="Add Title" />
-                <Input _placeholder={{ color: 'white' }} name="desc" variant={'unstyled'} placeholder="Add Description" />
-                <HStack for="videoInput" w={"100%"} >
-                    <Input
-                        type="file"
-                        accept="video/*"
-                        display="none"
-                        name="video"
-                        id="videoInput"
-                        justifyContent={"center"}
-                        onChange={handleVideoSelect}
-                        required
-                    />
-                    <label htmlFor="videoInput" style={{ cursor: "pointer" }}>
-                        {serverVideo ? serverVideo.name : 'Add Picture File'}
-                    </label>
-                </HStack>
-                <HStack for="imageInput" w={"100%"} >
-                    <Input
-                        type="file"
-                        accept="image/*"
-                        display="none"
-                        name="poster"
-                        id="imageInput"
-                        justifyContent={"center"}
-                        onChange={handlePictureSelect}
-                        required
-                    />
-                    <label htmlFor="imageInput" style={{ cursor: "pointer" }}>
-                        {serverImage ? serverImage.name : 'Add Picture File'}
-                    </label>
-                </HStack>
-
-            </VStack>
-            <Icon onClick={handleDelete} cursor={'pointer'} color={'black'} as={AiOutlineCloseCircle} alignSelf={'flex-start'} boxSize={7} />
-        </HStack>
-    );
-}
-
-const TrailerOutline = ({ index, setTrailerOutlines, trailerData, setTrailerData }) => {
-    console.log(trailerData);
-    const handleDelete = () => {
-        setTrailerOutlines((prevtrailerOutlines) => {
-            return prevtrailerOutlines.filter((trailer, i) => i !== index);
-        });
-
-        trailerData.forEach((_, index) => {
-            trailerData.splice(index, 1);
-        });
-    };
-    return (
-        <Box key={index} bg={'whiteAlpha.400'} w={'100%'} p={4}>
-            <Icon onClick={handleDelete} w={'100%'} cursor={'pointer'} color={'black'} as={AiOutlineCloseCircle} boxSize={7} />
-            <VStack alignItems={['center', 'flex-start']}>
-                <Stack direction={'row-reverse'}>
-                    <Box
-                        border={"1px solid transparent"}
-                        borderRadius={5}
-                        cursor={"pointer"}
-                        _hover={{ scale: "1.5" }}
-                        width={["100%", "200px"]}
-                        mr={"1rem"}
-                    >
-                        <Video src={trailerData[0].src} poster={trailerData[0].poster} name={trailerData[0].title} />
-                    </Box>
-                </Stack>
-                <Text>{trailerData[0].title}</Text>
-            </VStack>
-        </Box>
-    );
-}
-
 const UploadOutline = ({ trailerData, setTrailerData, setTrailerOutlines, trailerOutline }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -547,11 +759,11 @@ const UploadOutline = ({ trailerData, setTrailerData, setTrailerOutlines, traile
     );
 }
 
-export default function AddVideoTest() {
-    const [visibleVideoOutlines, setVisibleVideoOutlines] = useState([]);
+export default function AddVideoTest({ channelId }) {
     const [trailerOutline, setTrailerOutlines] = useState([]);
     const [trailerData, setTrailerData] = useState([]);
     const [episodeData, setEpisodeData] = useState([]);
+    console.log(channelId);
     const [isVideoCreated, setIsVideoCreated] = useState(false);
     const [episodes, setEpisodes] = useState([
         {
@@ -561,9 +773,26 @@ export default function AddVideoTest() {
             poster: '',
         },
     ]);
+    const [trailers, setTrailers] = useState([
+        {
+            title: '',
+            description: '',
+            video: '',
+            poster: '',
+        },
+    ]);
 
-    const handleAddButtonClick = () => {
+    const handleAddEpisode = () => {
         setEpisodes([...episodes, {
+            title: '',
+            description: '',
+            video: '',
+            poster: '',
+        }]);
+    };
+
+    const handleAddTrailer = () => {
+        setTrailers([...episodes, {
             title: '',
             description: '',
             video: '',
@@ -698,10 +927,9 @@ export default function AddVideoTest() {
 
                         <FormLabelOutline>Trailers (if any)</FormLabelOutline>
                         <HStack w={'100%'} overflowX={'auto'}>
-                            {trailerOutline.map((data, index) => (
+                            {trailers.map((data, index) => (
                                 <TrailerOutline
                                     index={index}
-                                    setTrailerOutlines={setTrailerOutlines}
                                     setTrailerData={setTrailerData}
                                     trailerData={trailerData}
                                     key={index}
@@ -752,7 +980,7 @@ export default function AddVideoTest() {
                             fontSize={'1.1rem'}
                             justifyContent={'space-between'}
                             width={'100%'}
-                            onClick={handleAddButtonClick}
+                            onClick={handleAddEpisode}
                             rightIcon={<FaPlus size={20} />}
                         >
                             Add New Episodes</Button>
