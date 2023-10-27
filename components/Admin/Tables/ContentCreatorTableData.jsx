@@ -27,18 +27,12 @@ import {
 
 import ReactPaginate from "react-paginate";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import "./Table.css";
 import { BiEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/router";
-import { HiOutlineEye } from "react-icons/hi";
 import { ToggleButton } from "../SmallReusableComponents/Action";
 import { server } from "../../server";
-import ReactPaginate from "react-paginate";
-import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import "./Table.css";
-import { BiEdit } from "react-icons/bi";
-import { AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { HiOutlineEye } from "react-icons/hi";
 import {
