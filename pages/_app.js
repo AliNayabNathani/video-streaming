@@ -2,7 +2,8 @@ import { useRouter } from "next/router";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { useEffect, useState } from "react";
 import { Provider, useSelector } from "react-redux";
-import store from "../features/store";
+import { PersistGate } from "redux-persist/integration/react";
+import store, { persistor } from "../features/store";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminLayout from "../components/Admin/AdminLayout";
@@ -45,7 +46,10 @@ const CustomRouteWrapper = ({ Component, pageProps }) => {
 function MyApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
-      <CustomRouteWrapper Component={Component} pageProps={pageProps} />
+      <PersistGate loading={null} persistor={persistor}>
+        <CustomRouteWrapper Component={Component} pageProps={pageProps} />
+      </PersistGate>
+      <ToastContainer autoClose={4000} />
     </Provider>
   );
 }

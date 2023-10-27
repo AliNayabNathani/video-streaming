@@ -30,6 +30,7 @@ import { MdCancel } from "react-icons/md";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { server } from "../../components/server";
+import PrivateRoute from "../PrivateRoute";
 
 const ShowInfo = [
   {
@@ -110,17 +111,18 @@ const MovieInfo = [
 const Movies = () => {
   const [movies, setMovies] = useState();
   useEffect(() => {
-    axios.get(server + 'user/getMovies', {
-      headers: {
-        'Content-type': 'application/json'
-      },
-      withCredentials: true
-    })
+    axios
+      .get(server + "user/getMovies", {
+        headers: {
+          "Content-type": "application/json",
+        },
+        withCredentials: true,
+      })
       .then((res) => {
         console.log(res.data);
         setMovies(res.data.movies);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }, []);
   return (
     <>
@@ -499,17 +501,18 @@ const Shows = () => {
   const [showData, setShowData] = useState();
 
   useEffect(() => {
-    axios.get(server + 'user/getSeries', {
-      headers: {
-        'Content-type': 'application/json'
-      },
-      withCredentials: true
-    })
+    axios
+      .get(server + "user/getSeries", {
+        headers: {
+          "Content-type": "application/json",
+        },
+        withCredentials: true,
+      })
       .then((res) => {
         console.log(res.data);
         setShowData(res.data.series);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }, []);
   return (
     <>
@@ -590,62 +593,64 @@ const Dashboard = (text) => {
   };
 
   return (
-    <UserTemplate>
-      <Box px={[4, 8]}>
-        <Flex alignItems={"center"}>
-          <Flex width={"100%"} py={"2rem"} borderRight={"2px solid black"}>
-            <Button
-              _active={{ color: "#55DF01" }}
-              width={"80%"}
-              variant={"outline"}
-              onClick={() => handleClick("shows")}
-              borderRadius={"0"}
-              py={4}
-              px={2}
-              fontSize={{ base: "sm", md: "md" }}
-              className="Content-Bar"
-            >
-              TV Shows
-            </Button>
+    <PrivateRoute>
+      <UserTemplate>
+        <Box px={[4, 8]}>
+          <Flex alignItems={"center"}>
+            <Flex width={"100%"} py={"2rem"} borderRight={"2px solid black"}>
+              <Button
+                _active={{ color: "#55DF01" }}
+                width={"80%"}
+                variant={"outline"}
+                onClick={() => handleClick("shows")}
+                borderRadius={"0"}
+                py={4}
+                px={2}
+                fontSize={{ base: "sm", md: "md" }}
+                className="Content-Bar"
+              >
+                TV Shows
+              </Button>
 
-            <Button
-              _active={{ color: "#55DF01" }}
-              width={"80%"}
-              variant={"outline"}
-              onClick={() => handleClick("movies")}
-              borderRadius={"0"}
-              py={4}
-              px={2}
-              fontSize={{ base: "sm", md: "md" }}
-              className="Content-Bar"
-            >
-              Movies
-            </Button>
+              <Button
+                _active={{ color: "#55DF01" }}
+                width={"80%"}
+                variant={"outline"}
+                onClick={() => handleClick("movies")}
+                borderRadius={"0"}
+                py={4}
+                px={2}
+                fontSize={{ base: "sm", md: "md" }}
+                className="Content-Bar"
+              >
+                Movies
+              </Button>
 
-            <Button
-              _active={{ color: "#55DF01" }}
-              width={"80%"}
-              variant={"outline"}
-              onClick={() => handleClick("channels")}
-              borderRadius={"0"}
-              py={4}
-              px={2}
-              fontSize={{ base: "sm", md: "md" }}
-              className="Content-Bar"
-            >
-              Channels
-            </Button>
+              <Button
+                _active={{ color: "#55DF01" }}
+                width={"80%"}
+                variant={"outline"}
+                onClick={() => handleClick("channels")}
+                borderRadius={"0"}
+                py={4}
+                px={2}
+                fontSize={{ base: "sm", md: "md" }}
+                className="Content-Bar"
+              >
+                Channels
+              </Button>
+            </Flex>
           </Flex>
-        </Flex>
-      </Box>
-      {content === "shows" ? (
-        <Shows />
-      ) : content === "movies" ? (
-        <Movies />
-      ) : (
-        <Channels />
-      )}
-    </UserTemplate>
+        </Box>
+        {content === "shows" ? (
+          <Shows />
+        ) : content === "movies" ? (
+          <Movies />
+        ) : (
+          <Channels />
+        )}
+      </UserTemplate>
+    </PrivateRoute>
   );
 };
 

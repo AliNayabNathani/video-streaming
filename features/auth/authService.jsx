@@ -30,7 +30,7 @@ const login = async (userData) => {
 
 const logout = async () => {
   localStorage.removeItem("User");
-  await axios.get(server + "auth/logout");
+  await axios.get(server + "auth/logout", { withCredentials: true });
 };
 
 const authService = {

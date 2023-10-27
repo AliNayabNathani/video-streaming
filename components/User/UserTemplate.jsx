@@ -63,8 +63,12 @@ const Navbar = () => {
         <a style={{ cursor: "pointer" }} href="/User/PPV">
           PPV
         </a>
-        <a style={{ cursor: "pointer" }} href="/User/Friends">Friends</a>
-        <a style={{ cursor: "pointer" }} href="/User/Theatre">In Theatres</a>
+        <a style={{ cursor: "pointer" }} href="/User/Friends">
+          Friends
+        </a>
+        <a style={{ cursor: "pointer" }} href="/User/Theatre">
+          In Theatres
+        </a>
       </HStack>
 
       <HStack w={"20%"} justifyContent={"flex-end"}>
@@ -96,8 +100,9 @@ const Navbar = () => {
           transform="rotate(90deg)"
         />
         <Text display={["none", "flex"]} color={"#fff"}>
-          {" "}
-          {user?.user?.user?.name}
+          {user?.user?.user?.name &&
+            user.user.user.name.charAt(0).toUpperCase() +
+              user.user.user.name.slice(1)}
         </Text>
         <Menu>
           <MenuButton
@@ -172,7 +177,6 @@ const Navbar = () => {
 };
 
 const UserTemplate = ({ children }) => {
-
   return (
     <Box maxW={"100vw"}>
       <Navbar />
