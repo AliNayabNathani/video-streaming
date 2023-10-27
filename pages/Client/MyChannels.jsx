@@ -21,6 +21,7 @@ import { FiEdit3 } from "react-icons/fi";
 import axios from "axios";
 import { server } from "../../components/server";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 const ChannelData = [
     {
         name: 'Dark',
@@ -122,8 +123,10 @@ const VideoPlayer = ({ src, poster, name }) => (
     </Box>
 )
 
-const ChannelOutline = ({ data, showName, setShowName }) => {
+const ChannelOutline = ({ setEpisodeData, data, showName, setShowName }) => {
     const [tempData, setTempData] = useState();
+    const router = useRouter();
+    console.log('data', data);
 
     const handleClick = async (index, name) => {
         if (showName === name) {
@@ -148,11 +151,14 @@ const ChannelOutline = ({ data, showName, setShowName }) => {
     return (
         <VStack spacing={'2rem'} my={'2rem'}>
             <HStack w={'100%'} justifyContent={'space-between'}>
-                <Heading size={'md'}>Channel 1</Heading>
-                <Text>Created On: <b>02-12-22</b></Text>
+                <Heading size={'md'}>{data?.name}</Heading>
+                <HStack>
+                    <Button onClick={() => router.push(`/Client/MyVideo?channelId=${data.id}`)}>Add Video</Button>
+                    <Text>Created On: <b>02-12-22</b></Text>
+                </HStack>
             </HStack>
             <HStack w={'100%'} overflowX={'auto'}>
-                {/* {data?.videos?.map((Vdata, index) => {
+                {data?.videos?.map((Vdata, index) => {
                     return (
                         <Box key={index} onClick={() => handleClick(index, data.name)}>
                             {Vdata?.trailers?.map((Tdata, index) => {
@@ -173,22 +179,6 @@ const ChannelOutline = ({ data, showName, setShowName }) => {
                                 )
                             })}
 
-                        </Box>
-                    )
-                })} */}
-                {ChannelData.map((data, index) => {
-                    return (
-                        <Box key={index} onClick={() => handleClick(index, data.name)}>
-                            <Box
-                                maxWidth="100%"
-                                height={{ base: "100%", md: 'auto' }}
-                            >
-                                <VideoPlayer
-                                    poster={data.poster}
-                                    name={data.name}
-                                    src={data.src} />
-                            </Box>
-                            <Text mt={'0.5rem'}>{data.name}</Text>
                         </Box>
                     )
                 })}
@@ -305,25 +295,23 @@ const AddEpisode = ({ index, tempEpisodeData, setTempEpisodeData, setEpisodes })
 }
 
 const AddChannelModal = ({ isOpen, onClose }) => {
-    const [episodes, setEpisodes] = useState([]);
-    const [tempEpisodeData, setTempEpisodeData] = useState({
-        title: '',
-        file: '',
-        poster: '',
-        description: '',
-    });
-    console.log(tempEpisodeData)
+    // const [episodes, setEpisodes] = useState([]);
+    // const [tempEpisodeData, setTempEpisodeData] = useState({
+    //     title: '',
+    //     file: '',
+    //     poster: '',
+    //     description: '',
+    // });
 
-    const [episodeData, setEpisodeData] = useState([]);
+
+    // const [episodeData, setEpisodeData] = useState([]);
     const [channelName, setChannelName] = useState();
     const { user } = useSelector((state) => state.auth);
 
-    console.log('Episode Data: ', episodeData);
     const HandleSave = async () => {
-        setEpisodeData([...episodeData, tempEpisodeData]);
+        // setEpisodeData([...episodeData, tempEpisodeData]);
         const requestBody = {
             name: channelName,
-            episodes: episodeData,
         };
         const res = await axios.post(server + 'creator/mychannel/add', requestBody, {
             headers: {
@@ -331,27 +319,31 @@ const AddChannelModal = ({ isOpen, onClose }) => {
             },
             withCredentials: true,
         })
-        console.log(res);
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
-    const handleNextEpClick = () => {
-        setEpisodeData([...episodeData, tempEpisodeData]);
-        console.log('Episode Data: ', episodeData);
-        setEpisodes([...episodes, <AddEpisode key={episodes.length} />])
-    }
+    // const handleNextEpClick = () => {
+    //     setEpisodeData([...episodeData, tempEpisodeData]);
+    //     console.log('Episode Data: ', episodeData);
+    //     setEpisodes([...episodes, <AddEpisode key={episodes.length} />])
+    // }
 
-    const clearEpisodeData = () => {
-        setEpisodeData([]);
-        setEpisodes([]);
-        setTempEpisodeData({ ...tempEpisodeData, title: '', description: '', poster: '', file: '' })
-        setChannelName('');
-    }
+    // const clearEpisodeData = () => {
+    //     setEpisodeData([]);
+    //     setEpisodes([]);
+    //     setTempEpisodeData({ ...tempEpisodeData, title: '', description: '', poster: '', file: '' })
+    //     setChannelName('');
+    // }
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent py={'2rem'} minH={['auto', '500px']} minW={["auto", "700px"]} bg={'#232323'}>
-                    <ModalCloseButton onClick={clearEpisodeData} />
                     <ModalBody>
                         <VStack h={'100%'} px={['auto', '5rem']} w={'100%'} justifyContent={'center'} alignItems={'center'} >
                             <VStack w={'100%'} spacing={'1rem'} alignItems={'flex-start'}>
@@ -360,14 +352,9 @@ const AddChannelModal = ({ isOpen, onClose }) => {
                                     <Text>Channel Name</Text>
                                     <Input value={channelName} onChange={(e) => setChannelName(e.target.value)} bg={'#414141'} placeholder="Enter Channel Name" />
                                 </Box>
-                                {episodes.map((ep, index) => (
-                                    <AddEpisode tempEpisodeData={tempEpisodeData} setTempEpisodeData={setTempEpisodeData} key={index} index={index} episodes={episodes} setEpisodes={setEpisodes} />
-                                ))}
                             </VStack>
-                            <Button variant={'outline'} w={'100%'} onClick={handleNextEpClick} >Add Next Episode</Button>
                             <HStack>
                                 <Button w={'100%'} onClick={HandleSave}>Save</Button>
-                                <Button onClick={clearEpisodeData} w={'100%'}>Clear</Button>
                             </HStack>
                         </VStack>
                     </ModalBody>
@@ -444,36 +431,6 @@ export default function Channel() {
                             </>
                         )
                     })}
-
-                    <ChannelOutline showName={showName} ChannelData={ChannelData} setShowName={setShowName} />
-                    <Divider />
-
-                    {/* {ChannelData.map((data) => {
-                        if (data.name == showName) {
-                            return data.episodes.map((episode, index) => (
-                                <Stack key={index} cursor={'pointer'} my={'1rem'} justifyContent={['center', 'space-between']} width={'100%'} p={'1.5rem'} bg={'#232323'} direction={{ base: 'column', md: 'row' }} alignItems={'center'}>
-                                    <Box
-                                        // Adjust the width as needed
-                                        maxWidth="100%" // Ensure the player doesn't exceed its original size
-                                        height={{ base: "100%", md: 'auto' }}
-                                    >
-                                        <VideoPlayer
-                                            poster={episode.poster}
-                                            name={episode.name}
-                                            src={episode.src} />
-                                    </Box>
-                                    <Stack alignItems={'flex-start'} justifyContent={'flex-start'} s direction={'column'}>
-                                        <Heading size={'md'}>{episode.name}</Heading>
-                                        <Text>{episode.Duration} min</Text>
-                                        <Text>{episode.desc}</Text>
-                                    </Stack>
-                                    <Stack direction={{ base: 'row', md: 'column' }} alignSelf={'normal'} justifyContent={'space-between'}>
-                                        <Icon as={FiEdit3} boxSize={6} />
-                                    </Stack>
-                                </Stack>
-                            ))
-                        }
-                    })} */}
                 </Box>
                 <AddChannelModal isOpen={isOpen} onClose={onClose} />
             </Box>

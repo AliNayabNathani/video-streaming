@@ -449,7 +449,8 @@ const Availability = () => {
 const NavData = [
     {
         name: "Catalog Listing",
-        to: AddVideoTest
+        to: AddVideoTest,
+        channelId: 'your-channel-id-here',
     },
     {
         name: "Cast & Crew",
@@ -470,8 +471,32 @@ const NavData = [
 ];
 
 export default function MyVideo() {
-    const { updateSubTitle, subTitle } = useDetailContext();
     const router = useRouter();
+    const { channelId } = router.query;
+    const { updateSubTitle, subTitle } = useDetailContext();
+    const NavData = [
+        {
+            name: "Catalog Listing",
+            to: AddVideoTest,
+            channelId: channelId,
+        },
+        {
+            name: "Cast & Crew",
+            to: CastandCrew
+        },
+        {
+            name: "Video Assets",
+            to: VideoAssets
+        },
+        {
+            name: "PPV Live Stream",
+            to: CreatePPV,
+        },
+        {
+            name: 'Availability',
+            to: Availability
+        }
+    ];
     const handleNavigation = (to) => {
         router.push(to);
     }
@@ -495,7 +520,7 @@ export default function MyVideo() {
                 <Box>
                     {NavData.map((navItem, index) => (
                         <React.Fragment key={index}>
-                            {navItem.name === subTitle && navItem.to && React.createElement(navItem.to)}
+                            {navItem.name === subTitle && navItem.to && React.createElement(navItem.to, { channelId: navItem.channelId })}
                         </React.Fragment>
                     ))}
                 </Box>

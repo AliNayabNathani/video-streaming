@@ -7,6 +7,7 @@ import {
     ModalBody,
     ModalCloseButton,
     Flex,
+    Spinner,
 } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineCloseCircle, AiOutlineInfoCircle, AiOutlineVideoCameraAdd, } from 'react-icons/ai';
@@ -66,7 +67,6 @@ const Video = ({ src, onOptions, poster, name }) => {
 
     const handleOptions = () => {
         // Implement your logic to show options, e.g., open a modal
-        console.log("Options clicked");
     };
 
     const togglePlayPause = () => {
@@ -137,169 +137,39 @@ const FormLabelOutline = ({ children }) => (
     </Text>
 )
 
-const UploadEpisodeOutline = ({ episodeData, setEpisodeData }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [serverImage, setServerImage] = useState();
-    const [selectedImage, setSelectedImage] = useState();
-    const [serverVideo, setServerVideo] = useState();
-    const [selectedVideo, setSelectedVideo] = useState();
-
-    function EpisodeModal({ isOpen, onClose, episodeData, setEpisodeData }) {
-        const [tempEpisodeData, setTempEpisodeData] = useState({
-            title: '',
-            src: '',
-            poster: '',
-            description: '',
-        });
-
-        const handleVideoSelect = (e) => {
-            const selectedFile = e.target.files[0];
-            console.log(selectedVideo);
-            setServerVideo(selectedFile);
-            if (selectedFile) {
-                const objectURL = URL.createObjectURL(selectedFile);
-                setSelectedVideo(objectURL);
-            }
-            const formData = new FormData();
-            formData.append("Video", selectedFile);
-            axios
-                .post(server + "other/uploadVideo", formData)
-                .then((response) => {
-                    console.log(response);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-            handleEpisodeData(e);
-        }
-
-        const handlePictureSelect = (e) => {
-
-            const selectedFile = e.target.files[0];
-            console.log(selectedImage);
-            setServerImage(selectedFile);
-            if (selectedFile) {
-                const objectURL = URL.createObjectURL(selectedFile);
-                setSelectedImage(objectURL);
-            }
-            const formData = new FormData();
-            formData.append("image", selectedFile);
-            axios
-                .post(server + "other/uploadPicture", formData)
-                .then((response) => {
-                    console.log(response);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-            handleEpisodeData(e);
-        };
-
-        const handleEpisodeData = (e) => {
-            setTempEpisodeData({ ...tempEpisodeData, [e.target.name]: e.target.value });
-        }
-
-        const handleEpisodeUpload = () => {
-            setEpisodeData([...episodeData, tempEpisodeData]);
-            onClose();
-        }
-
-        const clearEpisodeData = () => {
-            tempEpisodeData({
-                title: '',
-                src: '',
-                poster: '',
-                description: '',
-            });
-        }
-        return (
-            <>
-                <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent bg={'#232323'}>
-                        <ModalHeader>Modal Title</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody>
-                            <Text>Enter Title</Text>
-                            <Input value={tempEpisodeData.title} name="title" onChange={handleEpisodeData} required />
-                            <Text>Select Video</Text>
-                            {/* <Input value={tempEpisodeData.src} name="src" onChange={handleEpisodeData} type="file" accept="video/*" required /> */}
-                            <HStack for="fileInput" border={"1px solid #323232"} w={"100%"} >
-                                <Input
-                                    type="file"
-                                    value={tempEpisodeData.poster}
-                                    accept="video/*"
-                                    display="none"
-                                    id="fileInput"
-                                    justifyContent={"center"}
-                                    onChange={handleVideoSelect}
-                                    required
-                                />
-                                <label htmlFor="fileInput" style={{ cursor: "pointer", marginLeft: '1rem' }}>
-                                    <AiOutlineVideoCameraAdd size={32} />
-                                </label>
-                            </HStack>
-                            <Text>Select thumbnail</Text>
-                            {/* <Input value={tempEpisodeData.poster} name='poster' onChange={handleEpisodeData} type="file" accept="image/*" /> */}
-                            <HStack for="fileInput" border={"1px solid #323232"} w={"100%"} >
-                                <Input
-                                    type="file"
-                                    value={tempEpisodeData.poster}
-                                    accept="image/*"
-                                    display="none"
-                                    id="fileInput"
-                                    justifyContent={"center"}
-                                    onChange={handlePictureSelect}
-                                    required
-                                />
-                                <label htmlFor="fileInput" style={{ cursor: "pointer", marginLeft: '1rem' }}>
-                                    <BiImageAdd size={32} />
-                                </label>
-                            </HStack>
-                            <Text>Enter Description</Text>
-                            <Input value={tempEpisodeData.description} name="description" onChange={handleEpisodeData} required />
-                        </ModalBody>
-
-                        <ModalFooter>
-                            <Button mr={3} onClick={handleEpisodeUpload}>
-                                Upload
-                            </Button>
-                            <Button mr={3} onClick={clearEpisodeData}>
-                                clear
-                            </Button>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
-            </>
-        )
-    }
-
-    return (
-        <Box >
-            <VStack alignItems={['center', 'flex-start']} p={6}>
-                <Stack direction={'row-reverse'}>
-                    <HStack>
-                        <Button
-                            bg={'#414141'}
-                            color={'#55DF01'}
-                            fontSize={'inherit'}
-                            textDecor={'underline'}
-                            w={'150px'} h={'150px'}
-                            onClick={onOpen}
-                        >
-                            Upload File
-                        </Button>
-                    </HStack>
-                    <EpisodeModal episodeData={episodeData} setEpisodeData={setEpisodeData} isOpen={isOpen} onClose={onClose} />
-                </Stack>
-            </VStack>
-        </Box>
-    );
-}
-
-const VideoOutline = ({ index, setEpisodes, episodes, setEpisodeData, episodeData, visibleVideoOutlines, setVisibleVideoOutlines }) => {
+const VideoOutline = ({ index, setEpisodes, episodes, data }) => {
     const [serverImage, setServerImage] = useState();
     const [serverVideo, setServerVideo] = useState();
+    const [uploading, setUploading] = useState(false);
+    const videoInputRef = useRef(null);
+    const imageInputRef = useRef(null);
+    console.log('Episodes: ', episodes);
+
+    const handleTitleChange = (e, index) => {
+        const newEpisodes = [...episodes];
+        newEpisodes[index].title = e.target.value;
+        setEpisodes(newEpisodes);
+    };
+
+    const handleDescriptionChange = (e, index) => {
+        const newEpisodes = [...episodes];
+        newEpisodes[index].desc = e.target.value;
+        setEpisodes(newEpisodes);
+    };
+
+    const handleVideoChange = (e, index) => {
+        const selectedFile = e.target.files[0].name;
+        const newEpisodes = [...episodes];
+        newEpisodes[index].episodeVideo = selectedFile;
+        setEpisodes(newEpisodes);
+    };
+
+    const handlePictureChange = (e, index) => {
+        const selectedFile = e.target.files[0].name;
+        const newEpisodes = [...episodes];
+        newEpisodes[index].poster = selectedFile;
+        setEpisodes(newEpisodes);
+    };
 
     const handleDelete = () => {
         const newEpisodes = [...episodes];
@@ -307,14 +177,15 @@ const VideoOutline = ({ index, setEpisodes, episodes, setEpisodeData, episodeDat
         setEpisodes(newEpisodes);
     };
 
-    const handlePictureSelect = (e) => {
-        const selectedFile = e.target.files[0];
+    const handlePictureSelect = (e, index) => {
+        const selectedFile = e.target === imageInputRef.current ? e.target.files[0] : null;
         setServerImage(selectedFile);
         if (selectedFile) {
             const objectURL = URL.createObjectURL(selectedFile);
         }
         const formData = new FormData();
         formData.append("image", selectedFile);
+        setUploading(true);
         axios
             .post(server + "other/uploadPicture", formData, {
                 header: {
@@ -327,15 +198,32 @@ const VideoOutline = ({ index, setEpisodes, episodes, setEpisodeData, episodeDat
             })
             .catch((error) => {
                 console.error(error);
+            })
+            .finally(() => {
+                setUploading(false);
             });
+        handlePictureChange(e, index);
     };
 
-    const handleVideoSelect = (e) => {
-        const selectedFile = e.target.files[0];
+    function LoadingSpinner() {
+        return (
+            <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+            />
+        );
+    }
+    const handleVideoSelect = (e, index) => {
+        const selectedFile = e.target === videoInputRef.current ? e.target.files[0] : null;
         setServerVideo(selectedFile);
 
         const formData = new FormData();
         formData.append("Video", selectedFile);
+        setUploading(true);
+
         axios
             .post(server + "other/uploadVideo", formData, {
                 header: {
@@ -348,45 +236,50 @@ const VideoOutline = ({ index, setEpisodes, episodes, setEpisodeData, episodeDat
             })
             .catch((error) => {
                 console.error(error);
-            });
-        // handleEpisodeData(e);
+            })
+            .finally(() => {
+                setUploading(false);
+            })
+        handleVideoChange(e, index)
     }
-
     return (
         <HStack width={'100%'} bg={'whiteAlpha.400'} p={8} border={'2px solid black'}>
+            {uploading && <LoadingSpinner />}
+
             <Box height={'100%'}>
-                <UploadEpisodeOutline />
+                <Image w="100%" maxW="500px" alt={data.poster} objectFit={'cover'} src={data?.poster ? `http://localhost:5000/uploadPicture/${data.poster}` : `https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png`} />
             </Box>
             <VStack w={'100%'} ml={'1rem'} alignSelf={'flex-start'}>
-                <Input _placeholder={{ color: 'white' }} name="title" variant={'unstyled'} placeholder="Add Title" />
-                <Input _placeholder={{ color: 'white' }} name="desc" variant={'unstyled'} placeholder="Add Description" />
-                <HStack for="videoInput" w={"100%"} >
-                    <Input
-                        type="file"
-                        accept="video/*"
-                        display="none"
-                        name="video"
-                        id="videoInput"
-                        justifyContent={"center"}
-                        onChange={handleVideoSelect}
-                        required
-                    />
-                    <label htmlFor="videoInput" style={{ cursor: "pointer" }}>
-                        {serverVideo ? serverVideo.name : 'Add Picture File'}
+                <Input _placeholder={{ color: 'white' }} onChange={(e) => handleTitleChange(e, index)} name="title" variant={'unstyled'} placeholder="Add Title" />
+                <Input _placeholder={{ color: 'white' }} onChange={(e) => handleDescriptionChange(e, index)} name="desc" variant={'unstyled'} placeholder="Add Description" />
+                <HStack w={"100%"} >
+                    <label style={{ cursor: "pointer" }}>
+                        <Input
+                            type="file"
+                            accept="video/*"
+                            display="none"
+                            name="video"
+                            ref={videoInputRef}
+                            justifyContent={"center"}
+                            onChange={(e) => handleVideoSelect(e, index)}
+                            required
+                        />
+                        {serverVideo ? serverVideo.name : 'Add Video File'}
                     </label>
                 </HStack>
-                <HStack for="imageInput" w={"100%"} >
-                    <Input
-                        type="file"
-                        accept="image/*"
-                        display="none"
-                        name="poster"
-                        id="imageInput"
-                        justifyContent={"center"}
-                        onChange={handlePictureSelect}
-                        required
-                    />
-                    <label htmlFor="imageInput" style={{ cursor: "pointer" }}>
+
+                <HStack w={"100%"} >
+                    <label style={{ cursor: "pointer" }}>
+                        <Input
+                            type="file"
+                            accept="image/*"
+                            display="none"
+                            name="poster"
+                            ref={imageInputRef}
+                            justifyContent={"center"}
+                            onChange={(e) => handlePictureSelect(e, index)}
+                            required
+                        />
                         {serverImage ? serverImage.name : 'Add Picture File'}
                     </label>
                 </HStack>
@@ -397,140 +290,23 @@ const VideoOutline = ({ index, setEpisodes, episodes, setEpisodeData, episodeDat
     );
 }
 
-const TrailerOutline = ({ index, setTrailerOutlines, trailerData, setTrailerData }) => {
-    console.log(trailerData);
-    const handleDelete = () => {
-        setTrailerOutlines((prevtrailerOutlines) => {
-            return prevtrailerOutlines.filter((trailer, i) => i !== index);
-        });
+const TrailerOutline = ({ index, setTrailers, trailers, handleAddTrailer, data }) => {
+    const { onOpen, isOpen, onClose } = useDisclosure();
 
-        trailerData.forEach((_, index) => {
-            trailerData.splice(index, 1);
-        });
+    const handleDelete = () => {
+        const newTrailers = [...trailers];
+        newTrailers.splice(index, 1);
+        setTrailers(newTrailers);
     };
     return (
-        <Box key={index} bg={'whiteAlpha.400'} w={'100%'} p={4}>
-            <Icon onClick={handleDelete} w={'100%'} cursor={'pointer'} color={'black'} as={AiOutlineCloseCircle} boxSize={7} />
-            <VStack alignItems={['center', 'flex-start']}>
-                <Stack direction={'row-reverse'}>
-                    <Box
-                        border={"1px solid transparent"}
-                        borderRadius={5}
-                        cursor={"pointer"}
-                        _hover={{ scale: "1.5" }}
-                        width={["100%", "200px"]}
-                        mr={"1rem"}
-                    >
-                        <Video src={trailerData[0].src} poster={trailerData[0].poster} name={trailerData[0].title} />
-                    </Box>
-                </Stack>
-                <Text>{trailerData[0].title}</Text>
-            </VStack>
-        </Box>
-    );
-}
-
-const UploadOutline = ({ trailerData, setTrailerData, setTrailerOutlines, trailerOutline }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-
-
-    function TrailerModal({ isOpen, onClose, trailerData, setTrailerData }) {
-        const [tempTrailerData, setTempTrailerData] = useState({
-            title: '',
-            src: '',
-            poster: ''
-        });
-
-        console.log('Temp: ', tempTrailerData);
-        console.log('Trailer: ', trailerData);
-        const handleTrailerData = (e) => {
-            setTempTrailerData({ ...tempTrailerData, [e.target.name]: e.target.value });
-        }
-
-        const handleTrailerUpload = () => {
-            setTrailerData([...trailerData, tempTrailerData]);
-            setTrailerOutlines([...trailerOutline, <TrailerOutline key={index} trailerData={trailerData} />])
-            onClose();
-        }
-
-        const handleFileSelect = (e) => {
-
-            const selectedFile = e.target.files[0];
-            console.log(selectedFile);
-            setServerImage(selectedFile);
-            if (selectedFile) {
-                const objectURL = URL.createObjectURL(selectedFile);
-                setSelectedImage(objectURL);
-            }
-            const formData = new FormData();
-            formData.append("image", selectedFile);
-            axios
-                .post(server + "other/uploadPicture", formData)
-                .then((response) => {
-                    console.log(response);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-            handleTrailerData();
-        };
-
-        const clearTrailerData = () => {
-            tempTrailerData({
-                title: '',
-                src: '',
-                poster: ''
-            });
-        }
-        return (
-            <>
-                <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent bg={'#232323'}>
-                        <ModalHeader>Modal Title</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody>
-                            <Text>Enter Title</Text>
-                            <Input value={tempTrailerData.title} name="title" onChange={handleTrailerData} required />
-                            <Text>Select Video</Text>
-                            <Input value={tempTrailerData.src} name="src" onChange={handleTrailerData} type="file" accept="video/*" required />
-                            <Text>Select thumbnail</Text>
-                            {/* <Input name='poster' onChange={handleFileSelect} type="file" accept="image/*" /> */}
-                            <HStack for="fileInput" border={"1px solid #323232"} w={"100%"}>
-                                <Input
-                                    type="file"
-                                    value={tempTrailerData.poster}
-                                    accept="image/*"
-                                    display="none"
-                                    id="fileInput"
-                                    justifyContent={"center"}
-                                    onChange={handleFileSelect}
-                                    required
-                                />
-                            </HStack>
-                        </ModalBody>
-
-                        <ModalFooter>
-                            <Button mr={3} onClick={handleTrailerUpload}>
-                                Upload
-                            </Button>
-                            <Button mr={3} onClick={clearTrailerData}>
-                                clear
-                            </Button>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
-            </>
-        )
-    }
-
-    return (
-        <Box >
+        <HStack width={'100%'} bg={'whiteAlpha.400'} p={8} border={'2px solid black'}>
             <VStack alignItems={['center', 'flex-start']} p={6}>
                 <Stack direction={'row-reverse'}>
                     <HStack>
                         <Button
                             bg={'#414141'}
+                            bgImage={data?.trailerPoster ? `http://localhost:5000/uploadPicture/${data.trailerPoster}` : null}
+                            bgSize={'contain'}
                             color={'#55DF01'}
                             fontSize={'inherit'}
                             textDecor={'underline'}
@@ -539,30 +315,200 @@ const UploadOutline = ({ trailerData, setTrailerData, setTrailerOutlines, traile
                         >
                             Upload File
                         </Button>
+
                     </HStack>
-                    <TrailerModal trailerData={trailerData} setTrailerData={setTrailerData} isOpen={isOpen} onClose={onClose} />
+                    <UploadModal index={index} handleAddTrailer={handleAddTrailer} setTrailers={setTrailers} trailers={trailers} isOpen={isOpen} onClose={onClose} />
                 </Stack>
+                <Text>{data?.trailerTitle}</Text>
             </VStack>
-        </Box>
+            <Icon onClick={handleDelete} cursor={'pointer'} color={'black'} as={AiOutlineCloseCircle} alignSelf={'flex-start'} boxSize={7} />
+        </HStack>
     );
 }
 
-export default function AddVideoTest() {
-    const [visibleVideoOutlines, setVisibleVideoOutlines] = useState([]);
-    const [trailerOutline, setTrailerOutlines] = useState([]);
-    const [trailerData, setTrailerData] = useState([]);
-    const [episodeData, setEpisodeData] = useState([]);
+const UploadModal = ({ isOpen, onClose, setTrailers, trailers, handleAddTrailer, index }) => {
+    const [serverImage, setServerImage] = useState();
+    const [serverVideo, setServerVideo] = useState();
+    const [uploading, setUploading] = useState(false);
+    const videoInputRef = useRef(null);
+    const imageInputRef = useRef(null);
+    console.log('Trailers', trailers);
+
+    const handleTitleChange = (e, index) => {
+        const newTrailers = [...trailers];
+        newTrailers[index].trailerTitle = e.target.value;
+        setTrailers(newTrailers);
+    };
+
+    const handleDescriptionChange = (e, index) => {
+        const newTrailers = [...trailers];
+        newTrailers[index].description = e.target.value;
+        setTrailers(newTrailers);
+    };
+
+    const handleVideoChange = (e, index) => {
+        const selectedFile = e.target.files[0].name;
+        const newTrailers = [...trailers];
+        newTrailers[index].trailerVideo = selectedFile;
+        setTrailers(newTrailers);
+    };
+
+    const handlePictureChange = (e, index) => {
+        const selectedFile = e.target.files[0].name;
+        const newTrailers = [...trailers];
+        newTrailers[index].trailerPoster = selectedFile;
+        setTrailers(newTrailers);
+    };
+
+    const handlePictureSelect = (e, index) => {
+        const selectedFile = e.target === imageInputRef.current ? e.target.files[0] : null;
+        setServerImage(selectedFile);
+        if (selectedFile) {
+            const objectURL = URL.createObjectURL(selectedFile);
+        }
+        const formData = new FormData();
+        formData.append("image", selectedFile);
+        setUploading(true);
+        axios
+            .post(server + "other/uploadPicture", formData, {
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true,
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+            .finally(() => {
+                setUploading(false);
+            });
+        handlePictureChange(e, index);
+    };
+
+    function LoadingSpinner() {
+        return (
+            <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+            />
+        );
+    }
+    const handleVideoSelect = (e, index) => {
+        const selectedFile = e.target === videoInputRef.current ? e.target.files[0] : null;
+        setServerVideo(selectedFile);
+
+        const formData = new FormData();
+        formData.append("Video", selectedFile);
+        setUploading(true);
+
+        axios
+            .post(server + "other/uploadVideo", formData, {
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true,
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+            .finally(() => {
+                setUploading(false);
+            })
+        handleVideoChange(e, index)
+    }
+
+    const handleSubmit = () => {
+        handleAddTrailer();
+        onClose();
+    };
+
+    return (
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Create a New Entry</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    {uploading && LoadingSpinner}
+                    <VStack w={'100%'} ml={'1rem'} alignSelf={'flex-start'}>
+                        <Input _placeholder={{ color: 'white' }} onChange={(e) => handleTitleChange(e, index)} name="title" variant={'unstyled'} placeholder="Add Title" />
+                        <Input _placeholder={{ color: 'white' }} onChange={(e) => handleDescriptionChange(e, index)} name="desc" variant={'unstyled'} placeholder="Add Description" />
+                        <HStack w={"100%"} >
+                            <label style={{ cursor: "pointer" }}>
+                                <Input
+                                    type="file"
+                                    accept="video/*"
+                                    display="none"
+                                    name="video"
+                                    ref={videoInputRef}
+                                    justifyContent={"center"}
+                                    onChange={(e) => handleVideoSelect(e, index)}
+                                    required
+                                />
+                                {serverVideo ? serverVideo.name : 'Add Video File'}
+                            </label>
+                        </HStack>
+
+                        <HStack w={"100%"} >
+                            <label style={{ cursor: "pointer" }}>
+                                <Input
+                                    type="file"
+                                    accept="image/*"
+                                    display="none"
+                                    name="poster"
+                                    ref={imageInputRef}
+                                    justifyContent={"center"}
+                                    onChange={(e) => handlePictureSelect(e, index)}
+                                    required
+                                />
+                                {serverImage ? serverImage.name : 'Add Picture File'}
+                            </label>
+                        </HStack>
+
+                    </VStack>
+                </ModalBody>
+                <ModalFooter>
+                    <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
+                        Submit
+                    </Button>
+                    <Button variant="ghost" onClick={onClose}>
+                        Cancel
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    );
+};
+
+export default function AddVideoTest({ channelId }) {
     const [isVideoCreated, setIsVideoCreated] = useState(false);
     const [episodes, setEpisodes] = useState([
         {
             title: '',
-            description: '',
-            video: '',
+            desc: '',
+            episodeVideo: '',
             poster: '',
         },
     ]);
+    const [trailers, setTrailers] = useState([
+        {
+            trailerTitle: '',
+            description: '',
+            trailerVideo: '',
+            trailerPoster: '',
+        },
+    ]);
 
-    const handleAddButtonClick = () => {
+    const handleAddEpisode = () => {
         setEpisodes([...episodes, {
             title: '',
             description: '',
@@ -571,11 +517,20 @@ export default function AddVideoTest() {
         }]);
     };
 
+    const handleAddTrailer = () => {
+        setTrailers([...trailers, {
+            trailerTitle: '',
+            description: '',
+            trailerVideo: '',
+            trailerPoster: '',
+        }]);
+    };
+
     const [input, setInput] = useState({
         title: "",
         rentAmount: "",
         purchaseAmount: "",
-        addGenre: "",
+        genre: "",
         description: "",
         castDetails: "",
         category: "",
@@ -588,7 +543,7 @@ export default function AddVideoTest() {
         title: "",
         rentAmount: "",
         purchaseAmount: "",
-        addGenre: "",
+        genre: "",
         description: "",
         castDetails: "",
         category: "",
@@ -600,27 +555,69 @@ export default function AddVideoTest() {
     const handleInput = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        console.log(value);
         setInput({ ...input, [name]: value });
-        console.log(input);
     }
 
     const handleSelectChange = (e, selectedValue) => {
         const name = e.target.name;
-        console.log(selectedValue);
         setInput({ ...input, [name]: selectedValue });
         console.log(input);
     }
-    console.log('Epusides: ', episodes);
-    const createVideo = () => {
-        const res = axios.post(server + 'creator/myvideo/add', input, {
+    console.log(input);
+    const createVideo = async () => {
+
+        const videoTitle = input.title;
+        const rented_amount = input.rentAmount;
+        const purchasing_amount = input.purchaseAmount;
+        const Genre = input.genre;
+        const description = input.description;
+        const Cast = input.castDetails;
+        const Type = input.type;
+        const formData = new FormData();
+
+        // Append non-file data
+        formData.append('videoTitle', videoTitle);
+        formData.append('rented_amount', rented_amount);
+        formData.append('purchasing_amount', purchasing_amount);
+        formData.append('Genre', Genre);
+        formData.append('description', description);
+        formData.append('Cast', Cast);
+        formData.append('Type', Type);
+        const filteredTrailers = trailers.filter(trailer => Object.values(trailer).some(value => value !== ''));
+        const filteredEpisodes = episodes.filter(episode => Object.values(episode).some(value => value !== ''));
+
+        formData.append('trailer', filteredTrailers);
+        formData.append('episodes', filteredEpisodes);
+        // // Append trailers data (assuming trailers is an array)
+        // trailers
+        //     .filter(trailer => Object.values(trailer).some(value => value !== ''))
+        //     .forEach((trailer, index) => {
+        //         formData.append(`trailers[${index}][trailerTitle]`, trailer.trailerTitle);
+        //         formData.append(`trailers[${index}][description]`, trailer.description);
+        //         formData.append(`trailers[${index}][trailerVideo]`, trailer.trailerVideo);
+        //         formData.append(`trailers[${index}][trailerPoster]`, trailer.trailerPoster);
+        //     });
+
+        // // Append episodes data (assuming episodes is an array)
+        // episodes
+        //     .filter(episode => Object.values(episode).some(value => value !== ''))
+        //     .forEach((episode, index) => {
+        //         formData.append(`episodes[${index}][title]`, episode.title);
+        //         formData.append(`episodes[${index}][description]`, episode.description);
+        //         formData.append(`episodes[${index}][episodeVideo]`, episode.episodeVideo);
+        //         formData.append(`episodes[${index}][poster]`, episode.poster);
+        //     });
+        console.log(videoTitle, rented_amount, purchasing_amount, Genre, description, Cast, Type);
+
+        const response = await axios.post(server + 'creator/myvideo/add',
+            formData, {
             headers: {
-                'Content-Type': 'Application/json'
+                'Content-type': 'multipart/form-data',
             },
             withCredentials: true,
-        })
-        console.log(res);
-        if (res.data.status == 200) {
+        });
+        console.log(response);
+        if (response.data.status == 200) {
             setIsVideoCreated(true);
         }
     }
@@ -641,7 +638,7 @@ export default function AddVideoTest() {
                         <Input name="purchaseAmount" value={input.purchaseAmount} onChange={handleInput} type="number" bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
 
                         <FormLabelOutline>Add Genre</FormLabelOutline>
-                        <Input name="addGenre" value={input.addGenre} onChange={handleInput} bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
+                        <Input name="genre" value={input.genre} onChange={handleInput} bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
 
                         <FormLabelOutline>Description</FormLabelOutline>
                         <Textarea name="description" value={input.description} onChange={handleInput} bg="rgba(255, 255, 255, 0.24)" borderColor='transparent' />
@@ -698,20 +695,17 @@ export default function AddVideoTest() {
 
                         <FormLabelOutline>Trailers (if any)</FormLabelOutline>
                         <HStack w={'100%'} overflowX={'auto'}>
-                            {trailerOutline.map((data, index) => (
+                            {trailers.map((data, index) => (
                                 <TrailerOutline
+                                    data={data}
+                                    handleAddTrailer={handleAddTrailer}
                                     index={index}
-                                    setTrailerOutlines={setTrailerOutlines}
-                                    setTrailerData={setTrailerData}
-                                    trailerData={trailerData}
+                                    setTrailers={setTrailers}
+                                    trailers={trailers}
                                     key={index}
                                 />
                             ))}
-                            <VStack alignItems={'flex-start'} bg={'whiteAlpha.400'} w={'100%'} p={8}>
-                                <UploadOutline trailerData={trailerData} setTrailerData={setTrailerData} trailerOutline={trailerOutline} setTrailerOutlines={setTrailerOutlines} />
-                            </VStack>
                         </HStack>
-
 
                         <FormLabel>Trailer Langauge (Optional)</FormLabel>
                         <Menu>
@@ -727,21 +721,10 @@ export default function AddVideoTest() {
 
 
                         <FormLabelOutline>Upload Episodes</FormLabelOutline>
-
-                        {/* {visibleVideoOutlines.map((video, index) => (
-                            <VideoOutline
-                                visibleVideoOutlines={visibleVideoOutlines}
-                                setVisibleVideoOutlines={setVisibleVideoOutlines}
-                                episodeData={episodeData}
-                                setEpisodeData={setEpisodeData}
-                                index={index}
-                                key={index}
-                            />
-                        ))} */}
-                        {episodes.map((ep, index) => {
+                        {episodes.map((data, index) => {
                             return (
                                 <VideoOutline
-                                    setEpisodeData={setEpisodeData}
+                                    data={data}
                                     episodes={episodes}
                                     setEpisodes={setEpisodes}
                                     index={index} key={index} />
@@ -752,7 +735,7 @@ export default function AddVideoTest() {
                             fontSize={'1.1rem'}
                             justifyContent={'space-between'}
                             width={'100%'}
-                            onClick={handleAddButtonClick}
+                            onClick={handleAddEpisode}
                             rightIcon={<FaPlus size={20} />}
                         >
                             Add New Episodes</Button>
@@ -786,7 +769,7 @@ export default function AddVideoTest() {
 
                         <HStack w={'100%'} >
                             <Button variant={'outline'} w={'50%'}>Cancel</Button>
-                            <Button w={'50%'}>Submit</Button>
+                            <Button w={'50%'} onClick={createVideo}>Submit</Button>
                         </HStack>
                     </VStack>
                 </Stack>
