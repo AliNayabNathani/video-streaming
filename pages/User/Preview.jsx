@@ -257,10 +257,10 @@ const Episodes = ({ episodesData }) => {
     <>
       {episodesData?.map((episode, index) => {
 
-        console.log(episode)
         const poster = SlashSlice(episode?.poster)
         const file = SlashSlice(episode?.file)
-
+        const decodedString = file.replace(/%20/g, ' ');
+        console.log(decodedString);
         return (
           <Stack
             h={"100%"}
@@ -282,7 +282,7 @@ const Episodes = ({ episodesData }) => {
               <VideoPlayer
                 poster={`http://localhost:5000/uploadPicture/${poster}`}
                 name={episode?.title}
-                src={`http://localhost:5000/uploadVideo/${file}`}
+                src={`http://localhost:5000/uploadVideos/${decodedString}`}
               />
             </Box>
             <VStack
