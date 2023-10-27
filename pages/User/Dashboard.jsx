@@ -39,6 +39,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
+import PrivateRoute from "../PrivateRoute";
 
 const NetflixCategoriesModal = ({ setCategory }) => {
   const [isOpen, setIsOpen] = useState(false);

@@ -19,11 +19,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, register, reset } from "../../features/auth/authSlice";
 import axios from "axios";
 import { server } from "../server";
-<<<<<<< HEAD
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-=======
->>>>>>> 894da268896ed21a4249358e694d7d97f8bef2c0
 
 const GoogleIcon = () => {
   return (
@@ -36,10 +33,6 @@ const SignIn = ({ setAuthChoice }) => {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
-<<<<<<< HEAD
-
-=======
->>>>>>> 894da268896ed21a4249358e694d7d97f8bef2c0
   const { user, isLoading, isSuccess, message, isError } = useSelector(
     (state) => state.auth
   );
@@ -48,7 +41,6 @@ const SignIn = ({ setAuthChoice }) => {
   console.log(userId);
   useEffect(() => {
     const roleId = user?.user?.roleId;
-<<<<<<< HEAD
 
     async function fetchData() {
       await axios.post(
@@ -61,39 +53,11 @@ const SignIn = ({ setAuthChoice }) => {
           withCredentials: true,
         }
       );
-=======
-    if (isError) {
-      alert(message);
-    }
-
-    async function fetchData() {
-      await axios
-        .post(
-          server + "user/addDevice",
-          { userId: userId },
-          {
-            headers: {
-              "Content-type": "application/json",
-            },
-            withCredentials: true,
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.status == 200 && roleId == 2) {
-            router.push("/User/Dashboard");
-          } else {
-            dispatch(reset());
-          }
-        })
-        .catch((err) => console.log(err));
->>>>>>> 894da268896ed21a4249358e694d7d97f8bef2c0
     }
 
     if (isSuccess || user) {
       fetchData();
     }
-<<<<<<< HEAD
   }, [user, isError, isSuccess, message, router, dispatch]);
 
   const handleLogin = async (e) => {
@@ -118,19 +82,6 @@ const SignIn = ({ setAuthChoice }) => {
     }
   };
 
-=======
-
-  }, [user, isError, isSuccess, message, router, dispatch]);
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const userData = {
-      email,
-      password,
-    };
-    dispatch(login(userData));
-  };
->>>>>>> 894da268896ed21a4249358e694d7d97f8bef2c0
   return (
     <Box h={"100%"} bg={"black"}>
       <VStack
@@ -148,10 +99,7 @@ const SignIn = ({ setAuthChoice }) => {
           <Input
             bg={"#fff"}
             color={"black"}
-<<<<<<< HEAD
-=======
             type="email"
->>>>>>> 894da268896ed21a4249358e694d7d97f8bef2c0
             w={"100%"}
             border={"none"}
             placeholder="@email.com"
@@ -163,24 +111,15 @@ const SignIn = ({ setAuthChoice }) => {
           <Input
             bg={"#fff"}
             color={"black"}
-<<<<<<< HEAD
             w={"100%"}
             type="password"
-=======
-            type="password"
-            w={"100%"}
->>>>>>> 894da268896ed21a4249358e694d7d97f8bef2c0
             border={"none"}
             placeholder="Enter your password"
             onChange={(e) => setPassword(e.target.value)}
           />
         </Box>
 
-<<<<<<< HEAD
         <Button w={"100%"} onClick={handleLogin} isLoading={isLoading}>
-=======
-        <Button w={"100%"} onClick={handleLogin}>
->>>>>>> 894da268896ed21a4249358e694d7d97f8bef2c0
           Log In
         </Button>
 
@@ -208,10 +147,7 @@ const SignIn = ({ setAuthChoice }) => {
           </HStack>
         </Box>
       </VStack>
-<<<<<<< HEAD
       <ToastContainer autoClose={4000} />
-=======
->>>>>>> 894da268896ed21a4249358e694d7d97f8bef2c0
     </Box>
   );
 };
