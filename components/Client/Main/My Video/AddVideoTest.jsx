@@ -706,7 +706,7 @@ export default function AddVideoTest({ channelId }) {
         Object.values(episode).some((value) => value !== "")
       ),
     };
-    console.log("ME HERE", videoData);
+    // console.log("ME HERE", videoData);
 
     try {
       const response = await axios.post(
