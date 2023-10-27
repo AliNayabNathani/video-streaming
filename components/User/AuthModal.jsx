@@ -70,7 +70,6 @@ const SignIn = ({ setAuthChoice }) => {
       fetchData();
     }
 
-    dispatch(reset());
   }, [user, isError, isSuccess, message, router, dispatch]);
 
   const handleLogin = (e) => {
