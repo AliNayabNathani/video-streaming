@@ -194,7 +194,7 @@ const Movies = () => {
   const [videoData, setVideoData] = useState([]);
   const [MovieCategory, setMovieCategory] = useState();
   // getAllChannelsQuery
-  const categoryList = ["Action", "Drama"];
+  const categoryList = ["Action", "Drama", 'Thriller'];
   useEffect(() => {
     const fetchDataForGenres = async () => {
       const categoryData = {};
@@ -539,7 +539,7 @@ const Channels = () => {
   const [videoData, setVideoData] = useState([]);
   const [ChannelCategory, setChannelCategory] = useState();
   // getAllChannelsQuery
-  const categoryList = ["Action", "Drama"];
+  const categoryList = ["Action", "Drama", 'Thriller'];
   useEffect(() => {
     const fetchDataForGenres = async () => {
       const categoryData = {};
@@ -675,7 +675,7 @@ const Shows = () => {
   const [videoData, setVideoData] = useState([]);
   const [seriesCategory, setSeriesCategory] = useState();
   // getAllChannelsQuery
-  const categoryList = ["Action", "Drama"];
+  const categoryList = ["Action", "Drama", 'Thriller'];
   useEffect(() => {
     const fetchDataForGenres = async () => {
       const categoryData = {};

@@ -285,7 +285,6 @@ const Episodes = ({ episodesData }) => {
                 src={`http://localhost:5000/uploadVideo/${file}`}
               />
             </Box>
-            <Image src={`http://localhost:5000/uploadPicture/${poster}`} />
             <VStack
               h={"100%"}
               alignItems={"flex-start"}
