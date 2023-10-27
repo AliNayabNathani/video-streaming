@@ -19,6 +19,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, register, reset } from "../../features/auth/authSlice";
 import axios from "axios";
 import { server } from "../server";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const GoogleIcon = () => {
   return (
@@ -39,47 +41,47 @@ const SignIn = ({ setAuthChoice }) => {
   console.log(userId);
   useEffect(() => {
     const roleId = user?.user?.roleId;
-    if (isError) {
-      alert(message);
-    }
 
     async function fetchData() {
-      await axios
-        .post(
-          server + "user/addDevice",
-          { userId: userId },
-          {
-            headers: {
-              "Content-type": "application/json",
-            },
-            withCredentials: true,
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.status == 200 && roleId == 2) {
-            router.push("/User/Dashboard");
-          } else {
-            dispatch(reset());
-          }
-        })
-        .catch((err) => console.log(err));
+      await axios.post(
+        server + "user/addDevice",
+        { userId: userId },
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
     }
 
     if (isSuccess || user) {
       fetchData();
     }
-
   }, [user, isError, isSuccess, message, router, dispatch]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     const userData = {
       email,
       password,
     };
-    dispatch(login(userData));
+
+    const response = await dispatch(login(userData));
+    console.log("LOGIN RESPONSE", response);
+    if (response.payload.msg === "Logged In") {
+      toast.success(`Welcome Back`, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 4000,
+      });
+      router.push("/User/Dashboard");
+    } else {
+      toast.error("Invalid credentials. Please try again.", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
   };
+
   return (
     <Box h={"100%"} bg={"black"}>
       <VStack
@@ -109,15 +111,15 @@ const SignIn = ({ setAuthChoice }) => {
           <Input
             bg={"#fff"}
             color={"black"}
-            type="password"
             w={"100%"}
+            type="password"
             border={"none"}
             placeholder="Enter your password"
             onChange={(e) => setPassword(e.target.value)}
           />
         </Box>
 
-        <Button w={"100%"} onClick={handleLogin}>
+        <Button w={"100%"} onClick={handleLogin} isLoading={isLoading}>
           Log In
         </Button>
 
@@ -145,6 +147,7 @@ const SignIn = ({ setAuthChoice }) => {
           </HStack>
         </Box>
       </VStack>
+      <ToastContainer autoClose={4000} />
     </Box>
   );
 };

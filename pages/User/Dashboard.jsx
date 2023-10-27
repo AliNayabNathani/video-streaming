@@ -40,6 +40,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { FiMaximize2, FiMinimize2 } from "react-icons/fi";
+import PrivateRoute from "../PrivateRoute";
 
 const NetflixCategoriesModal = ({ setCategory }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -805,62 +806,64 @@ const Dashboard = (text) => {
   };
 
   return (
-    <UserTemplate>
-      <Box px={[4, 8]}>
-        <Flex alignItems={"center"}>
-          <Flex width={"100%"} py={"2rem"} borderRight={"2px solid black"}>
-            <Button
-              _active={{ color: "#55DF01" }}
-              width={"80%"}
-              variant={"outline"}
-              onClick={() => handleClick("shows")}
-              borderRadius={"0"}
-              py={4}
-              px={2}
-              fontSize={{ base: "sm", md: "md" }}
-              className="Content-Bar"
-            >
-              TV Shows
-            </Button>
+    <PrivateRoute>
+      <UserTemplate>
+        <Box px={[4, 8]}>
+          <Flex alignItems={"center"}>
+            <Flex width={"100%"} py={"2rem"} borderRight={"2px solid black"}>
+              <Button
+                _active={{ color: "#55DF01" }}
+                width={"80%"}
+                variant={"outline"}
+                onClick={() => handleClick("shows")}
+                borderRadius={"0"}
+                py={4}
+                px={2}
+                fontSize={{ base: "sm", md: "md" }}
+                className="Content-Bar"
+              >
+                TV Shows
+              </Button>
 
-            <Button
-              _active={{ color: "#55DF01" }}
-              width={"80%"}
-              variant={"outline"}
-              onClick={() => handleClick("movies")}
-              borderRadius={"0"}
-              py={4}
-              px={2}
-              fontSize={{ base: "sm", md: "md" }}
-              className="Content-Bar"
-            >
-              Movies
-            </Button>
+              <Button
+                _active={{ color: "#55DF01" }}
+                width={"80%"}
+                variant={"outline"}
+                onClick={() => handleClick("movies")}
+                borderRadius={"0"}
+                py={4}
+                px={2}
+                fontSize={{ base: "sm", md: "md" }}
+                className="Content-Bar"
+              >
+                Movies
+              </Button>
 
-            <Button
-              _active={{ color: "#55DF01" }}
-              width={"80%"}
-              variant={"outline"}
-              onClick={() => handleClick("channels")}
-              borderRadius={"0"}
-              py={4}
-              px={2}
-              fontSize={{ base: "sm", md: "md" }}
-              className="Content-Bar"
-            >
-              Channels
-            </Button>
+              <Button
+                _active={{ color: "#55DF01" }}
+                width={"80%"}
+                variant={"outline"}
+                onClick={() => handleClick("channels")}
+                borderRadius={"0"}
+                py={4}
+                px={2}
+                fontSize={{ base: "sm", md: "md" }}
+                className="Content-Bar"
+              >
+                Channels
+              </Button>
+            </Flex>
           </Flex>
-        </Flex>
-      </Box>
-      {content === "shows" ? (
-        <Shows />
-      ) : content === "movies" ? (
-        <Movies />
-      ) : (
-        <Channels />
-      )}
-    </UserTemplate>
+        </Box>
+        {content === "shows" ? (
+          <Shows />
+        ) : content === "movies" ? (
+          <Movies />
+        ) : (
+          <Channels />
+        )}
+      </UserTemplate>
+    </PrivateRoute>
   );
 };
 
