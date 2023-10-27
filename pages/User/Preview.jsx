@@ -21,6 +21,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import {
+  AiFillHeart,
   AiOutlineHeart,
   AiOutlineInfoCircle,
   AiOutlineSetting,
@@ -39,6 +40,7 @@ import "./Style.css";
 import axios from "axios";
 import { server } from "../../components/server";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 const EpisodeData = [
   {
@@ -243,14 +245,22 @@ const InfoOutline = ({ children }) => (
 );
 
 const Episodes = ({ episodesData }) => {
+  const SlashSlice = (fullPath) => {
+    console.log(fullPath);
+    const lastSlashIndex = fullPath.toString().lastIndexOf('/');
+    console.log(lastSlashIndex);
+    const fileName = fullPath.slice(lastSlashIndex + 1);
+    console.log(fileName);
+    return fileName;
+  }
   return (
     <>
       {episodesData?.map((episode, index) => {
-        const apiUrl = `${(server, episode.poster)}`;
-        console.log(apiUrl);
-        const correctedUrl = apiUrl.replace(/\/+/g, "/");
 
-        console.log(correctedUrl);
+        console.log(episode)
+        const poster = SlashSlice(episode?.poster)
+        const file = SlashSlice(episode?.file)
+
         return (
           <Stack
             h={"100%"}
@@ -270,12 +280,11 @@ const Episodes = ({ episodesData }) => {
               height={{ base: "100%", md: "auto" }}
             >
               <VideoPlayer
-                poster={episode?.poster}
+                poster={`http://localhost:5000/uploadPicture/${poster}`}
                 name={episode?.title}
-                src={episode?.file}
+                src={`http://localhost:5000/uploadVideo/${file}`}
               />
             </Box>
-            <Image src={`${server}${episode.poster}`} />
             <VStack
               h={"100%"}
               alignItems={"flex-start"}
@@ -447,30 +456,30 @@ const Preview = () => {
   const [content, setContent] = useState("Episodes");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [videoData, setVideoData] = useState();
+  const [creatorData, setCreatorData] = useState();
   const [episodesData, setEpisodesData] = useState();
   const [trailersData, setTrailersData] = useState();
   const { creatorId, id } = router.query;
-  console.log("id", id);
-  console.log("creatorId", creatorId);
-
+  console.log(videoData);
   useEffect(() => {
     const fetchVideo = async () => {
       await axios
-        .get(server + `user/getSerie?creatorId=${creatorId}&id=${id}`, {
+        .get(`${server}user/getSerie?creatorId=${creatorId}&id=${id}`, {
           headers: {
             "Content-type": "application/json",
           },
           withCredentials: true,
         })
         .then((resp) => {
-          console.log(resp);
+
           setVideoData(resp?.data.video);
+          setCreatorData(resp?.data.creator)
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
     };
 
     fetchVideo();
-  }, []);
+  }, [creatorId, id]);
 
   useEffect(() => {
     if (videoData) {
@@ -478,9 +487,28 @@ const Preview = () => {
       setEpisodesData(videoData?.episodes);
     }
   }, [videoData]);
+
   const toggleReadMore = () => {
     setisReadMoreOpen(!isReadMoreOpen);
   };
+
+  const AddToFavourite = async () => {
+    const { user } = useSelector((state) => state.auth)
+    const userId = user?.user?.userId;
+    const videoId = videoData.id;
+    await axios.post(`${server}user/favourites`, { userId, videoId }, {
+      headers: {
+        'Content-type': 'application/json',
+      },
+      withCredentials: true,
+    })
+      .then(() => {
+        console.log(res)
+      })
+      .catch(() => {
+        console.log(err)
+      })
+  }
 
   return (
     <UserTemplate>
@@ -551,6 +579,9 @@ const Preview = () => {
               </Button>
               <Button leftIcon={<BiPlay size={24} />} variant={"outline"}>
                 Trailer
+              </Button>
+              <Button leftIcon={<AiFillHeart size={24} color="#55DF01" />} variant={"outline"}>
+                Add to Favourite
               </Button>
             </Stack>
           </Stack>
