@@ -21,9 +21,13 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { BiDislike, BiLike, BiPlay } from "react-icons/bi";
+import { BiDislike, BiLike, BiPause, BiPlay } from "react-icons/bi";
 import { Tooltip } from "recharts";
-import { AiOutlineClose, AiOutlineHeart, AiOutlineInfoCircle } from "react-icons/ai";
+import {
+  AiOutlineClose,
+  AiOutlineHeart,
+  AiOutlineInfoCircle,
+} from "react-icons/ai";
 import { BsDownload, BsThreeDotsVertical } from "react-icons/bs";
 import "./Style.css";
 import { MdCancel } from "react-icons/md";
@@ -88,7 +92,7 @@ const NetflixCategoriesModal = ({ setCategory }) => {
                 width="100%"
                 my={4}
                 fontSize={"xl"}
-                color={'white'}
+                color={"white"}
                 bg={"transparent"}
                 onClick={() => {
                   setCategory(category);
@@ -100,8 +104,16 @@ const NetflixCategoriesModal = ({ setCategory }) => {
               </Button>
             ))}
           </ModalBody>
-          <ModalFooter justifyContent={'center'}>
-            <Button colorScheme="gray" bg={'transparent'} h={16} w={'max-content'} border={'1px solid white'} rounded={'full'} onClick={handleClose}>
+          <ModalFooter justifyContent={"center"}>
+            <Button
+              colorScheme="gray"
+              bg={"transparent"}
+              h={16}
+              w={"max-content"}
+              border={"1px solid white"}
+              rounded={"full"}
+              onClick={handleClose}
+            >
               <AiOutlineClose size={32} color="white" />
             </Button>
           </ModalFooter>
@@ -194,7 +206,7 @@ const Movies = () => {
   const [videoData, setVideoData] = useState([]);
   const [MovieCategory, setMovieCategory] = useState();
   // getAllChannelsQuery
-  const categoryList = ["Action", "Drama", 'Thriller'];
+  const categoryList = ["Action", "Drama", "Thriller"];
   useEffect(() => {
     const fetchDataForGenres = async () => {
       const categoryData = {};
@@ -387,19 +399,28 @@ export const Video = ({ src, onOptions, poster, name }) => {
       setIsFullScreen(!!document.fullscreenElement);
     };
 
-    document.addEventListener('fullscreenchange', handleFullScreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
-    document.addEventListener('mozfullscreenchange', handleFullScreenChange);
-    document.addEventListener('MSFullscreenChange', handleFullScreenChange);
+    document.addEventListener("fullscreenchange", handleFullScreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullScreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullScreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullScreenChange);
     return () => {
       // Cleanup and dispose of the player
       if (player) {
         player.dispose();
       }
-      document.removeEventListener('fullscreenchange', handleFullScreenChange);
-      document.removeEventListener('webkitfullscreenchange', handleFullScreenChange);
-      document.removeEventListener('mozfullscreenchange', handleFullScreenChange);
-      document.removeEventListener('MSFullscreenChange', handleFullScreenChange);
+      document.removeEventListener("fullscreenchange", handleFullScreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullScreenChange
+      );
+      document.removeEventListener(
+        "mozfullscreenchange",
+        handleFullScreenChange
+      );
+      document.removeEventListener(
+        "MSFullscreenChange",
+        handleFullScreenChange
+      );
     };
   }, []);
 
@@ -465,7 +486,6 @@ export const Video = ({ src, onOptions, poster, name }) => {
             <AiOutlineInfoCircle />
           </Button>
           <Button
-            // Add a full-screen button and toggle the icon based on full-screen state
             borderRadius={"20px"}
             size={"sm"}
             bg={"blackAlpha.600"}
@@ -539,26 +559,25 @@ const Channels = () => {
   const [videoData, setVideoData] = useState([]);
   const [ChannelCategory, setChannelCategory] = useState();
   // getAllChannelsQuery
-  const categoryList = ["Action", "Drama", 'Thriller'];
+  const categoryList = ["Action", "Drama", "Thriller"];
   useEffect(() => {
     const fetchDataForGenres = async () => {
       const categoryData = {};
       const videoType = "Channel";
       await axios
-        .get(
-          `${server}user/allchannels`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        ).then((res) => {
-          console.log(res.data)
-          setChannelData(res.data.channels);
-        }).catch((err) => {
-          console.log(err)
+        .get(`${server}user/allchannels`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
         })
+        .then((res) => {
+          console.log(res.data);
+          setChannelData(res.data.channels);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
 
     fetchDataForGenres();
@@ -569,8 +588,8 @@ const Channels = () => {
       {ChannelData.map((channel, index) => {
         const videos = channel.videos;
         const creatorId = channel.content_creator_id;
-        console.log('Videos', videos);
-        console.log(channel)
+        console.log("Videos", videos);
+        console.log(channel);
         return (
           <Box px={["2rem", "5rem"]}>
             <Heading size={"lg"}>{channel.name}</Heading>
@@ -675,7 +694,7 @@ const Shows = () => {
   const [videoData, setVideoData] = useState([]);
   const [seriesCategory, setSeriesCategory] = useState();
   // getAllChannelsQuery
-  const categoryList = ["Action", "Drama", 'Thriller'];
+  const categoryList = ["Action", "Drama", "Thriller"];
   useEffect(() => {
     const fetchDataForGenres = async () => {
       const categoryData = {};
