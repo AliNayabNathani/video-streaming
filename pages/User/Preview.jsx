@@ -246,20 +246,13 @@ const InfoOutline = ({ children }) => (
 
 const Episodes = ({ episodesData }) => {
   const SlashSlice = (fullPath) => {
-    console.log(fullPath);
-    const lastSlashIndex = fullPath.toString().lastIndexOf('/');
-    console.log(lastSlashIndex);
-    const fileName = fullPath.slice(lastSlashIndex + 1);
-    console.log(fileName);
-    return fileName;
-  }
+    return fullPath;
+  };
   return (
     <>
       {episodesData?.map((episode, index) => {
-
-        console.log(episode)
-        const poster = SlashSlice(episode?.poster)
-        const file = SlashSlice(episode?.file)
+        const poster = SlashSlice(episode?.poster);
+        const file = SlashSlice(episode?.file);
 
         return (
           <Stack
@@ -282,7 +275,7 @@ const Episodes = ({ episodesData }) => {
               <VideoPlayer
                 poster={`http://localhost:5000/uploadPicture/${poster}`}
                 name={episode?.title}
-                src={`http://localhost:5000/uploadVideo/${file}`}
+                src={`http://localhost:5000/uploadVideos/${file}`}
               />
             </Box>
             <VStack
@@ -337,6 +330,7 @@ const Similar_Titles = () => {
 };
 
 const Trailers = ({ trailersData }) => {
+  console.log(trailersData);
   return (
     <HStack
       maxW="100%"
@@ -344,7 +338,7 @@ const Trailers = ({ trailersData }) => {
       className="scrollable-container"
       spacing={"1rem"}
     >
-      {trailersData.map((data, index) => (
+      {trailersData?.map((data, index) => (
         <Box
           key={index}
           mt={"2rem"}
@@ -355,24 +349,29 @@ const Trailers = ({ trailersData }) => {
           minW={["80%", "300px"]}
           mr={"1rem"}
         >
-          <Video src={data.file} poster={data.poster} name={data.title} />
+          <Video
+            src={`http://localhost:5000/uploadVideos/${data.file}`}
+            poster={`http://localhost:5000/uploadPicture/${data.poster}`}
+            name={data.title}
+          />
         </Box>
       ))}
     </HStack>
   );
 };
 
-const Crew = () => {
+const Crew = ({ Cast, Genre, Category }) => {
   return (
     <>
       <Text fontSize={"1.2rem"} color={"white"} mb={"1rem"}>
-        <b>Cast: </b>Tom cruise, Angelina Jolie, Brad pitt
+        <b>Cast: </b>
+        {Cast}
       </Text>
       <Text fontSize={"1.2rem"} color={"white"} mb={"1rem"}>
-        <b>Genre:</b> Thriller
+        <b>Genre:</b> {Genre}
       </Text>
       <Text fontSize={"1.2rem"} color={"white"} mb={"1rem"}>
-        <b>Documentary</b>
+        <b>Category:</b> {Category}
       </Text>
     </>
   );
@@ -459,6 +458,10 @@ const Preview = () => {
   const [creatorData, setCreatorData] = useState();
   const [episodesData, setEpisodesData] = useState();
   const [trailersData, setTrailersData] = useState();
+  const Cast = videoData?.Cast;
+  const Genre = videoData?.Genre;
+  const Category = videoData?.Category;
+
   const { creatorId, id } = router.query;
   console.log(videoData);
   useEffect(() => {
@@ -471,11 +474,10 @@ const Preview = () => {
           withCredentials: true,
         })
         .then((resp) => {
-
           setVideoData(resp?.data.video);
-          setCreatorData(resp?.data.creator)
+          setCreatorData(resp?.data.creator);
         })
-        .catch((err) => console.log(err))
+        .catch((err) => console.log(err));
     };
 
     fetchVideo();
@@ -493,22 +495,27 @@ const Preview = () => {
   };
 
   const AddToFavourite = async () => {
-    const { user } = useSelector((state) => state.auth)
+    const { user } = useSelector((state) => state.auth);
     const userId = user?.user?.userId;
     const videoId = videoData.id;
-    await axios.post(`${server}user/favourites`, { userId, videoId }, {
-      headers: {
-        'Content-type': 'application/json',
-      },
-      withCredentials: true,
-    })
+    await axios
+      .post(
+        `${server}user/favourites`,
+        { userId, videoId },
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+          withCredentials: true,
+        }
+      )
       .then(() => {
-        console.log(res)
+        console.log(res);
       })
       .catch(() => {
-        console.log(err)
-      })
-  }
+        console.log(err);
+      });
+  };
 
   return (
     <UserTemplate>
@@ -580,7 +587,11 @@ const Preview = () => {
               <Button leftIcon={<BiPlay size={24} />} variant={"outline"}>
                 Trailer
               </Button>
-              <Button leftIcon={<AiFillHeart size={24} color="#55DF01" />} variant={"outline"}>
+              <Button
+                leftIcon={<AiFillHeart size={24} color="#55DF01" />}
+                variant={"outline"}
+                onClick={AddToFavourite}
+              >
                 Add to Favourite
               </Button>
             </Stack>
@@ -647,7 +658,7 @@ const Preview = () => {
         ) : content === "Trailers" ? (
           <Trailers trailersData={trailersData} />
         ) : content === "Crew" ? (
-          <Crew />
+          <Crew Cast={Cast} Genre={Genre} Category={Category} />
         ) : null}
       </Box>
       <PurchaseModal onClose={onClose} isOpen={isOpen} />

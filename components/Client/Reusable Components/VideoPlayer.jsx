@@ -13,11 +13,40 @@ import React, { useRef, useEffect, useState } from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { FiMaximize2, FiMinimize2 } from "react-icons/fi";
 
 const Video = ({ src, onOptions, poster, name }) => {
   const videoRef = useRef(null);
-
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const [streamButton, setStreamButton] = useState(<BiPlay />);
+
+  // Function to toggle full-screen mode
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      if (videoRef.current.requestFullscreen) {
+        videoRef.current.requestFullscreen();
+      } else if (videoRef.current.mozRequestFullScreen) {
+        videoRef.current.mozRequestFullScreen();
+      } else if (videoRef.current.webkitRequestFullscreen) {
+        videoRef.current.webkitRequestFullscreen();
+      } else if (videoRef.current.msRequestFullscreen) {
+        videoRef.current.msRequestFullscreen();
+      }
+      setIsFullScreen(true);
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+      setIsFullScreen(false);
+    }
+  };
+
   useEffect(() => {
     const videoJsOptions = {
       autoplay: false,
@@ -50,12 +79,32 @@ const Video = ({ src, onOptions, poster, name }) => {
     player.on("ended", () => {
       // Video ended event
     });
+    const handleFullScreenChange = () => {
+      setIsFullScreen(!!document.fullscreenElement);
+    };
 
+    document.addEventListener("fullscreenchange", handleFullScreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullScreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullScreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullScreenChange);
     return () => {
       // Cleanup and dispose of the player
       if (player) {
         player.dispose();
       }
+      document.removeEventListener("fullscreenchange", handleFullScreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullScreenChange
+      );
+      document.removeEventListener(
+        "mozfullscreenchange",
+        handleFullScreenChange
+      );
+      document.removeEventListener(
+        "MSFullscreenChange",
+        handleFullScreenChange
+      );
     };
   }, []);
 
@@ -116,6 +165,16 @@ const Video = ({ src, onOptions, poster, name }) => {
             bg={"blackAlpha.600"}
             color="white"
             p={0}
+            onClick={toggleFullScreen}
+          >
+            {isFullScreen ? <FiMinimize2 /> : <FiMaximize2 />}
+          </Button>
+          <Button
+            borderRadius={"20px"}
+            size={"sm"}
+            bg={"blackAlpha.600"}
+            color="white"
+            p={0}
             onClick={handleOptions}
           >
             <BsThreeDotsVertical />
@@ -127,6 +186,7 @@ const Video = ({ src, onOptions, poster, name }) => {
 };
 
 const VideoPlayer = ({ src, poster, name }) => {
+  console.log("file", src);
   return (
     <Box
       border={"1px solid transparent"}
