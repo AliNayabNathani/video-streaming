@@ -68,7 +68,8 @@ const NetflixCategoriesModal = ({ setCategory }) => {
       <Button
         position="fixed"
         bottom="20px"
-        right="20px"
+        // right="20px"
+        right={"20px"}
         zIndex="1"
         height={24}
         w={24}
@@ -695,6 +696,7 @@ const Shows = () => {
   const [seriesCategory, setSeriesCategory] = useState();
   // getAllChannelsQuery
   const categoryList = ["Action", "Drama", "Thriller"];
+
   useEffect(() => {
     const fetchDataForGenres = async () => {
       const categoryData = {};

@@ -33,6 +33,7 @@ const SignIn = ({ setAuthChoice }) => {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
+
   const { user, isLoading, isSuccess, message, isError } = useSelector(
     (state) => state.auth
   );

@@ -464,6 +464,7 @@ const Preview = () => {
 
   const { creatorId, id } = router.query;
   console.log(videoData);
+
   useEffect(() => {
     const fetchVideo = async () => {
       await axios
@@ -494,12 +495,15 @@ const Preview = () => {
     setisReadMoreOpen(!isReadMoreOpen);
   };
 
-  const AddToFavourite = async () => {
-    const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+  const AddToFavourite = async (user) => {
     const userId = user?.user?.userId;
     const videoId = videoData.id;
-    await axios
-      .post(
+
+    console.log(userId, videoId);
+
+    try {
+      const response = await axios.post(
         `${server}user/favourites`,
         { userId, videoId },
         {
@@ -508,13 +512,12 @@ const Preview = () => {
           },
           withCredentials: true,
         }
-      )
-      .then(() => {
-        console.log(res);
-      })
-      .catch(() => {
-        console.log(err);
-      });
+      );
+
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
