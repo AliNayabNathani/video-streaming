@@ -34,26 +34,6 @@ import { useRouter } from "next/router";
 import { HiOutlineEye } from "react-icons/hi";
 import { ToggleButton } from "../SmallReusableComponents/Action";
 import { server } from "../../server";
-import ReactPaginate from "react-paginate";
-import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import "./Table.css";
-import { BiEdit } from "react-icons/bi";
-import { AiOutlineDelete } from "react-icons/ai";
-import { useRouter } from "next/router";
-import { HiOutlineEye } from "react-icons/hi";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
-  Button,
-  HStack,
-  Box,
-} from "@chakra-ui/react";
 
 const deleteCreator = (id) => {
   axios

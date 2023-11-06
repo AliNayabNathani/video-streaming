@@ -3,7 +3,7 @@ import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
-import UserTemplate from "../../components/User/UserTemplate";
+import UserTemplate from "../../../components/User/UserTemplate.jsx";
 import {
   Box,
   Button,
@@ -29,11 +29,11 @@ import {
   AiOutlineInfoCircle,
 } from "react-icons/ai";
 import { BsDownload, BsThreeDotsVertical } from "react-icons/bs";
-import "./Style.css";
+import "../Style.css";
 import { MdCancel } from "react-icons/md";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { server } from "../../components/server";
+import { server } from "../../../components/server";
 import {
   Modal,
   ModalOverlay,
@@ -44,85 +44,8 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { FiMaximize2, FiMinimize2 } from "react-icons/fi";
-import PrivateRoute from "../PrivateRoute";
-import Loader from "../../components/Loader";
-
-const NetflixCategoriesModal = ({ videoType, GenreData }) => {
-  console.log("video Type", videoType);
-  console.log("CATEGORY", GenreData);
-  const [isOpen, setIsOpen] = useState(false);
-
-  const categories = [
-    "Action",
-    "Comedy",
-    "Drama",
-    "Sci-Fi",
-    "Fantasy",
-    "Horror",
-    "Documentary",
-  ];
-
-  const handleOpen = () => setIsOpen(true);
-  const handleClose = () => setIsOpen(false);
-
-  return (
-    <div>
-      <Button
-        position="fixed"
-        bottom="20px"
-        // right="20px"
-        right={"20px"}
-        zIndex="1"
-        height={24}
-        w={24}
-        rounded={"full"}
-        bg={"#414141"}
-        color={"#fff"}
-        onClick={handleOpen}
-      >
-        Genre
-      </Button>
-      <Modal isOpen={isOpen} onClose={handleClose} size="md">
-        <ModalOverlay />
-        <ModalContent bg={"transparent"}>
-          <ModalHeader fontSize={"3xl"} textAlign={"center"} color={"white"}>
-            Categories
-          </ModalHeader>
-          <ModalBody>
-            {categories.map((category, index) => (
-              <Button
-                key={index}
-                width="100%"
-                my={4}
-                fontSize={"xl"}
-                color={"white"}
-                bg={"transparent"}
-                onClick={() => {
-                  handleClose();
-                }}
-              >
-                {category}
-              </Button>
-            ))}
-          </ModalBody>
-          <ModalFooter justifyContent={"center"}>
-            <Button
-              colorScheme="gray"
-              bg={"transparent"}
-              h={16}
-              w={"max-content"}
-              border={"1px solid white"}
-              rounded={"full"}
-              onClick={handleClose}
-            >
-              <AiOutlineClose size={32} color="white" />
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </div>
-  );
-};
+import PrivateRoute from "../../PrivateRoute";
+import Loader from "../../../components/Loader";
 
 const ShowInfo = [
   {
@@ -747,13 +670,33 @@ const Shows = () => {
   const { query } = useRouter();
   const [seriesData, setSeriesData] = useState([]);
   const [seriesCategory, setSeriesCategory] = useState();
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const categories = [
+    "Action",
+    "Comedy",
+    "Drama",
+    "Sci-Fi",
+    "Fantasy",
+    "Horror",
+    "Documentary",
+  ];
+
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
 
   useEffect(() => {
+    setIsLoading(true);
+
     const fetchDataForSeries = async () => {
       try {
         const videoType = "Series";
+        const genreParam = selectedCategory ? `&genre=${selectedCategory}` : "";
+
         const response = await axios.get(
-          `${server}user/allchannels?videoType=${videoType}`,
+          `${server}user/allchannels?videoType=${videoType}${genreParam}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -762,26 +705,37 @@ const Shows = () => {
           }
         );
 
-        setSeriesData(response.data.channels);
+        if (response.status === 200) {
+          setSeriesData(response.data.channels);
+        } else if (response.status === 404) {
+          setSeriesData([]);
+        } else {
+          console.error(`Error: Unexpected status code ${response.status}`);
+        }
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchDataForSeries();
-  }, []);
-  console.log(seriesData);
+  }, [selectedCategory]);
 
-  const allVideos = seriesData.flatMap((channel) => channel.videos);
-  // console.log("ALL VIDEOS", allVideos);
+  const allVideos = useMemo(
+    () => seriesData.flatMap((channel) => channel.videos),
+    [seriesData]
+  );
 
-  const videosByGenre = allVideos.reduce((acc, video) => {
-    if (!acc[video.Genre]) {
-      acc[video.Genre] = [];
-    }
-    acc[video.Genre].push(video);
-    return acc;
-  }, {});
+  const videosByGenre = useMemo(() => {
+    return allVideos.reduce((acc, video) => {
+      if (!acc[video.Genre]) {
+        acc[video.Genre] = [];
+      }
+      acc[video.Genre].push(video);
+      return acc;
+    }, {});
+  }, [allVideos]);
 
   return (
     <>
@@ -821,45 +775,114 @@ const Shows = () => {
       </Box>
 
       <Box px={["2rem", "5rem"]}>
-        {Object.entries(videosByGenre).map(([genre, videos]) => (
-          <React.Fragment key={genre}>
-            <Heading size={"lg"}>{genre}</Heading>
-            <Box>
-              <HStack
-                maxW="100%"
-                overflowX="auto"
-                className="scrollable-container"
-                spacing={"1rem"}
-              >
-                {videos.map((video) => (
-                  <Box
-                    key={video.id}
-                    mt={"2rem"}
-                    border={"1px solid transparent"}
-                    cursor={"pointer"}
-                    _hover={{ scale: "1.5" }}
-                    height={"auto"}
-                    onClick={() =>
-                      router.push(
-                        `/User/Preview?creatorId=${video.content_creator_id}&id=${video.id}`
-                      )
-                    }
-                    minW={["80%", "300px"]}
-                    mr={"1rem"}
+        {isLoading ? (
+          <Loader color="#55DF01" />
+        ) : (
+          <>
+            {Object.keys(videosByGenre).length > 0
+              ? Object.keys(videosByGenre).map((genre) => (
+                  <React.Fragment key={genre}>
+                    <Heading size={"lg"}>{genre}</Heading>
+                    <Box>
+                      <HStack
+                        maxW="100%"
+                        overflowX="auto"
+                        className="scrollable-container"
+                        spacing={"1rem"}
+                      >
+                        {videosByGenre[genre].map((video) => (
+                          <Box
+                            key={video.id}
+                            mt={"2rem"}
+                            border={"1px solid transparent"}
+                            cursor={"pointer"}
+                            _hover={{ scale: "1.5" }}
+                            height={"auto"}
+                            onClick={() =>
+                              router.push(`/User/Preview/${video.id}`)
+                            }
+                            minW={["80%", "300px"]}
+                            mr={"1rem"}
+                          >
+                            <Video
+                              src={"https://vjs.zencdn.net/v/oceans.mp4"}
+                              poster={"/assests/Shows/dark-small.jpg"}
+                              name={video.name}
+                            />
+                          </Box>
+                        ))}
+                      </HStack>
+                    </Box>
+                  </React.Fragment>
+                ))
+              : selectedCategory && (
+                  <Heading
+                    textAlign="center"
+                    my={[4, 8]}
+                    fontSize={["2xl", "4xl"]}
                   >
-                    <Video
-                      src={"https://vjs.zencdn.net/v/oceans.mp4"}
-                      poster={"/assests/Shows/dark-small.jpg"}
-                      name={video.name}
-                    />
-                  </Box>
-                ))}
-              </HStack>
-            </Box>
-          </React.Fragment>
-        ))}
+                    No Movies Found for Genre: {selectedCategory}
+                  </Heading>
+                )}
+          </>
+        )}
       </Box>
-      <NetflixCategoriesModal setCategory={setSeriesCategory} />
+      <div>
+        <Button
+          position="fixed"
+          bottom="20px"
+          // right="20px"
+          right={"20px"}
+          zIndex="1"
+          height={24}
+          w={24}
+          rounded={"full"}
+          bg={"#414141"}
+          color={"#fff"}
+          onClick={handleOpen}
+        >
+          Genre
+        </Button>
+        <Modal isOpen={isOpen} onClose={handleClose} size="md">
+          <ModalOverlay />
+          <ModalContent bg={"transparent"}>
+            <ModalHeader fontSize={"3xl"} textAlign={"center"} color={"white"}>
+              Categories
+            </ModalHeader>
+            <ModalBody>
+              {categories.map((category, index) => (
+                <Button
+                  key={index}
+                  width="100%"
+                  my={4}
+                  fontSize={"xl"}
+                  color={"white"}
+                  bg={"transparent"}
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    handleClose();
+                  }}
+                >
+                  {category}
+                </Button>
+              ))}
+            </ModalBody>
+            <ModalFooter justifyContent={"center"}>
+              <Button
+                colorScheme="gray"
+                bg={"transparent"}
+                h={16}
+                w={"max-content"}
+                border={"1px solid white"}
+                rounded={"full"}
+                onClick={handleClose}
+              >
+                <AiOutlineClose size={32} color="white" />
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </div>
     </>
   );
 };
