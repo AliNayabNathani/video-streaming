@@ -31,7 +31,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import "./Style.css";
+// import "./Style.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { server } from "../../components/server";
@@ -366,7 +366,7 @@ const ShowAddUserModal = ({ isOpen, onClose }) => {
               >
                 <option
                   style={{ background: "#232323" }}
-                  select-option
+                  // select-option
                   selected
                 >
                   Male
