@@ -9,11 +9,17 @@ import "react-toastify/dist/ReactToastify.css";
 import AdminLayout from "../components/Admin/AdminLayout";
 import ClientLayout from "../components/Client/ClientLayout";
 import UnauthorizedPage from "./Unauthorized";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
+const stripePromise = loadStripe(
+  "pk_test_51NcJPPC3eQWXYigjuTBGrLzDyqwhUR23ioapDlQqzHHZKkHkBsyCJhxAVbU90hXpAlqDLqXylcMP21VZu6W3aQjy00Z0mCTnYV"
+);
 const CustomRouteWrapper = ({ Component, pageProps }) => {
   const router = useRouter();
   const [userRole, setUserRole] = useState();
   const route = router.route;
+
   let Layout = ClientLayout;
   if (route.startsWith("/Admin")) {
     Layout = AdminLayout;
@@ -47,7 +53,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <CustomRouteWrapper Component={Component} pageProps={pageProps} />
+        <Elements stripe={stripePromise}>
+          <CustomRouteWrapper Component={Component} pageProps={pageProps} />
+        </Elements>
       </PersistGate>
       <ToastContainer autoClose={4000} />
     </Provider>

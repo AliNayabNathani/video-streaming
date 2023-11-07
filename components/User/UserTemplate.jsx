@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -27,15 +27,16 @@ import { BsDownload } from "react-icons/bs";
 import { useRouter } from "next/router";
 import { logout } from "../../features/auth/authSlice";
 
-const Navbar = () => {
+const Navbar = ({ currActive }) => {
   const user = useSelector((state) => state.auth);
   const router = useRouter();
   const dispatch = useDispatch();
-
+  const [activeLink, setActiveLink] = useState(currActive);
   const handleLogout = () => {
     dispatch(logout());
     router.push("/User");
   };
+
   return (
     <HStack
       p={["1rem", "2rem"]}
@@ -48,7 +49,6 @@ const Navbar = () => {
         h={"50px"}
         src="/assests/videe0/Logo/Black _ White/sideBarLogo.png"
       />
-
       <HStack
         display={["none", "flex"]}
         w={"60%"}
@@ -56,17 +56,54 @@ const Navbar = () => {
         justifyContent={"space-around"}
         fontWeight={"bold"}
       >
-        <a style={{ cursor: "pointer" }} href="/User/Dashboard">
+        <a
+          style={{
+            cursor: "pointer",
+            color: activeLink === "Home" ? "#55DF01" : "",
+          }}
+          href="/User/Dashboard"
+          onClick={() => setActiveLink("Home")}
+        >
           Home
         </a>
-        <a style={{ cursor: "pointer" }}>Favourites</a>
-        <a style={{ cursor: "pointer" }} href="/User/PPV">
+        <a
+          style={{
+            cursor: "pointer",
+            color: activeLink === "Favourites" ? "#55DF01" : "",
+          }}
+          href="/User/Favourites"
+          onClick={() => setActiveLink("Favourites")}
+        >
+          Favourites
+        </a>
+        <a
+          style={{
+            cursor: "pointer",
+            color: activeLink === "PPV" ? "#55DF01" : "",
+          }}
+          href="/User/PPV"
+          onClick={() => setActiveLink("PPV")}
+        >
           PPV
         </a>
-        <a style={{ cursor: "pointer" }} href="/User/Friends">
+        {/* <a
+          style={{
+            cursor: "pointer",
+            color: activeLink === "Friends" ? "#55DF01" : "",
+          }}
+          href="/User/Friends"
+          onClick={() => setActiveLink("Friends")}
+        >
           Friends
-        </a>
-        <a style={{ cursor: "pointer" }} href="/User/Theatre">
+        </a> */}
+        <a
+          style={{
+            cursor: "pointer",
+            color: activeLink === "Theatre" ? "#55DF01" : "",
+          }}
+          href="/User/Theatre"
+          onClick={() => setActiveLink("Theatre")}
+        >
           In Theatres
         </a>
       </HStack>
@@ -177,6 +214,7 @@ const Navbar = () => {
 };
 
 const UserTemplate = ({ children }) => {
+  // console.log("BACHAY:", children);
   return (
     <Box maxW={"100vw"}>
       <Navbar />
@@ -198,14 +236,14 @@ const UserTemplate = ({ children }) => {
           <a href="/User/Dashboard">Home</a>
         </Box>
         <Box textAlign={"center"} w={"30%"} p={4} border={"1px solid black"}>
-          <a href="">Favourites</a>
+          <a href="/User/Favourites">Favourites</a>
         </Box>
         <Box textAlign={"center"} w={"20%"} p={4} border={"1px solid black"}>
           <a href="/User/PPV">PPV</a>
         </Box>
-        <Box textAlign={"center"} w={"20%"} p={4} border={"1px solid black"}>
+        {/* <Box textAlign={"center"} w={"20%"} p={4} border={"1px solid black"}>
           <a href="/User/Friends">Friends</a>
-        </Box>
+        </Box> */}
         <Box textAlign={"center"} w={"25%"} p={4} border={"1px solid black"}>
           <a href="/User/Theatre">In Theaters</a>
         </Box>

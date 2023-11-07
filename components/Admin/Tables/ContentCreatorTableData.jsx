@@ -31,9 +31,6 @@ import { BiEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { ToggleButton } from "../SmallReusableComponents/Action";
 import { server } from "../../server";
-import "./Table.css";
-import { useRouter } from "next/router";
-import { HiOutlineEye } from "react-icons/hi";
 
 const deleteCreator = (id) => {
   axios

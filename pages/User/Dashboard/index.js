@@ -1,9 +1,9 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
-import UserTemplate from "../../components/User/UserTemplate";
+import UserTemplate from "../../../components/User/UserTemplate.jsx";
 import {
   Box,
   Button,
@@ -21,15 +21,19 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { BiDislike, BiLike, BiPlay } from "react-icons/bi";
+import { BiDislike, BiLike, BiPause, BiPlay } from "react-icons/bi";
 import { Tooltip } from "recharts";
-import { AiOutlineClose, AiOutlineHeart, AiOutlineInfoCircle } from "react-icons/ai";
+import {
+  AiOutlineClose,
+  AiOutlineHeart,
+  AiOutlineInfoCircle,
+} from "react-icons/ai";
 import { BsDownload, BsThreeDotsVertical } from "react-icons/bs";
-import "./Style.css";
+import "../Style.css";
 import { MdCancel } from "react-icons/md";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { server } from "../../components/server";
+import { server } from "../../../components/server";
 import {
   Modal,
   ModalOverlay,
@@ -40,76 +44,8 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { FiMaximize2, FiMinimize2 } from "react-icons/fi";
-import PrivateRoute from "../PrivateRoute";
-
-const NetflixCategoriesModal = ({ setCategory }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
-
-  const categories = [
-    "Action",
-    "Comedy",
-    "Drama",
-    "Sci-Fi",
-    "Fantasy",
-    "Horror",
-    "Documentary",
-  ];
-
-  const handleOpen = () => setIsOpen(true);
-  const handleClose = () => setIsOpen(false);
-
-  return (
-    <div>
-      <Button
-        position="fixed"
-        bottom="20px"
-        right="20px"
-        zIndex="1"
-        height={24}
-        w={24}
-        rounded={"full"}
-        bg={"#414141"}
-        color={"#fff"}
-        onClick={handleOpen}
-      >
-        Genre
-      </Button>
-      <Modal isOpen={isOpen} onClose={handleClose} size="md">
-        <ModalOverlay />
-        <ModalContent bg={"transparent"}>
-          <ModalHeader fontSize={"3xl"} textAlign={"center"} color={"white"}>
-            Categories
-          </ModalHeader>
-          <ModalBody>
-            {categories.map((category, index) => (
-              <Button
-                key={index}
-                width="100%"
-                my={4}
-                fontSize={"xl"}
-                color={'white'}
-                bg={"transparent"}
-                onClick={() => {
-                  setCategory(category);
-                  router.push("/User/Dashboard/");
-                  handleClose();
-                }}
-              >
-                {category}
-              </Button>
-            ))}
-          </ModalBody>
-          <ModalFooter justifyContent={'center'}>
-            <Button colorScheme="gray" bg={'transparent'} h={16} w={'max-content'} border={'1px solid white'} rounded={'full'} onClick={handleClose}>
-              <AiOutlineClose size={32} color="white" />
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </div>
-  );
-};
+import PrivateRoute from "../../PrivateRoute";
+import Loader from "../../../components/Loader";
 
 const ShowInfo = [
   {
@@ -149,84 +85,76 @@ const ShowInfo = [
   },
 ];
 
-const MovieInfo = [
-  {
-    name: "Jason Bourne",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/bourne-small.jpg",
-  },
-  {
-    name: "Jason Bourne",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/bourne-small.jpg",
-  },
-  {
-    name: "Jason Bourne",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/bourne-small.jpg",
-  },
-  {
-    name: "Jason Bourne",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/bourne-small.jpg",
-  },
-  {
-    name: "Jason Bourne",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/bourne-small.jpg",
-  },
-  {
-    name: "Jason Bourne",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/bourne-small.jpg",
-  },
-  {
-    name: "Jason Bourne",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/bourne-small.jpg",
-  },
-];
-
 const Movies = () => {
   const router = useRouter();
-  const { query } = useRouter();
   const [MovieData, setMovieData] = useState([]);
-  const [videoData, setVideoData] = useState([]);
-  const [MovieCategory, setMovieCategory] = useState();
-  // getAllChannelsQuery
-  const categoryList = ["Action", "Drama", 'Thriller'];
-  useEffect(() => {
-    const fetchDataForGenres = async () => {
-      const categoryData = {};
-      const videoType = "Movie";
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  // console.log("MovieData: ", MovieData);x
+  const categories = [
+    "Action",
+    "Comedy",
+    "Drama",
+    "Sci-Fi",
+    "Fantasy",
+    "Horror",
+    "Documentary",
+  ];
 
-      for (const category of categoryList) {
-        await axios
-          .get(
-            `${server}user/allchannels?videoType=${videoType}&genre=${category}`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-              withCredentials: true,
-            }
-          )
-          .then((res) => {
-            categoryData[category] = res.data.channels;
-            setMovieData((prevData) => [
-              ...prevData,
-              { [category]: res.data.channels },
-            ]);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    const fetchDataForMovies = async () => {
+      try {
+        const videoType = "Movie";
+        const genreParam = selectedCategory ? `&genre=${selectedCategory}` : "";
+
+        const response = await axios.get(
+          `${server}user/allchannels?videoType=${videoType}${genreParam}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
+
+        if (response.status === 200) {
+          setMovieData(response.data.channels);
+        } else if (response.status === 404) {
+          setMovieData([]);
+        } else {
+          console.error(`Error: Unexpected status code ${response.status}`);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchDataForGenres();
-  }, []);
-  console.log(MovieData);
+    fetchDataForMovies();
+  }, [selectedCategory]);
+
+  const allVideos = useMemo(
+    () => MovieData.flatMap((channel) => channel.videos),
+    [MovieData]
+  );
+
+  const videosByGenre = useMemo(() => {
+    return allVideos.reduce((acc, video) => {
+      if (!acc[video.Genre]) {
+        acc[video.Genre] = [];
+      }
+      acc[video.Genre].push(video);
+      return acc;
+    }, {});
+  }, [allVideos]);
+
   return (
     <>
       <Carousal />
@@ -264,56 +192,118 @@ const Movies = () => {
         <Divider my={"2rem"} />
       </Box>
 
-      {MovieData.map((Movie, index) => {
-        const category = Object.keys(Movie)[0];
-        const channels = Movie[category];
-        return (
-          <Box px={["2rem", "5rem"]}>
-            <Heading size={"lg"}>{category}</Heading>
-            <Box>
-              <HStack
-                maxW="100%"
-                overflowX="auto"
-                className="scrollable-container"
-                spacing={"1rem"}
-              >
-                {channels.map((channel, index) => {
-                  const videos = channel.videos;
-                  const creatorId = channel.content_creator_id;
-
-                  console.log(videos);
-                  return videos.map((video) => {
-                    return (
-                      <Box
-                        key={index}
-                        mt={"2rem"}
-                        border={"1px solid transparent"}
-                        cursor={"pointer"}
-                        _hover={{ scale: "1.5" }}
-                        height={"auto"}
-                        onClick={() =>
-                          router.push(
-                            `/User/Preview?creatorId=${creatorId}&id=${video.id}`
-                          )
-                        }
-                        minW={["80%", "300px"]}
-                        mr={"1rem"}
+      <Box px={["2rem", "5rem"]}>
+        {isLoading ? (
+          <Loader color="#55DF01" />
+        ) : (
+          <>
+            {Object.keys(videosByGenre).length > 0
+              ? Object.keys(videosByGenre).map((genre) => (
+                  <React.Fragment key={genre}>
+                    <Heading size={"lg"}>{genre}</Heading>
+                    <Box>
+                      <HStack
+                        maxW="100%"
+                        overflowX="auto"
+                        className="scrollable-container"
+                        spacing={"1rem"}
                       >
-                        <Video
-                          src={"https://vjs.zencdn.net/v/oceans.mp4"}
-                          poster={"/assests/Shows/dark-small.jpg"}
-                          name={"Dark"}
-                        />
-                      </Box>
-                    );
-                  });
-                })}
-              </HStack>
-            </Box>
-          </Box>
-        );
-      })}
-      <NetflixCategoriesModal setCategory={setMovieCategory} />
+                        {videosByGenre[genre].map((video) => (
+                          <Box
+                            key={video.id}
+                            mt={"2rem"}
+                            border={"1px solid transparent"}
+                            cursor={"pointer"}
+                            _hover={{ scale: "1.5" }}
+                            height={"auto"}
+                            onClick={() =>
+                              router.push(
+                                `/User/Preview?creatorId=${video.content_creator_id}&id=${video.id}`
+                              )
+                            }
+                            minW={["80%", "300px"]}
+                            mr={"1rem"}
+                          >
+                            <Video
+                              src={"https://vjs.zencdn.net/v/oceans.mp4"}
+                              poster={"/assests/Shows/dark-small.jpg"}
+                              name={video.name}
+                            />
+                          </Box>
+                        ))}
+                      </HStack>
+                    </Box>
+                  </React.Fragment>
+                ))
+              : selectedCategory && (
+                  <Heading
+                    textAlign="center"
+                    my={[4, 8]}
+                    fontSize={["2xl", "4xl"]}
+                  >
+                    No Movies Found for Genre: {selectedCategory}
+                  </Heading>
+                )}
+          </>
+        )}
+      </Box>
+
+      <div>
+        <Button
+          position="fixed"
+          bottom="20px"
+          // right="20px"
+          right={"20px"}
+          zIndex="1"
+          height={24}
+          w={24}
+          rounded={"full"}
+          bg={"#414141"}
+          color={"#fff"}
+          onClick={handleOpen}
+        >
+          Genre
+        </Button>
+        <Modal isOpen={isOpen} onClose={handleClose} size="md">
+          <ModalOverlay />
+          <ModalContent bg={"transparent"}>
+            <ModalHeader fontSize={"3xl"} textAlign={"center"} color={"white"}>
+              Categories
+            </ModalHeader>
+            <ModalBody>
+              {categories.map((category, index) => (
+                <Button
+                  key={index}
+                  width="100%"
+                  my={4}
+                  fontSize={"xl"}
+                  color={"white"}
+                  bg={"transparent"}
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    handleClose();
+                  }}
+                >
+                  {category}
+                </Button>
+              ))}
+            </ModalBody>
+            <ModalFooter justifyContent={"center"}>
+              <Button
+                colorScheme="gray"
+                bg={"transparent"}
+                h={16}
+                w={"max-content"}
+                border={"1px solid white"}
+                rounded={"full"}
+                onClick={handleClose}
+              >
+                <AiOutlineClose size={32} color="white" />
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </div>
     </>
   );
 };
@@ -387,19 +377,28 @@ export const Video = ({ src, onOptions, poster, name }) => {
       setIsFullScreen(!!document.fullscreenElement);
     };
 
-    document.addEventListener('fullscreenchange', handleFullScreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
-    document.addEventListener('mozfullscreenchange', handleFullScreenChange);
-    document.addEventListener('MSFullscreenChange', handleFullScreenChange);
+    document.addEventListener("fullscreenchange", handleFullScreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullScreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullScreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullScreenChange);
     return () => {
       // Cleanup and dispose of the player
       if (player) {
         player.dispose();
       }
-      document.removeEventListener('fullscreenchange', handleFullScreenChange);
-      document.removeEventListener('webkitfullscreenchange', handleFullScreenChange);
-      document.removeEventListener('mozfullscreenchange', handleFullScreenChange);
-      document.removeEventListener('MSFullscreenChange', handleFullScreenChange);
+      document.removeEventListener("fullscreenchange", handleFullScreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullScreenChange
+      );
+      document.removeEventListener(
+        "mozfullscreenchange",
+        handleFullScreenChange
+      );
+      document.removeEventListener(
+        "MSFullscreenChange",
+        handleFullScreenChange
+      );
     };
   }, []);
 
@@ -465,7 +464,6 @@ export const Video = ({ src, onOptions, poster, name }) => {
             <AiOutlineInfoCircle />
           </Button>
           <Button
-            // Add a full-screen button and toggle the icon based on full-screen state
             borderRadius={"20px"}
             size={"sm"}
             bg={"blackAlpha.600"}
@@ -539,26 +537,25 @@ const Channels = () => {
   const [videoData, setVideoData] = useState([]);
   const [ChannelCategory, setChannelCategory] = useState();
   // getAllChannelsQuery
-  const categoryList = ["Action", "Drama", 'Thriller'];
+  const categoryList = ["Action", "Drama", "Thriller"];
   useEffect(() => {
     const fetchDataForGenres = async () => {
       const categoryData = {};
       const videoType = "Channel";
       await axios
-        .get(
-          `${server}user/allchannels`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        ).then((res) => {
-          console.log(res.data)
-          setChannelData(res.data.channels);
-        }).catch((err) => {
-          console.log(err)
+        .get(`${server}user/allchannels`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
         })
+        .then((res) => {
+          console.log(res.data);
+          setChannelData(res.data.channels);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
 
     fetchDataForGenres();
@@ -569,8 +566,8 @@ const Channels = () => {
       {ChannelData.map((channel, index) => {
         const videos = channel.videos;
         const creatorId = channel.content_creator_id;
-        console.log('Videos', videos);
-        console.log(channel)
+        console.log("Videos", videos);
+        console.log(channel);
         return (
           <Box px={["2rem", "5rem"]}>
             <Heading size={"lg"}>{channel.name}</Heading>
@@ -672,42 +669,74 @@ const Shows = () => {
   const router = useRouter();
   const { query } = useRouter();
   const [seriesData, setSeriesData] = useState([]);
-  const [videoData, setVideoData] = useState([]);
   const [seriesCategory, setSeriesCategory] = useState();
-  // getAllChannelsQuery
-  const categoryList = ["Action", "Drama", 'Thriller'];
-  useEffect(() => {
-    const fetchDataForGenres = async () => {
-      const categoryData = {};
-      const videoType = "Series";
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
-      for (const category of categoryList) {
-        await axios
-          .get(
-            `${server}user/allchannels?videoType=${videoType}&genre=${category}`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-              withCredentials: true,
-            }
-          )
-          .then((res) => {
-            categoryData[category] = res.data.channels;
-            setSeriesData((prevData) => [
-              ...prevData,
-              { [category]: res.data.channels },
-            ]);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+  const categories = [
+    "Action",
+    "Comedy",
+    "Drama",
+    "Sci-Fi",
+    "Fantasy",
+    "Horror",
+    "Documentary",
+  ];
+
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    const fetchDataForSeries = async () => {
+      try {
+        const videoType = "Series";
+        const genreParam = selectedCategory ? `&genre=${selectedCategory}` : "";
+
+        const response = await axios.get(
+          `${server}user/allchannels?videoType=${videoType}${genreParam}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
+
+        if (response.status === 200) {
+          setSeriesData(response.data.channels);
+        } else if (response.status === 404) {
+          setSeriesData([]);
+        } else {
+          console.error(`Error: Unexpected status code ${response.status}`);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchDataForGenres();
-  }, []);
-  console.log(seriesData);
+    fetchDataForSeries();
+  }, [selectedCategory]);
+
+  const allVideos = useMemo(
+    () => seriesData.flatMap((channel) => channel.videos),
+    [seriesData]
+  );
+
+  const videosByGenre = useMemo(() => {
+    return allVideos.reduce((acc, video) => {
+      if (!acc[video.Genre]) {
+        acc[video.Genre] = [];
+      }
+      acc[video.Genre].push(video);
+      return acc;
+    }, {});
+  }, [allVideos]);
+
   return (
     <>
       <Carousal />
@@ -745,56 +774,115 @@ const Shows = () => {
         <Divider my={"2rem"} />
       </Box>
 
-      {seriesData.map((series, index) => {
-        const category = Object.keys(series)[0];
-        const channels = series[category];
-        return (
-          <Box px={["2rem", "5rem"]}>
-            <Heading size={"lg"}>{category}</Heading>
-            <Box>
-              <HStack
-                maxW="100%"
-                overflowX="auto"
-                className="scrollable-container"
-                spacing={"1rem"}
-              >
-                {channels.map((channel, index) => {
-                  const videos = channel.videos;
-                  const creatorId = channel.content_creator_id;
-
-                  console.log(videos);
-                  return videos.map((video) => {
-                    return (
-                      <Box
-                        key={index}
-                        mt={"2rem"}
-                        border={"1px solid transparent"}
-                        cursor={"pointer"}
-                        _hover={{ scale: "1.5" }}
-                        height={"auto"}
-                        onClick={() =>
-                          router.push(
-                            `/User/Preview?creatorId=${creatorId}&id=${video.id}`
-                          )
-                        }
-                        minW={["80%", "300px"]}
-                        mr={"1rem"}
+      <Box px={["2rem", "5rem"]}>
+        {isLoading ? (
+          <Loader color="#55DF01" />
+        ) : (
+          <>
+            {Object.keys(videosByGenre).length > 0
+              ? Object.keys(videosByGenre).map((genre) => (
+                  <React.Fragment key={genre}>
+                    <Heading size={"lg"}>{genre}</Heading>
+                    <Box>
+                      <HStack
+                        maxW="100%"
+                        overflowX="auto"
+                        className="scrollable-container"
+                        spacing={"1rem"}
                       >
-                        <Video
-                          src={"https://vjs.zencdn.net/v/oceans.mp4"}
-                          poster={"/assests/Shows/dark-small.jpg"}
-                          name={"Dark"}
-                        />
-                      </Box>
-                    );
-                  });
-                })}
-              </HStack>
-            </Box>
-          </Box>
-        );
-      })}
-      <NetflixCategoriesModal setCategory={setSeriesCategory} />
+                        {videosByGenre[genre].map((video) => (
+                          <Box
+                            key={video.id}
+                            mt={"2rem"}
+                            border={"1px solid transparent"}
+                            cursor={"pointer"}
+                            _hover={{ scale: "1.5" }}
+                            height={"auto"}
+                            onClick={() =>
+                              router.push(`/User/Preview/${video.id}`)
+                            }
+                            minW={["80%", "300px"]}
+                            mr={"1rem"}
+                          >
+                            <Video
+                              src={"https://vjs.zencdn.net/v/oceans.mp4"}
+                              poster={"/assests/Shows/dark-small.jpg"}
+                              name={video.name}
+                            />
+                          </Box>
+                        ))}
+                      </HStack>
+                    </Box>
+                  </React.Fragment>
+                ))
+              : selectedCategory && (
+                  <Heading
+                    textAlign="center"
+                    my={[4, 8]}
+                    fontSize={["2xl", "4xl"]}
+                  >
+                    No Movies Found for Genre: {selectedCategory}
+                  </Heading>
+                )}
+          </>
+        )}
+      </Box>
+      <div>
+        <Button
+          position="fixed"
+          bottom="20px"
+          // right="20px"
+          right={"20px"}
+          zIndex="1"
+          height={24}
+          w={24}
+          rounded={"full"}
+          bg={"#414141"}
+          color={"#fff"}
+          onClick={handleOpen}
+        >
+          Genre
+        </Button>
+        <Modal isOpen={isOpen} onClose={handleClose} size="md">
+          <ModalOverlay />
+          <ModalContent bg={"transparent"}>
+            <ModalHeader fontSize={"3xl"} textAlign={"center"} color={"white"}>
+              Categories
+            </ModalHeader>
+            <ModalBody>
+              {categories.map((category, index) => (
+                <Button
+                  key={index}
+                  width="100%"
+                  my={4}
+                  fontSize={"xl"}
+                  color={"white"}
+                  bg={"transparent"}
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    handleClose();
+                  }}
+                >
+                  {category}
+                </Button>
+              ))}
+            </ModalBody>
+            <ModalFooter justifyContent={"center"}>
+              <Button
+                colorScheme="gray"
+                bg={"transparent"}
+                h={16}
+                w={"max-content"}
+                border={"1px solid white"}
+                rounded={"full"}
+                onClick={handleClose}
+              >
+                <AiOutlineClose size={32} color="white" />
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </div>
     </>
   );
 };
@@ -812,7 +900,7 @@ const Dashboard = (text) => {
           <Flex alignItems={"center"}>
             <Flex width={"100%"} py={"2rem"} borderRight={"2px solid black"}>
               <Button
-                _active={{ color: "#55DF01" }}
+                _active={{ color: "white", bg: "#55DF01" }}
                 width={"80%"}
                 variant={"outline"}
                 onClick={() => handleClick("shows")}
@@ -826,7 +914,7 @@ const Dashboard = (text) => {
               </Button>
 
               <Button
-                _active={{ color: "#55DF01" }}
+                _active={{ color: "white", bg: "#55DF01" }}
                 width={"80%"}
                 variant={"outline"}
                 onClick={() => handleClick("movies")}
@@ -840,7 +928,7 @@ const Dashboard = (text) => {
               </Button>
 
               <Button
-                _active={{ color: "#55DF01" }}
+                _active={{ color: "white", bg: "#55DF01" }}
                 width={"80%"}
                 variant={"outline"}
                 onClick={() => handleClick("channels")}
