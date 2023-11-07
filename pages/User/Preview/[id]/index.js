@@ -40,9 +40,14 @@ import { VideoPlayer } from "../../../../components/Client/Reusable Components/V
 import { Video } from "../../Dashboard";
 import "../../Style.css";
 import axios from "axios";
-import { server } from "../../../../components/server";
+import {
+  pictureServer,
+  server,
+  videoServer,
+} from "../../../../components/server";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
+import Link from "next/link";
 
 const EpisodeData = [
   {
@@ -127,10 +132,10 @@ const ShowInfo = [
   },
 ];
 
-const MainVideo = ({ src, onOptions, poster, name }) => {
+const MainVideo = ({ src, poster, name, onOptions }) => {
   const videoRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
 
-  const [streamButton, setStreamButton] = useState(<BiPlay size={32} />);
   useEffect(() => {
     const videoJsOptions = {
       autoplay: false,
@@ -147,21 +152,19 @@ const MainVideo = ({ src, onOptions, poster, name }) => {
       ],
     };
 
-    const player = videojs(videoRef.current, videoJsOptions, function () {
-      // Player is ready
-    });
+    const player = videojs(videoRef.current, videoJsOptions, function () {});
 
     // Add event listeners
     player.on("play", () => {
-      // Video play event
+      setPlaying(true);
     });
 
     player.on("pause", () => {
-      // Video pause event
+      setPlaying(false);
     });
 
     player.on("ended", () => {
-      // Video ended event
+      setPlaying(false);
     });
 
     return () => {
@@ -172,36 +175,38 @@ const MainVideo = ({ src, onOptions, poster, name }) => {
     };
   }, []);
 
-  const handleOptions = () => {
-    // Implement your logic to show options, e.g., open a modal
-    console.log("Options clicked");
-  };
-
   const togglePlayPause = () => {
     if (videoRef.current) {
-      // Check if the video is paused and toggle accordingly
       if (videoRef.current.paused) {
         videoRef.current.play();
-        setStreamButton(<BiPause size={32} />); // Set the button icon to pause
       } else {
         videoRef.current.pause();
-        setStreamButton(<BiPlay size={32} />); // Set the button icon to play
       }
     }
   };
 
+  const handleClick = () => {
+    if (playing) {
+      videoRef.current.pause();
+      setPlaying(false);
+    } else {
+      videoRef.current.play();
+      setPlaying(true);
+    }
+  };
+
   return (
-    <Box position="relative" overflow={"hidden"}>
+    <Box position="relative" overflow="hidden">
       <style>
         {`
-                .video-js.vjs-fluid:not(.vjs-audio-only-mode),
-                .video-js.vjs-16-9:not(.vjs-audio-only-mode),
-                .video-js.vjs-4-3:not(.vjs-audio-only-mode),
-                .video-js.vjs-9-16:not(.vjs-audio-only-mode),
-                .video-js.vjs-1-1:not(.vjs-audio-only-mode) {
-                    height: 60vh; /* Reset the height to its default value */
-                }
-                `}
+          .video-js.vjs-fluid:not(.vjs-audio-only-mode),
+          .video-js.vjs-16-9:not(.vjs-audio-only-mode),
+          .video-js.vjs-4-3:not(.vjs-audio-only-mode),
+          .video-js.vjs-9-16:not(.vjs-audio-only-mode),
+          .video-js.vjs-1-1:not(.vjs-audio-only-mode) {
+            height: 60vh;
+          }
+        `}
       </style>
 
       <video
@@ -209,26 +214,30 @@ const MainVideo = ({ src, onOptions, poster, name }) => {
         className="video-js vjs-default-skin"
         style={{
           padding: "0",
-          maxWidwth: "100vw",
+          maxWidth: "100vw",
           maxHeight: "60vh",
           objectFit: "cover",
         }}
         poster={poster}
+        onClick={handleClick}
       />
-      <Button
-        position="absolute"
-        top="30%"
-        left="50%"
-        boxSize={16}
-        transform="translate(-50%, -50%)"
-        rounded={"full"}
-        size="sm"
-        bg="blackAlpha.600"
-        color="white"
-        onClick={togglePlayPause}
-      >
-        {streamButton}
-      </Button>
+
+      {!playing && (
+        <Button
+          position="absolute"
+          top="50%"
+          left="50%"
+          boxSize={16}
+          transform="translate(-50%, -50%)"
+          rounded="full"
+          size="sm"
+          bg="blackAlpha.600"
+          color="white"
+          onClick={togglePlayPause}
+        >
+          <BiPlay size={32} />
+        </Button>
+      )}
     </Box>
   );
 };
@@ -247,7 +256,7 @@ const InfoOutline = ({ children }) => (
 );
 
 const Episodes = ({ episodesData, videoData, userId }) => {
-  // console.log("videoData", videoData);
+  console.log("EPISODE", episodesData);
   const [loading, setLoading] = useState(true);
   const [videoStatus, setVideoStatus] = useState("none");
   const SlashSlice = (fullPath) => {
@@ -303,13 +312,15 @@ const Episodes = ({ episodesData, videoData, userId }) => {
             {loading ? (
               <Skeleton height="180px" width="50%" />
             ) : shouldRenderVideoPlayer ? (
-              <Box maxWidth="100%" height={{ base: "100%", md: "auto" }}>
-                <VideoPlayer
-                  poster={`http://localhost:5000/uploadPicture/${poster}`}
-                  name={episode?.title}
-                  src={`http://localhost:5000/uploadVideos/${file}`}
-                />
-              </Box>
+              <Link href={`/User/Preview/${videoData}/${episode.id}`} passHref>
+                <Box maxWidth="100%" height={{ base: "100%", md: "auto" }}>
+                  <VideoPlayer
+                    poster={`${pictureServer}/${poster}`}
+                    name={episode?.title}
+                    src={`${videoServer}/${file}`}
+                  />
+                </Box>
+              </Link>
             ) : (
               <></>
             )}
@@ -541,23 +552,17 @@ const Preview = () => {
   const [creatorData, setCreatorData] = useState();
   const [episodesData, setEpisodesData] = useState();
   const [trailersData, setTrailersData] = useState();
+  const [videoStatus, setVideoStatus] = useState("none");
   const Cast = videoData?.Cast;
   const Genre = videoData?.Genre;
   const Category = videoData?.category;
   const userData = JSON.parse(localStorage.getItem("User"));
   const userId = userData?.user?.userId;
 
-  // const { id } = router.query;
-  // console.log("HERE IS ME: ", { id }, id);
-  // console.log("videoData", videoData);
-  // console.log("EPI Data", episodesData);
-  // console.log("TRAILER Data", trailersData);
-  // console.log("CREATOR Data", creatorData);
   useEffect(() => {
     const fetchVideo = async () => {
       const { id } = router.query;
       if (id) {
-        // console.log("here it is", id);
         try {
           const response = await axios.get(`${server}user/getSerie?id=${id}`, {
             headers: {
@@ -565,20 +570,42 @@ const Preview = () => {
             },
             withCredentials: true,
           });
-
+          console.log("VIDEO", videoData);
+          console.log("Trailer", trailersData);
           setVideoData(response?.data.video);
           setCreatorData(response?.data.contentCreator);
           setTrailersData(response?.data.video?.trailers);
           setEpisodesData(response?.data.video?.episodes);
         } catch (err) {
           console.log(err);
-          // Handle error, e.g., set state to indicate an error
         }
       }
     };
 
     fetchVideo();
   }, [router.query.id]);
+
+  useEffect(() => {
+    const fetchVideoStatus = async () => {
+      try {
+        const response = await axios.get(
+          `${server}user/checkVideoStatus?id=${videoData.id}&userId=${userId}`,
+          {
+            headers: {
+              "Content-type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
+
+        setVideoStatus(response.data.status);
+      } catch (error) {
+        console.error("Error fetching video status:", error);
+      }
+    };
+
+    fetchVideoStatus();
+  }, [videoData, userId]);
 
   const toggleReadMore = () => {
     setisReadMoreOpen(!isReadMoreOpen);
@@ -618,7 +645,7 @@ const Preview = () => {
       >
         <MainVideo
           src={"https://vjs.zencdn.net/v/oceans.mp4"}
-          poster={"/assests/Shows/dark.png"}
+          poster={"/assests/Shows/MulanJourney.png"}
           name={"Dark"}
         />
       </Box>
@@ -665,13 +692,15 @@ const Preview = () => {
               {/* <Button leftIcon={<BiPlay size={24} />} variant={"outline"}>
                 Resume
               </Button> */}
-              <Button
-                leftIcon={<FiShoppingBag size={20} />}
-                variant={"outline"}
-                onClick={onOpen}
-              >
-                Purchase
-              </Button>
+              {videoStatus === "none" && (
+                <Button
+                  leftIcon={<FiShoppingBag size={20} />}
+                  variant={"outline"}
+                  onClick={onOpen}
+                >
+                  Purchase
+                </Button>
+              )}
               {/* <Button leftIcon={<BiPlay size={24} />} variant={"outline"}>
                 Trailer
               </Button> */}

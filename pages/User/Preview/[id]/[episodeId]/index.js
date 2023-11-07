@@ -40,104 +40,23 @@ import { VideoPlayer } from "../../../../../components/Client/Reusable Component
 import { Video } from "../../../Dashboard";
 import "../../../Style.css";
 import axios from "axios";
-import { server } from "../../../../../components/server";
+import { server, videoServer } from "../../../../../components/server";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { ArrowBackIcon } from "@chakra-ui/icons";
+import Link from "next/link";
 
-const EpisodeData = [
-  {
-    name: "Dark",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-    episodes: [
-      {
-        name: "Episode 1",
-        Duration: "25",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque veniam aperiam explicabo similique reprehenderit eligendi. Aliquam ad atque tempore in. Accusamus ipsum tempore animi sapiente veritatis ipsam similique blanditiis inventore!",
-      },
-      {
-        name: "Episode 2",
-        Duration: "30",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque veniam aperiam explicabo similique reprehenderit eligendi. Aliquam ad atque tempore in. Accusamus ipsum tempore animi sapiente veritatis ipsam similique blanditiis inventore!",
-      },
-      {
-        name: "Episode 3",
-        Duration: "30",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque veniam aperiam explicabo similique reprehenderit eligendi. Aliquam ad atque tempore in. Accusamus ipsum tempore animi sapiente veritatis ipsam similique blanditiis inventore!",
-      },
-      {
-        name: "Episode 4",
-        Duration: "30",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque veniam aperiam explicabo similique reprehenderit eligendi. Aliquam ad atque tempore in. Accusamus ipsum tempore animi sapiente veritatis ipsam similique blanditiis inventore!",
-      },
-      {
-        name: "Episode 5",
-        Duration: "30",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque veniam aperiam explicabo similique reprehenderit eligendi. Aliquam ad atque tempore in. Accusamus ipsum tempore animi sapiente veritatis ipsam similique blanditiis inventore!",
-      },
-    ],
-  },
-];
-
-const ShowInfo = [
-  {
-    name: "Dark",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/dark-small.jpg",
-  },
-  {
-    name: "Stranger Things",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/strangerthings-small.jpg",
-  },
-  {
-    name: "Breaking Bad",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/breakingbad-small.jpg",
-  },
-  {
-    name: "The Crown",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/crown-small.jpg",
-  },
-  {
-    name: "Game of Thrones",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/gameofthrones-small.jpg",
-  },
-  {
-    name: "The Mandalorian",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/mandalorian-small.jpg",
-  },
-];
-
-const MainVideo = ({ src, onOptions, poster, name }) => {
+const MainVideo = ({ src, poster, name, onOptions }) => {
   const videoRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
 
-  const [streamButton, setStreamButton] = useState(<BiPlay size={32} />);
   useEffect(() => {
     const videoJsOptions = {
       autoplay: false,
-      muted: true,
-      controls: false,
+      muted: false,
       responsive: true,
+      controls: true,
+      disablePictureInPicture: true,
       fluid: true,
       sources: [
         {
@@ -148,61 +67,62 @@ const MainVideo = ({ src, onOptions, poster, name }) => {
       ],
     };
 
-    const player = videojs(videoRef.current, videoJsOptions, function () {
-      // Player is ready
-    });
+    const player = videojs(videoRef.current, videoJsOptions, function () {});
 
-    // Add event listeners
     player.on("play", () => {
-      // Video play event
+      setPlaying(true);
     });
 
     player.on("pause", () => {
-      // Video pause event
+      setPlaying(false);
     });
 
     player.on("ended", () => {
-      // Video ended event
+      setPlaying(false);
     });
 
     return () => {
-      // Cleanup and dispose of the player
       if (player) {
         player.dispose();
       }
     };
   }, []);
 
-  const handleOptions = () => {
-    // Implement your logic to show options, e.g., open a modal
-    console.log("Options clicked");
+  const handleClick = () => {
+    if (playing) {
+      videoRef.current.pause();
+      setPlaying(false);
+    } else {
+      videoRef.current.play();
+      setPlaying(true);
+    }
   };
 
   const togglePlayPause = () => {
     if (videoRef.current) {
-      // Check if the video is paused and toggle accordingly
       if (videoRef.current.paused) {
         videoRef.current.play();
-        setStreamButton(<BiPause size={32} />); // Set the button icon to pause
       } else {
         videoRef.current.pause();
-        setStreamButton(<BiPlay size={32} />); // Set the button icon to play
       }
     }
   };
 
   return (
-    <Box position="relative" overflow={"hidden"}>
+    <Box position="relative" overflow="hidden">
       <style>
         {`
-                .video-js.vjs-fluid:not(.vjs-audio-only-mode),
-                .video-js.vjs-16-9:not(.vjs-audio-only-mode),
-                .video-js.vjs-4-3:not(.vjs-audio-only-mode),
-                .video-js.vjs-9-16:not(.vjs-audio-only-mode),
-                .video-js.vjs-1-1:not(.vjs-audio-only-mode) {
-                    height: 60vh; /* Reset the height to its default value */
-                }
-                `}
+          .video-js.vjs-fluid:not(.vjs-audio-only-mode),
+          .video-js.vjs-16-9:not(.vjs-audio-only-mode),
+          .video-js.vjs-4-3:not(.vjs-audio-only-mode),
+          .video-js.vjs-9-16:not(.vjs-audio-only-mode),
+          .video-js.vjs-1-1:not(.vjs-audio-only-mode) {
+            height: 60vh;
+          }
+          .vjs-big-play-button {
+            display: none !important;
+          }
+        `}
       </style>
 
       <video
@@ -210,45 +130,37 @@ const MainVideo = ({ src, onOptions, poster, name }) => {
         className="video-js vjs-default-skin"
         style={{
           padding: "0",
-          maxWidwth: "100vw",
+          maxWidth: "100vw",
           maxHeight: "60vh",
           objectFit: "cover",
         }}
         poster={poster}
+        onClick={handleClick}
+        playsInline
       />
-      <Button
-        position="absolute"
-        top="30%"
-        left="50%"
-        boxSize={16}
-        transform="translate(-50%, -50%)"
-        rounded={"full"}
-        size="sm"
-        bg="blackAlpha.600"
-        color="white"
-        onClick={togglePlayPause}
-      >
-        {streamButton}
-      </Button>
+
+      {!playing && (
+        <Button
+          position="absolute"
+          top="50%"
+          left="50%"
+          boxSize={16}
+          transform="translate(-50%, -50%)"
+          rounded="full"
+          size="sm"
+          bg="blackAlpha.600"
+          color="white"
+          onClick={togglePlayPause}
+        >
+          <BiPlay size={32} />
+        </Button>
+      )}
     </Box>
   );
 };
 
-const InfoOutline = ({ children }) => (
-  <Box
-    borderRadius={"5px"}
-    color={"#55DF01"}
-    fontSize={"0.8rem"}
-    p={"0.5rem"}
-    bg={"black"}
-    border={"1px solid #55DF01"}
-  >
-    {children}
-  </Box>
-);
-
 const Episodes = ({ episodesData, videoData, userId }) => {
-  // console.log("videoData", videoData);
+  console.log("EPISODE", episodesData);
   const [loading, setLoading] = useState(true);
   const [videoStatus, setVideoStatus] = useState("none");
   const SlashSlice = (fullPath) => {
@@ -304,13 +216,15 @@ const Episodes = ({ episodesData, videoData, userId }) => {
             {loading ? (
               <Skeleton height="180px" width="50%" />
             ) : shouldRenderVideoPlayer ? (
-              <Box maxWidth="100%" height={{ base: "100%", md: "auto" }}>
-                <VideoPlayer
-                  poster={`http://localhost:5000/uploadPicture/${poster}`}
-                  name={episode?.title}
-                  src={`http://localhost:5000/uploadVideos/${file}`}
-                />
-              </Box>
+              <Link href={`/User/Preview/${videoData}/${episode.id}`} passHref>
+                <Box maxWidth="100%" height={{ base: "100%", md: "auto" }}>
+                  <VideoPlayer
+                    poster={`http://localhost:5000/uploadPicture/${poster}`}
+                    name={episode?.title}
+                    src={`http://localhost:5000/uploadVideos/${file}`}
+                  />
+                </Box>
+              </Link>
             ) : (
               <></>
             )}
@@ -353,83 +267,6 @@ const Episodes = ({ episodesData, videoData, userId }) => {
   );
 };
 
-const Similar_Titles = () => {
-  return (
-    <>
-      <HStack
-        maxW="100%"
-        overflowX="auto"
-        className="scrollable-container"
-        spacing={"1rem"}
-      >
-        {ShowInfo.map((data, index) => (
-          <Box
-            key={index}
-            mt={"2rem"}
-            border={"1px solid transparent"}
-            cursor={"pointer"}
-            _hover={{ scale: "1.5" }}
-            height={"auto"}
-            minW={["80%", "300px"]}
-            mr={"1rem"}
-          >
-            <Video src={data.src} poster={data.poster} name={data.name} />
-            <Text>Dark</Text>
-          </Box>
-        ))}
-      </HStack>
-    </>
-  );
-};
-
-const Trailers = ({ trailersData }) => {
-  console.log(trailersData);
-  return (
-    <HStack
-      maxW="100%"
-      overflowX="auto"
-      className="scrollable-container"
-      spacing={"1rem"}
-    >
-      {trailersData?.map((data, index) => (
-        <Box
-          key={index}
-          mt={"2rem"}
-          border={"1px solid transparent"}
-          cursor={"pointer"}
-          _hover={{ scale: "1.5" }}
-          height={"auto"}
-          minW={["80%", "300px"]}
-          mr={"1rem"}
-        >
-          <Video
-            src={`http://localhost:5000/uploadVideos/${data.file}`}
-            poster={`http://localhost:5000/uploadPicture/${data.poster}`}
-            name={data.title}
-          />
-        </Box>
-      ))}
-    </HStack>
-  );
-};
-
-const Crew = ({ Cast, Genre, Category }) => {
-  return (
-    <>
-      <Text fontSize={"1.2rem"} color={"white"} mb={"1rem"}>
-        <b>Cast: </b>
-        {Cast}
-      </Text>
-      <Text fontSize={"1.2rem"} color={"white"} mb={"1rem"}>
-        <b>Genre:</b> {Genre}
-      </Text>
-      <Text fontSize={"1.2rem"} color={"white"} mb={"1rem"}>
-        <b>Category:</b> {Category}
-      </Text>
-    </>
-  );
-};
-
 const EpisodeOutline = ({ children, setContent, text }) => {
   const handleClick = (text) => {
     setContent(text);
@@ -440,11 +277,11 @@ const EpisodeOutline = ({ children, setContent, text }) => {
       _hover={{ color: "#55DF01", border: "1px solid #55DF01" }}
       _focus={{ color: "#55DF01", border: "1px solid #55DF01" }}
       _active={{ color: "#55DF01", border: "1px solid #55DF01" }}
-      width={"80%"}
+      width={"100%"}
       bg={"transparent"}
       fontWeight={["normal", "bold"]}
-      border={"1px solid #232323"}
-      color={"white"}
+      border={"1px solid #55DF01"}
+      color={"#55DF01"}
       onClick={() => handleClick(text)}
       borderRadius={"0"}
       py={4}
@@ -456,95 +293,14 @@ const EpisodeOutline = ({ children, setContent, text }) => {
   );
 };
 
-function PurchaseModal({
-  onClose,
-  isOpen,
-  rentedAmount,
-  purchasingAmount,
-  video_id,
-}) {
-  const router = useRouter();
-
-  const handleBuyNowClick = () => {
-    router.push({
-      pathname: "/User/PurchaseForm",
-      query: { videoId: video_id },
-    });
-  };
-
-  const handleRentNowClick = () => {
-    router.push({
-      pathname: "/User/RentForm",
-      query: { videoId: video_id },
-    });
-  };
-  return (
-    <>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalContent
-          margin={["1rem", "auto"]}
-          alignItems={"center"}
-          bg={"#323232"}
-        >
-          <ModalCloseButton />
-          <ModalBody p={[8, 10]} w={"100%"} justifyContent={"center"}>
-            <Heading mb={8} size={"md"} textAlign={"center"}>
-              Purchase Plan
-            </Heading>
-            <HStack
-              p={2}
-              borderRadius={"5px"}
-              mb={4}
-              bg={"#414141"}
-              justifyContent={"space-between"}
-              spacing={[2, 8]}
-            >
-              <p>Rent Video</p>
-              {/* <p>UHD</p> */}
-              <p>${rentedAmount}</p>
-              <Button size={"sm"} p={4} onClick={handleRentNowClick}>
-                Rent Now
-              </Button>
-            </HStack>
-            <HStack
-              p={2}
-              borderRadius={"5px"}
-              mb={4}
-              bg={"#414141"}
-              justifyContent={"space-between"}
-              spacing={[2, 8]}
-            >
-              <p>Buy Video</p>
-              {/* <p>SD</p> */}
-              <p>${purchasingAmount}</p>
-              <Button size={"sm"} p={4} onClick={handleBuyNowClick}>
-                Buy Now
-              </Button>
-            </HStack>
-            <Flex justifyContent={"center"}>
-              <Button px={[10, 16]} my={[4, 8]} onClick={onClose}>
-                Cancel
-              </Button>
-            </Flex>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </>
-  );
-}
-
 const Preview = () => {
   const router = useRouter();
   const [isReadMoreOpen, setisReadMoreOpen] = useState(false);
-  const [content, setContent] = useState("");
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [content, setContent] = useState("Episodes");
   const [videoData, setVideoData] = useState();
-  const [creatorData, setCreatorData] = useState();
+  // const [creatorData, setCreatorData] = useState();
   const [episodesData, setEpisodesData] = useState();
-  const [trailersData, setTrailersData] = useState();
-  const Cast = videoData?.Cast;
-  const Genre = videoData?.Genre;
-  const Category = videoData?.category;
+  const [episodeData, setEpisodeData] = useState();
   const userData = JSON.parse(localStorage.getItem("User"));
   const userId = userData?.user?.userId;
 
@@ -552,7 +308,6 @@ const Preview = () => {
     const fetchVideo = async () => {
       const { id } = router.query;
       if (id) {
-        // console.log("here it is", id);
         try {
           const response = await axios.get(`${server}user/getSerie?id=${id}`, {
             headers: {
@@ -560,14 +315,11 @@ const Preview = () => {
             },
             withCredentials: true,
           });
-
           setVideoData(response?.data.video);
-          setCreatorData(response?.data.contentCreator);
-          setTrailersData(response?.data.video?.trailers);
           setEpisodesData(response?.data.video?.episodes);
+          console.log(episodesData);
         } catch (err) {
           console.log(err);
-          // Handle error, e.g., set state to indicate an error
         }
       }
     };
@@ -575,29 +327,35 @@ const Preview = () => {
     fetchVideo();
   }, [router.query.id]);
 
+  useEffect(() => {
+    const fetchEpisode = async () => {
+      const { episodeId } = router.query;
+      console.log("EPISODE ID", episodeId);
+      if (episodeId) {
+        try {
+          const episodeResponse = await axios.get(
+            `${server}creator/episodes/${episodeId}`,
+            {
+              headers: {
+                "Content-type": "application/json",
+              },
+              withCredentials: true,
+            }
+          );
+
+          console.log("EPI RES:", episodeResponse.data.episode);
+          setEpisodeData(episodeResponse?.data.episode);
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
+
+    fetchEpisode();
+  }, [router.query.episodeId]);
+
   const toggleReadMore = () => {
     setisReadMoreOpen(!isReadMoreOpen);
-  };
-
-  const AddToFavourite = async () => {
-    const userData = JSON.parse(localStorage.getItem("User"));
-    const userId = userData?.user?.userId;
-    const videoId = videoData.id;
-
-    try {
-      const response = await axios.post(
-        `${server}user/favourites`,
-        { userId, videoId },
-        {
-          headers: {
-            "Content-type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   return (
@@ -606,30 +364,17 @@ const Preview = () => {
         mt={"1rem"}
         border={"1px solid transparent"}
         cursor={"pointer"}
-        minH={"100vh"}
         maxW={"100vw"}
         overflow={"hidden"}
       >
         <MainVideo
-          src={"https://vjs.zencdn.net/v/oceans.mp4"}
-          poster={"/assests/Shows/dark.png"}
-          name={"Dark"}
+          src={`${videoServer}/Episode1.mp4`}
+          poster={"/assests/Shows/MulanJourney.png"}
+          name={episodeData?.title}
         />
       </Box>
       <Box mx={["1rem", "2rem"]}>
-        <VStack w={"100%"} alignItems={"flex-start"} mt={[4, 8]}>
-          {/* <Heading fontWeight={"semibold"} textAlign={"start"} size={"lg"}>
-            Preview
-          </Heading> */}
-          {/* <HStack spacing={"0.5rem"}>
-            <InfoOutline>On Trending</InfoOutline>
-            <InfoOutline>4.5</InfoOutline>
-            <InfoOutline>18+</InfoOutline>
-            <InfoOutline>HD</InfoOutline>
-          </HStack> */}
-        </VStack>
-
-        <VStack w={"100%"} alignItems={["center", "flex-start"]}>
+        <VStack w={"100%"} alignItems={["center", "flex-start"]} mb={[10, 20]}>
           <Stack
             w={"100%"}
             direction={["column", "row"]}
@@ -638,42 +383,54 @@ const Preview = () => {
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            <Box w={"100%"}>
+            <Box w={"70%"}>
               <Heading size={"xl"} fontWeight={"bold"}>
-                {videoData?.name ? videoData.name : ""}
+                {episodeData?.title ? episodeData.title : ""}
               </Heading>
+              <span>{episodeData?.views} Views</span>
             </Box>
-            <Stack
+            {/* <Stack
               w={["100%", "auto"]}
               direction={["column", "row"]}
               spacing={"1rem"}
+            > */}
+            <Button
+              leftIcon={<ArrowBackIcon size={20} />}
+              variant={"outline"}
+              w={"auto"}
+              onClick={() => router.back()}
             >
-              <Button
-                leftIcon={<ArrowBackIcon size={20} />}
-                variant={"outline"}
-                onClick={onOpen}
-              >
-                Go Back
-              </Button>
-            </Stack>
+              Go Back
+            </Button>
+            {/* </Stack> */}
           </Stack>
 
           <Box w={["100%", "40%"]}>
-            <Collapse startingHeight={"20"} in={isReadMoreOpen}>
-              <Text>{videoData?.description}</Text>
+            <Collapse startingHeight={"20"} isOpen={isReadMoreOpen}>
+              <Text>{episodeData?.description}</Text>
             </Collapse>
-            {!isReadMoreOpen && (
-              <Button onClick={toggleReadMore} size="sm" variant="link">
-                Read More
-              </Button>
-            )}
-            {isReadMoreOpen && (
-              <Button onClick={toggleReadMore} size="sm" variant="link">
-                Read Less
-              </Button>
-            )}
+            <Button size="sm" onClick={toggleReadMore}>
+              Show {isReadMoreOpen ? "Less" : "More"}
+            </Button>
           </Box>
         </VStack>
+
+        <Flex
+          width={"100%"}
+          py={["auto", "2rem"]}
+          borderRight={"2px solid black"}
+        >
+          <EpisodeOutline text="Episodes" setContent={setContent}>
+            Episodes
+          </EpisodeOutline>
+        </Flex>
+        {content === "Episodes" ? (
+          <Episodes
+            episodesData={episodesData}
+            videoData={videoData?.id}
+            userId={userId}
+          />
+        ) : null}
       </Box>
     </UserTemplate>
   );
