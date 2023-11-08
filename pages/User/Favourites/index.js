@@ -460,7 +460,7 @@ const Channels = () => {
         console.log("Videos", videos);
         console.log(channel);
         return (
-          <Box px={["2rem", "5rem"]}>
+          <Box px={["2rem", "5rem"]} key={index}>
             <Heading size={"lg"}>{channel.name}</Heading>
             <Box>
               <HStack

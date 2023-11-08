@@ -569,7 +569,7 @@ const Channels = () => {
         console.log("Videos", videos);
         console.log(channel);
         return (
-          <Box px={["2rem", "5rem"]}>
+          <Box px={["2rem", "5rem"]} key={index}>
             <Heading size={"lg"}>{channel.name}</Heading>
             <Box>
               <HStack
@@ -625,6 +625,7 @@ const Carousal = () => {
         h={"300px"}
         w={"1500px"}
         src="/assests/Shows/dark.png"
+        alt=""
       />
     </div>,
     <div className="item" data-value="2">
@@ -633,6 +634,7 @@ const Carousal = () => {
         h={"300px"}
         w={"1500px"}
         src="/assests/Shows/riverdale.jpg"
+        alt=""
       />
     </div>,
     <div className="item" data-value="3">
@@ -641,6 +643,7 @@ const Carousal = () => {
         h={"300px"}
         w={"1500px"}
         src="/assests/Shows/gameofthrones.jpg"
+        alt=""
       />
     </div>,
     <div className="item" data-value="4">
@@ -648,6 +651,7 @@ const Carousal = () => {
         px={"1rem"}
         h={"300px"}
         w={"1500px"}
+        alt=""
         src="/assests/Shows/strangerthings.jpg"
       />
     </div>,

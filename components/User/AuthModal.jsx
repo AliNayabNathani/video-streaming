@@ -126,7 +126,7 @@ const SignIn = ({ setAuthChoice }) => {
 
         <Box textAlign={"center"} w={"100%"}>
           <Text color={"#fff"} mb={"0.5rem"}>
-            If you don't have a account then{" "}
+            If you do not have a account then
             <a
               style={{ color: "#55DF01", cursor: "pointer" }}
               onClick={() => setAuthChoice("Signup")}
