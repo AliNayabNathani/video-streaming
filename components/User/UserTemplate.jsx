@@ -26,6 +26,7 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { BsDownload } from "react-icons/bs";
 import { useRouter } from "next/router";
 import { logout } from "../../features/auth/authSlice";
+import Link from "next/link";
 
 const Navbar = ({ currActive }) => {
   const user = useSelector((state) => state.auth);
@@ -56,36 +57,42 @@ const Navbar = ({ currActive }) => {
         justifyContent={"space-around"}
         fontWeight={"bold"}
       >
-        <a
-          style={{
-            cursor: "pointer",
-            color: activeLink === "Home" ? "#55DF01" : "",
-          }}
-          href="/User/Dashboard"
-          onClick={() => setActiveLink("Home")}
-        >
-          Home
-        </a>
-        <a
-          style={{
-            cursor: "pointer",
-            color: activeLink === "Favourites" ? "#55DF01" : "",
-          }}
-          href="/User/Favourites"
-          onClick={() => setActiveLink("Favourites")}
-        >
-          Favourites
-        </a>
-        <a
-          style={{
-            cursor: "pointer",
-            color: activeLink === "PPV" ? "#55DF01" : "",
-          }}
-          href="/User/PPV"
-          onClick={() => setActiveLink("PPV")}
-        >
-          PPV
-        </a>
+        <Link href="/User/Dashboard">
+          <a
+            style={{
+              cursor: "pointer",
+              color: activeLink === "Home" ? "#55DF01" : "",
+            }}
+            // href="/User/Dashboard"
+            onClick={() => setActiveLink("Home")}
+          >
+            Home
+          </a>
+        </Link>
+        <Link href="/User/Favourites">
+          <a
+            style={{
+              cursor: "pointer",
+              color: activeLink === "Favourites" ? "#55DF01" : "",
+            }}
+            // href="/User/Favourites"
+            onClick={() => setActiveLink("Favourites")}
+          >
+            Favourites
+          </a>
+        </Link>
+        <Link href="/User/Favourites">
+          <a
+            style={{
+              cursor: "pointer",
+              color: activeLink === "PPV" ? "#55DF01" : "",
+            }}
+            href="/User/PPV"
+            onClick={() => setActiveLink("PPV")}
+          >
+            PPV
+          </a>
+        </Link>
         {/* <a
           style={{
             cursor: "pointer",
@@ -96,7 +103,7 @@ const Navbar = ({ currActive }) => {
         >
           Friends
         </a> */}
-        <a
+        {/* <a
           style={{
             cursor: "pointer",
             color: activeLink === "Theatre" ? "#55DF01" : "",
@@ -105,7 +112,7 @@ const Navbar = ({ currActive }) => {
           onClick={() => setActiveLink("Theatre")}
         >
           In Theatres
-        </a>
+        </a> */}
       </HStack>
 
       <HStack w={"20%"} justifyContent={"flex-end"}>
@@ -233,20 +240,26 @@ const UserTemplate = ({ children }) => {
         alignItems={"center"}
       >
         <Box textAlign={"center"} w={"25%"} p={4} border={"1px solid black"}>
-          <a href="/User/Dashboard">Home</a>
+          <Link href="/User/Dashboard">
+            <a>Home</a>
+          </Link>
         </Box>
         <Box textAlign={"center"} w={"30%"} p={4} border={"1px solid black"}>
-          <a href="/User/Favourites">Favourites</a>
+          <Link href="/User/Favourites">
+            <a>Favourites</a>
+          </Link>
         </Box>
         <Box textAlign={"center"} w={"20%"} p={4} border={"1px solid black"}>
-          <a href="/User/PPV">PPV</a>
+          <Link href="/User/PPV">
+            <a>PPV</a>
+          </Link>
         </Box>
         {/* <Box textAlign={"center"} w={"20%"} p={4} border={"1px solid black"}>
           <a href="/User/Friends">Friends</a>
         </Box> */}
-        <Box textAlign={"center"} w={"25%"} p={4} border={"1px solid black"}>
+        {/* <Box textAlign={"center"} w={"25%"} p={4} border={"1px solid black"}>
           <a href="/User/Theatre">In Theaters</a>
-        </Box>
+        </Box> */}
       </HStack>
     </Box>
   );
