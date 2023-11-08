@@ -628,9 +628,8 @@ const Sports = ({ setContent, setCategories }) => {
   return (
     <SimpleGrid columns={[1, 2]} spacing={4}>
       {Liveshows.map((data, index) => (
-        <GridItem>
+        <GridItem key={index}>
           <Box
-            key={index}
             mt={"2rem"}
             border={"1px solid transparent"}
             cursor={"pointer"}

@@ -17,7 +17,7 @@ import {
 
 import ReactPaginate from "react-paginate";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import "./Table.css";
+import styles from "./Table.module.css";
 import { BiEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/router";
@@ -200,8 +200,8 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             onPageChange={handlePageClick}
-            containerClassName={"pagination"}
-            activeClassName={"active"}
+            containerClassName={"styles.pagination"}
+            activeClassName={"styles.active"}
           />
         </>
       ) : null}

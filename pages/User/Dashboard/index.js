@@ -619,7 +619,7 @@ const Carousal = () => {
   };
 
   const items = [
-    <div className="item" data-value="1">
+    <div key="1" className="item" data-value="1">
       <Image
         px={"1rem"}
         h={"300px"}
@@ -628,7 +628,7 @@ const Carousal = () => {
         alt=""
       />
     </div>,
-    <div className="item" data-value="2">
+    <div key="2" className="item" data-value="2">
       <Image
         px={"1rem"}
         h={"300px"}
@@ -637,7 +637,7 @@ const Carousal = () => {
         alt=""
       />
     </div>,
-    <div className="item" data-value="3">
+    <div key="3" className="item" data-value="3">
       <Image
         px={"1rem"}
         h={"300px"}
@@ -646,7 +646,7 @@ const Carousal = () => {
         alt=""
       />
     </div>,
-    <div className="item" data-value="4">
+    <div key="4" className="item" data-value="4">
       <Image
         px={"1rem"}
         h={"300px"}
