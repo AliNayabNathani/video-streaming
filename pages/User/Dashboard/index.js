@@ -91,19 +91,34 @@ const Movies = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
   // console.log("MovieData: ", MovieData);x
-  const categories = [
-    "Action",
-    "Comedy",
-    "Drama",
-    "Sci-Fi",
-    "Fantasy",
-    "Horror",
-    "Documentary",
-  ];
+  // const categories = [
+  //   "Action",
+  //   "Comedy",
+  //   "Drama",
+  //   "Sci-Fi",
+  //   "Fantasy",
+  //   "Horror",
+  //   "Documentary",
+  // ];
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${server}user/getGenres`);
+        console.log(response.data.categories);
+        setCategories(response.data.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
