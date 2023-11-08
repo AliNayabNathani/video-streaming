@@ -167,7 +167,6 @@ const SignUp = ({ setAuthChoice }) => {
     mobile_number: "",
     confirm_password: "",
   });
-
   const { name, password, email, mobile_number, confirm_password, gender } =
     Info;
 
