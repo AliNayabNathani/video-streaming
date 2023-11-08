@@ -49,6 +49,7 @@ const Navbar = ({ currActive }) => {
         w={"150px"}
         h={"50px"}
         src="/assests/videe0/Logo/Black _ White/sideBarLogo.png"
+        alt=""
       />
       <HStack
         display={["none", "flex"]}
@@ -81,13 +82,13 @@ const Navbar = ({ currActive }) => {
             Favourites
           </a>
         </Link>
-        <Link href="/User/Favourites">
+        <Link href="/User/PPV">
           <a
             style={{
               cursor: "pointer",
               color: activeLink === "PPV" ? "#55DF01" : "",
             }}
-            href="/User/PPV"
+            // href="/User/PPV"
             onClick={() => setActiveLink("PPV")}
           >
             PPV
@@ -214,7 +215,7 @@ const Navbar = ({ currActive }) => {
             </MenuItem>
           </MenuList>
         </Menu>
-        <Image />
+        {/* <Image /> */}
       </HStack>
     </HStack>
   );
