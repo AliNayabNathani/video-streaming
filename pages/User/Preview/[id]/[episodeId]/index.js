@@ -40,7 +40,11 @@ import { VideoPlayer } from "../../../../../components/Client/Reusable Component
 import { Video } from "../../../Dashboard";
 import "../../../Style.css";
 import axios from "axios";
-import { server, videoServer } from "../../../../../components/server";
+import {
+  pictureServer,
+  server,
+  videoServer,
+} from "../../../../../components/server";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { ArrowBackIcon } from "@chakra-ui/icons";
@@ -81,11 +85,11 @@ const MainVideo = ({ src, poster, name, onOptions }) => {
       setPlaying(false);
     });
 
-    return () => {
-      if (player) {
-        player.dispose();
-      }
-    };
+    // return () => {
+    //   if (player) {
+    //     player.dispose();
+    //   }
+    // };
   }, []);
 
   const handleClick = () => {
@@ -219,9 +223,9 @@ const Episodes = ({ episodesData, videoData, userId }) => {
               <Link href={`/User/Preview/${videoData}/${episode.id}`} passHref>
                 <Box maxWidth="100%" height={{ base: "100%", md: "auto" }}>
                   <VideoPlayer
-                    poster={`http://localhost:5000/uploadPicture/${poster}`}
+                    poster={`${pictureServer}/${poster || "No_Image.jpg"}`}
                     name={episode?.title}
-                    src={`http://localhost:5000/uploadVideos/${file}`}
+                    src={`${videoServer}/${file || "v2.mp4"}`}
                   />
                 </Box>
               </Link>
@@ -303,7 +307,9 @@ const Preview = () => {
   const [episodeData, setEpisodeData] = useState();
   const userData = JSON.parse(localStorage.getItem("User"));
   const userId = userData?.user?.userId;
-
+  const replaceSpacesWithPercent20 = (inputString) => {
+    return inputString.replace(/ /g, "%20");
+  };
   useEffect(() => {
     const fetchVideo = async () => {
       const { id } = router.query;
@@ -317,7 +323,6 @@ const Preview = () => {
           });
           setVideoData(response?.data.video);
           setEpisodesData(response?.data.video?.episodes);
-          console.log(episodesData);
         } catch (err) {
           console.log(err);
         }
@@ -367,11 +372,25 @@ const Preview = () => {
         maxW={"100vw"}
         overflow={"hidden"}
       >
-        <MainVideo
-          src={`${videoServer}/Episode1.mp4`}
-          poster={"/assests/Shows/MulanJourney.png"}
-          name={episodeData?.title}
-        />
+        {episodeData && (
+          <MainVideo
+            src={
+              episodeData
+                ? `${videoServer}/${replaceSpacesWithPercent20(
+                    episodeData?.file
+                  )}`
+                : `${videoServer}/${"v2.mp4"}`
+            }
+            poster={
+              episodeData
+                ? `${pictureServer}/${replaceSpacesWithPercent20(
+                    episodeData?.poster
+                  )}`
+                : `${videoServer}/${"No_Image.jpg"}`
+            }
+            name={episodeData?.title}
+          />
+        )}
       </Box>
       <Box mx={["1rem", "2rem"]}>
         <VStack w={"100%"} alignItems={["center", "flex-start"]} mb={[10, 20]}>

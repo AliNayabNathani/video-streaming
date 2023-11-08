@@ -33,7 +33,7 @@ import "../Style.css";
 import { MdCancel } from "react-icons/md";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { server } from "../../../components/server";
+import { pictureServer, server, videoServer } from "../../../components/server";
 import {
   Modal,
   ModalOverlay,
@@ -232,16 +232,25 @@ const Movies = () => {
                             _hover={{ scale: "1.5" }}
                             height={"auto"}
                             onClick={() =>
-                              router.push(
-                                `/User/Preview?creatorId=${video.content_creator_id}&id=${video.id}`
-                              )
+                              router.push(`/User/Preview/${video.id}`)
                             }
                             minW={["80%", "300px"]}
                             mr={"1rem"}
                           >
                             <Video
-                              src={"https://vjs.zencdn.net/v/oceans.mp4"}
-                              poster={"/assests/Shows/dark-small.jpg"}
+                              src={
+                                video.trailers && video.trailers.length > 0
+                                  ? `${videoServer}/${video.trailers[0]?.file}`
+                                  : "https://vjs.zencdn.net/v/oceans.mp4"
+                              }
+                              poster={
+                                video.trailers && video.trailers.length > 0
+                                  ? `${pictureServer}/${
+                                      video.trailers[0]?.poster ||
+                                      "No_Image.jpg"
+                                    }`
+                                  : `${pictureServer}/No_Image.jpg`
+                              }
                               name={video.name}
                             />
                           </Box>
@@ -837,9 +846,21 @@ const Shows = () => {
                             minW={["80%", "300px"]}
                             mr={"1rem"}
                           >
+                            {/* {console.log("ME HERE:", video)} */}
                             <Video
-                              src={"https://vjs.zencdn.net/v/oceans.mp4"}
-                              poster={"/assests/Shows/dark-small.jpg"}
+                              src={
+                                video.trailers && video.trailers.length > 0
+                                  ? `${videoServer}/${video.trailers[0]?.file}`
+                                  : "https://vjs.zencdn.net/v/oceans.mp4"
+                              }
+                              poster={
+                                video.trailers && video.trailers.length > 0
+                                  ? `${pictureServer}/${
+                                      video.trailers[0]?.poster ||
+                                      "No_Image.jpg"
+                                    }`
+                                  : `${pictureServer}/No_Image.jpg`
+                              }
                               name={video.name}
                             />
                           </Box>

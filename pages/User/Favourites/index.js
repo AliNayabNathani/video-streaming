@@ -611,7 +611,7 @@ const Shows = () => {
 };
 
 const Dashboard = (text) => {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState("shows");
   const handleClick = (text) => {
     setContent(text);
   };
@@ -625,6 +625,7 @@ const Dashboard = (text) => {
             <Flex width={"100%"} py={"2rem"} borderRight={"2px solid black"}>
               <Button
                 _active={{ color: "white", bg: "#55DF01" }}
+                autoFocus
                 width={"80%"}
                 variant={"outline"}
                 onClick={() => handleClick("shows")}

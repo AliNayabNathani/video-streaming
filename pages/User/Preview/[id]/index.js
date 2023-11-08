@@ -133,6 +133,8 @@ const ShowInfo = [
 ];
 
 const MainVideo = ({ src, poster, name, onOptions }) => {
+  console.log("src", src);
+  console.log("posster:", poster);
   const videoRef = useRef(null);
   const [playing, setPlaying] = useState(false);
 
@@ -140,9 +142,9 @@ const MainVideo = ({ src, poster, name, onOptions }) => {
     const videoJsOptions = {
       autoplay: false,
       muted: true,
-      controls: false,
-      responsive: true,
+      controls: true,
       fluid: true,
+      responsive: true,
       sources: [
         {
           src,
@@ -166,14 +168,7 @@ const MainVideo = ({ src, poster, name, onOptions }) => {
     player.on("ended", () => {
       setPlaying(false);
     });
-
-    return () => {
-      // Cleanup and dispose of the player
-      if (player) {
-        player.dispose();
-      }
-    };
-  }, []);
+  }, [src, poster]);
 
   const togglePlayPause = () => {
     if (videoRef.current) {
@@ -205,6 +200,9 @@ const MainVideo = ({ src, poster, name, onOptions }) => {
           .video-js.vjs-9-16:not(.vjs-audio-only-mode),
           .video-js.vjs-1-1:not(.vjs-audio-only-mode) {
             height: 60vh;
+          }
+          .vjs-big-play-button {
+            display: none !important;
           }
         `}
       </style>
@@ -315,9 +313,9 @@ const Episodes = ({ episodesData, videoData, userId }) => {
               <Link href={`/User/Preview/${videoData}/${episode.id}`} passHref>
                 <Box maxWidth="100%" height={{ base: "100%", md: "auto" }}>
                   <VideoPlayer
-                    poster={`${pictureServer}/${poster}`}
+                    poster={`${pictureServer}/${poster || "No_Image.jpg"}`}
                     name={episode?.title}
-                    src={`${videoServer}/${file}`}
+                    src={`${videoServer}/${file || "v2.mp4"}`}
                   />
                 </Box>
               </Link>
@@ -392,8 +390,12 @@ const Similar_Titles = () => {
   );
 };
 
-const Trailers = ({ trailersData }) => {
+const Trailers = ({ trailersData, setSelectedTrailer }) => {
   console.log(trailersData);
+
+  const handleTrailerClick = (trailer) => {
+    setSelectedTrailer(trailer);
+  };
   return (
     <HStack
       maxW="100%"
@@ -411,10 +413,12 @@ const Trailers = ({ trailersData }) => {
           height={"auto"}
           minW={["80%", "300px"]}
           mr={"1rem"}
+          onClick={() => handleTrailerClick(data)}
         >
+          {/* {console.log("ME DATA:", data.file)} */}
           <Video
-            src={`http://localhost:5000/uploadVideos/${data.file}`}
-            poster={`http://localhost:5000/uploadPicture/${data.poster}`}
+            src={`${videoServer}/${data?.file || "v2.mp4"}`}
+            poster={`${pictureServer}/${data?.poster || "No_Image.jpg"}`}
             name={data.title}
           />
         </Box>
@@ -553,15 +557,21 @@ const Preview = () => {
   const [episodesData, setEpisodesData] = useState();
   const [trailersData, setTrailersData] = useState();
   const [videoStatus, setVideoStatus] = useState("none");
+  const [selectedTrailer, setSelectedTrailer] = useState(null);
   const Cast = videoData?.Cast;
   const Genre = videoData?.Genre;
   const Category = videoData?.category;
   const userData = JSON.parse(localStorage.getItem("User"));
   const userId = userData?.user?.userId;
-
+  console.log("SELCTEDTrailer", selectedTrailer);
+  console.log("TrailerDATA", trailersData);
+  const replaceSpacesWithPercent20 = (inputString) => {
+    return inputString.replace(/ /g, "%20");
+  };
   useEffect(() => {
     const fetchVideo = async () => {
       const { id } = router.query;
+      console.log(id);
       if (id) {
         try {
           const response = await axios.get(`${server}user/getSerie?id=${id}`, {
@@ -570,8 +580,7 @@ const Preview = () => {
             },
             withCredentials: true,
           });
-          console.log("VIDEO", videoData);
-          console.log("Trailer", trailersData);
+
           setVideoData(response?.data.video);
           setCreatorData(response?.data.contentCreator);
           setTrailersData(response?.data.video?.trailers);
@@ -643,11 +652,38 @@ const Preview = () => {
         maxW={"100vw"}
         overflow={"hidden"}
       >
-        <MainVideo
-          src={"https://vjs.zencdn.net/v/oceans.mp4"}
-          poster={"/assests/Shows/MulanJourney.png"}
-          name={"Dark"}
-        />
+        {trailersData && trailersData.length >= 0 && (
+          <MainVideo
+            src={
+              trailersData && trailersData.length > 0
+                ? `${videoServer}/${replaceSpacesWithPercent20(
+                    trailersData[0]?.file
+                  )}`
+                : selectedTrailer
+                ? `${videoServer}/${replaceSpacesWithPercent20(
+                    selectedTrailer.file
+                  )}`
+                : `${videoServer}/${"v2.mp4"}`
+            }
+            poster={
+              trailersData && trailersData.length > 0
+                ? `${pictureServer}/${replaceSpacesWithPercent20(
+                    trailersData[0]?.poster
+                  )}`
+                : selectedTrailer
+                ? `${pictureServer}/${replaceSpacesWithPercent20(
+                    selectedTrailer?.poster
+                  )}`
+                : `${pictureServer}/${"No_Image.jpg"}`
+            }
+            // poster={
+            //   selectedTrailer
+            //     ? `${pictureServer}/${selectedTrailer.poster}`
+            //     : `${pictureServer}/No_Image.jpg`
+            // }
+            name={selectedTrailer ? selectedTrailer.title : ""}
+          />
+        )}
       </Box>
       <Box mx={["1rem", "2rem"]}>
         <VStack w={"100%"} alignItems={"flex-start"} mt={[4, 8]}>
@@ -741,9 +777,9 @@ const Preview = () => {
               Episodes
             </EpisodeOutline>
 
-            <EpisodeOutline text="Similar titles" setContent={setContent}>
+            {/* <EpisodeOutline text="Similar titles" setContent={setContent}>
               Similar Titles
-            </EpisodeOutline>
+            </EpisodeOutline> */}
 
             <EpisodeOutline text="Trailers" setContent={setContent}>
               Trailers
@@ -760,13 +796,17 @@ const Preview = () => {
             videoData={videoData?.id}
             userId={userId}
           />
-        ) : content === "Similar titles" ? (
-          <Similar_Titles />
         ) : content === "Trailers" ? (
-          <Trailers trailersData={trailersData} />
+          <Trailers
+            trailersData={trailersData}
+            setSelectedTrailer={setSelectedTrailer}
+          />
         ) : content === "Crew" ? (
           <Crew Cast={Cast} Genre={Genre} Category={Category} />
         ) : null}
+        {/* : content === "Similar titles" ? (
+          <Similar_Titles />
+        ) */}
       </Box>
       <PurchaseModal
         onClose={onClose}

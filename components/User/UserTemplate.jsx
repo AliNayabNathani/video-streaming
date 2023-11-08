@@ -28,13 +28,14 @@ import { useRouter } from "next/router";
 import { logout } from "../../features/auth/authSlice";
 import Link from "next/link";
 
-const Navbar = ({ currActive }) => {
+const Navbar = () => {
   const user = useSelector((state) => state.auth);
   const router = useRouter();
   const dispatch = useDispatch();
-  const [activeLink, setActiveLink] = useState(currActive);
-  const handleLogout = () => {
-    dispatch(logout());
+  const [activeLink, setActiveLink] = useState("");
+  // console.log("active:", activeLink);
+  const handleLogout = async () => {
+    await dispatch(logout());
     router.push("/User");
   };
 
@@ -58,7 +59,7 @@ const Navbar = ({ currActive }) => {
         justifyContent={"space-around"}
         fontWeight={"bold"}
       >
-        <Link href="/User/Dashboard">
+        <Link href="/User/Dashboard" legacyBehavior>
           <a
             style={{
               cursor: "pointer",
@@ -70,7 +71,7 @@ const Navbar = ({ currActive }) => {
             Home
           </a>
         </Link>
-        <Link href="/User/Favourites">
+        <Link href="/User/Favourites" legacyBehavior>
           <a
             style={{
               cursor: "pointer",
@@ -82,7 +83,7 @@ const Navbar = ({ currActive }) => {
             Favourites
           </a>
         </Link>
-        <Link href="/User/PPV">
+        <Link href="/User/PPV" legacyBehavior>
           <a
             style={{
               cursor: "pointer",
@@ -241,19 +242,13 @@ const UserTemplate = ({ children }) => {
         alignItems={"center"}
       >
         <Box textAlign={"center"} w={"25%"} p={4} border={"1px solid black"}>
-          <Link href="/User/Dashboard">
-            <a>Home</a>
-          </Link>
+          <Link href="/User/Dashboard">Home</Link>
         </Box>
         <Box textAlign={"center"} w={"30%"} p={4} border={"1px solid black"}>
-          <Link href="/User/Favourites">
-            <a>Favourites</a>
-          </Link>
+          <Link href="/User/Favourites">Favourites</Link>
         </Box>
         <Box textAlign={"center"} w={"20%"} p={4} border={"1px solid black"}>
-          <Link href="/User/PPV">
-            <a>PPV</a>
-          </Link>
+          <Link href="/User/PPV">PPV</Link>
         </Box>
         {/* <Box textAlign={"center"} w={"20%"} p={4} border={"1px solid black"}>
           <a href="/User/Friends">Friends</a>
