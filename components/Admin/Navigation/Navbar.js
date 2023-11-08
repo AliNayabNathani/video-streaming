@@ -1,4 +1,3 @@
-
 import {
   IconButton,
   Avatar,
@@ -34,27 +33,27 @@ import { ImTicket } from "react-icons/im";
 import { BsFillBellFill } from "react-icons/bs";
 import { FiMenu, FiChevronDown, FiBell } from "react-icons/fi";
 import { useRouter } from "next/router";
-import "./Navbar.css";
+import styles from "./Navbar.module.css";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
 const NotifData = [
   {
-    msg: 'New Video Uploaded',
-    desc: 'Mark has uploaded a new video: "Exploring the Great Outdoors"'
+    msg: "New Video Uploaded",
+    desc: 'Mark has uploaded a new video: "Exploring the Great Outdoors"',
   },
   {
-    msg: 'Comment on Your Video',
-    desc: 'You have a new comment on your video: "How to Bake the Perfect Cake"'
+    msg: "Comment on Your Video",
+    desc: 'You have a new comment on your video: "How to Bake the Perfect Cake"',
   },
   {
-    msg: 'Channel Subscription',
-    desc: 'User123 has subscribed to your channel!'
+    msg: "Channel Subscription",
+    desc: "User123 has subscribed to your channel!",
   },
   {
-    msg: 'Video Purchased',
-    desc: 'You have successfuly Purchased the Video: "Great Web of lies"'
-  }
+    msg: "Video Purchased",
+    desc: 'You have successfuly Purchased the Video: "Great Web of lies"',
+  },
 ];
 
 const LinkItems = [
@@ -220,8 +219,8 @@ const MobileNav = ({ onOpen, ...rest }) => {
   const router = useRouter();
 
   const handleProfileRoute = () => {
-    router.push('/Admin/Profile');
-  }
+    router.push("/Admin/Profile");
+  };
   return (
     <Flex
       ml={{ base: 0, md: "20rem" }}
@@ -252,18 +251,14 @@ const MobileNav = ({ onOpen, ...rest }) => {
         justifyContent={"space-between"}
         spacing={{ base: "0", md: "6" }}
       > */}
-      <Text suppressHydrationWarning={true} className="hide-on-small">
+      <Text suppressHydrationWarning={true} className="styles.hide-on-small">
         Hi {user?.user?.user?.name}!! Welcome to administrative panel
       </Text>
 
       <Flex>
-
         <Menu>
-          <MenuButton
-            cursor={'pointer'}
-            minW={0}
-          >
-            <Box >
+          <MenuButton cursor={"pointer"} minW={0}>
+            <Box>
               <Icon
                 mr={"2rem"}
                 borderRadius={"0"}
@@ -273,25 +268,29 @@ const MobileNav = ({ onOpen, ...rest }) => {
                 color={"whiteAlpha.600"}
                 _hover={{ color: "#55DF01" }}
                 aria-label="open menu"
-                cursor={'pointer'}
+                cursor={"pointer"}
                 as={FiBell}
               />
             </Box>
           </MenuButton>
 
-          <MenuList w={'600px'} p={0} m={0}>
-            <MenuItem p={3} color={'white'} bg={'#232323'}>
-              <HStack w={'100%'} justifyContent={'space-between'}>
-                <Heading size={'md'}>Notifications</Heading>
-                <Text textDecor={'underline'} color={'#55DF01'}>Mark all Read </Text>
+          <MenuList w={"600px"} p={0} m={0}>
+            <MenuItem p={3} color={"white"} bg={"#232323"}>
+              <HStack w={"100%"} justifyContent={"space-between"}>
+                <Heading size={"md"}>Notifications</Heading>
+                <Text textDecor={"underline"} color={"#55DF01"}>
+                  Mark all Read{" "}
+                </Text>
               </HStack>
             </MenuItem>
             {NotifData.map((data) => (
               <>
-                <MenuItem p={5} bg={'#323232'} color={'white'}>
+                <MenuItem p={5} bg={"#323232"} color={"white"}>
                   <Box>
-                    <Heading color={'#55DF01'} size={'md'}>{data.msg}</Heading>
-                    <Text fontSize={'0.9rem'}>{data.desc}</Text>
+                    <Heading color={"#55DF01"} size={"md"}>
+                      {data.msg}
+                    </Heading>
+                    <Text fontSize={"0.9rem"}>{data.desc}</Text>
                   </Box>
                 </MenuItem>
                 <Divider />
@@ -300,9 +299,10 @@ const MobileNav = ({ onOpen, ...rest }) => {
           </MenuList>
         </Menu>
 
-        <Icon as={FaRegUserCircle}
-          color={'#55DF01'}
-          cursor={'pointer'}
+        <Icon
+          as={FaRegUserCircle}
+          color={"#55DF01"}
+          cursor={"pointer"}
           boxSize={10}
           onClick={handleProfileRoute}
         />

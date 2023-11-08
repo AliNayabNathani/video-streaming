@@ -19,7 +19,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import ReactPaginate from "react-paginate";
 import axios from "axios";
 import { server } from "../../server";
-import "./Table.css";
+import styles from "./Table.module.css";
 import { useRouter } from "next/router";
 
 const deleteCategory = (id) => {
@@ -213,8 +213,8 @@ const TableTemplate = ({
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             onPageChange={handlePageClick}
-            containerClassName={"pagination"}
-            activeClassName={"active"}
+            containerClassName={"styles.pagination"}
+            activeClassName={"styles.active"}
           />
         </>
       ) : null}
