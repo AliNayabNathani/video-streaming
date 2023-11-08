@@ -26,7 +26,7 @@ import UserTemplate from "../../components/User/UserTemplate";
 import { FiDownload, FiEdit3, FiShoppingBag } from "react-icons/fi";
 import { VideoPlayer } from "../../components/Client/Reusable Components/VideoPlayer";
 import { Video } from "./Dashboard";
-import "./Style.css";
+// import "./Style.css";
 import { InfoIcon } from "@chakra-ui/icons";
 
 const ShowInfo = [

@@ -309,7 +309,7 @@ const AppSetting = () => {
     );
   }
   return (
-    <Box maxW={"100%"} minW={'70%'} px={[0, 8]} mx={[4, 8]}>
+    <Box maxW={"100%"} minW={"70%"} px={[0, 8]} mx={[4, 8]}>
       <HStack>
         <AiOutlineArrowLeft size={24} />
         <Heading size={"md"}>App Settings</Heading>
@@ -465,24 +465,34 @@ const Contact = () => {
   console.log(userId);
   const [complaint, setComplaint] = useState();
   const sendEmail = async () => {
-    await axios.post(server + 'user/sendTestMailToSupport', { userId, complaint }, {
-      headers: {
-        'Content-Type': 'Application/json'
-      },
-      withCredentials: true,
-    })
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
+    await axios
+      .post(
+        server + "user/sendTestMailToSupport",
+        { userId, complaint },
+        {
+          headers: {
+            "Content-Type": "Application/json",
+          },
+          withCredentials: true,
+        }
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
 
-    await axios.post(server + 'user/sendTestMailToUser', { userId, complaint }, {
-      headers: {
-        'Content-Type': 'Application/json'
-      },
-      withCredentials: true,
-    })
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-  }
+    await axios
+      .post(
+        server + "user/sendTestMailToUser",
+        { userId, complaint },
+        {
+          headers: {
+            "Content-Type": "Application/json",
+          },
+          withCredentials: true,
+        }
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <Box maxW={"100%"} px={[0, 8]} mx={[4, 8]}>
@@ -494,10 +504,15 @@ const Contact = () => {
       <Divider my={8} />
       <Box my={4}>
         <Text mb={2}>Describe your issue</Text>
-        <Input placeholder="type your issues" onChange={(e) => setComplaint(e.target.value)} />
+        <Input
+          placeholder="type your issues"
+          onChange={(e) => setComplaint(e.target.value)}
+        />
       </Box>
       <Stack direction={["column", "row"]} justifyContent={"flex-end"}>
-        <Button px={[0, 16]} onClick={sendEmail}>Submit</Button>
+        <Button px={[0, 16]} onClick={sendEmail}>
+          Submit
+        </Button>
         <Button px={[0, 16]}>Call</Button>
         <Button px={[0, 16]} variant={"outline"}>
           Live Chat
@@ -521,7 +536,7 @@ const Plan = () => {
       </HStack>
       {planData.map((plan, index) => {
         return (
-          <div style={{ width: "100%" }}>
+          <div style={{ width: "100%" }} key={index}>
             <Divider my={4} />
             <HStack w={["100%", "40%"]} justifyContent={"space-between"}>
               <Text fontWeight={"semibold"} color={"white"}>
@@ -631,8 +646,8 @@ const Membership = () => {
           security.
         </Text>
       </Box>
-      {AccessList.map((access) => (
-        <ActivityOutline access={access} />
+      {AccessList.map((access, index) => (
+        <ActivityOutline access={access} key={index} />
       ))}
     </Box>
   );
