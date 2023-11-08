@@ -257,7 +257,7 @@ const ContentAprrovalModal = ({ isOpen, onClose, item }) => (
               justifyContent={"space-around"}
               marginBottom={"1rem"}
             >
-              "", "", "", "", "",
+              &quot;&quot;&quot;&quot;&quot;
               <Text fontWeight={"bold"}>Video Title: </Text>
               <Text>{item.name}</Text>
             </HStack>

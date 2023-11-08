@@ -714,8 +714,8 @@ const Security = () => {
           security.
         </Text>
       </Box>
-      {deviceData?.map((access) => (
-        <ActivityOutline access={access} />
+      {deviceData?.map((access, index) => (
+        <ActivityOutline access={access} key={index} />
       ))}
     </Box>
   );
@@ -757,8 +757,8 @@ const Settings = () => {
           downloads.
         </Text>
       </Box>
-      {DownloadAccessList.map((download) => (
-        <ActivityOutline download={download} />
+      {DownloadAccessList.map((download, index) => (
+        <ActivityOutline download={download} key={index} />
       ))}
     </Box>
   );
