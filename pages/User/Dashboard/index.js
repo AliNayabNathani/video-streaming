@@ -158,7 +158,7 @@ const Movies = () => {
   return (
     <>
       <Carousal />
-      <Box px={["2rem", "5rem"]}>
+      {/* <Box px={["2rem", "5rem"]}>
         <Heading size={"lg"}>Continue Watching</Heading>
         <Box>
           <HStack
@@ -190,7 +190,7 @@ const Movies = () => {
         </Box>
 
         <Divider my={"2rem"} />
-      </Box>
+      </Box> */}
 
       <Box px={["2rem", "5rem"]}>
         {isLoading ? (
@@ -744,7 +744,7 @@ const Shows = () => {
   return (
     <>
       <Carousal />
-      <Box px={["2rem", "5rem"]}>
+      {/* <Box px={["2rem", "5rem"]}>
         <Heading size={"lg"}>Continue Watching</Heading>
         <Box>
           <HStack
@@ -776,7 +776,7 @@ const Shows = () => {
         </Box>
 
         <Divider my={"2rem"} />
-      </Box>
+      </Box> */}
 
       <Box px={["2rem", "5rem"]}>
         {isLoading ? (
