@@ -127,7 +127,7 @@ export const Navbar = () => {
     </HStack>
   );
 };
-const userSelection = () => {
+const UserSelection = () => {
   const router = useRouter();
   return (
     <Box bg={"black"}>
@@ -182,4 +182,4 @@ const userSelection = () => {
   );
 };
 
-export default userSelection;
+export default UserSelection;
