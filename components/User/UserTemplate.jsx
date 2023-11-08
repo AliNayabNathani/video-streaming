@@ -34,9 +34,11 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const [activeLink, setActiveLink] = useState("");
   // console.log("active:", activeLink);
+
   const handleLogout = async () => {
     await dispatch(logout());
     router.push("/User");
+    window.location.reload();
   };
 
   return (
