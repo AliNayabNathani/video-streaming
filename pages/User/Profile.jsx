@@ -326,7 +326,7 @@ const AppSetting = () => {
       </HStack>
       <HStack mb={2} spacing={4}>
         <BsShield size={24} />
-        <Text fontSize={"1.2rem"}>Do/Don't sell my info</Text>
+        <Text fontSize={"1.2rem"}>Do/Dont sell my info</Text>
       </HStack>
 
       <Divider my={8} />
