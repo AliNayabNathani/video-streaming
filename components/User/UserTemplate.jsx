@@ -167,7 +167,7 @@ const Navbar = () => {
             <ChevronDownIcon mt={2} color={"#55DF01"} boxSize={8} />
           </MenuButton>
           <MenuList bg={"#232323"} alignItems={"center"}>
-            <MenuItem p={4} color={"white"} bg={"#232323"}>
+            {/* <MenuItem p={4} color={"white"} bg={"#232323"}>
               <BsDownload />
               <Text ml={4} color={"white"}>
                 Downloads
@@ -205,7 +205,7 @@ const Navbar = () => {
               <Text ml={4} color={"white"}>
                 Settings
               </Text>
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               p={4}
               color={"white"}

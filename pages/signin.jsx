@@ -19,6 +19,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, reset, addToken } from "../features/auth/authSlice";
 import Spinner from "../components/spinner";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function SignIn() {
   const router = useRouter();
@@ -27,44 +29,53 @@ export default function SignIn() {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const dispatch = useDispatch();
-  const { user, isLoading, isSuccess, message, isError } = useSelector(
-    (state) => state.auth
-  );
-  const roleId = user?.user?.roleId;
-  useEffect(() => {
-    if (isError) {
-      alert(message);
-      dispatch(reset());
-    }
-    console.log(roleId);
-    if (isSuccess || user) {
-      if (roleId == 1 || roleId == 3) {
-        router.push("/Admin/");
-      } else if (roleId == 4) {
-        router.push("/Client/Overview");
-      }
-    }
-  }, [user, isError, isSuccess, message, router]);
+  const handleLogin = async (e) => {
+    // e.preventDefault();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
     const userData = {
       email,
       password,
     };
-    dispatch(login(userData));
+
+    try {
+      const response = await dispatch(login(userData));
+      // console.log("IM RESPONSE", response.payload);
+
+      if (response.payload.msg === "Logged In") {
+        const roleId = response.payload.user.roleId;
+        // console.log("ME ROLEID", roleId);
+        if (roleId === "2") {
+          toast.success(`Welcome Back`, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 4000,
+          });
+          router.push("/Client/Dashboard");
+        } else if (roleId === "1") {
+          toast.success(`Welcome Back`, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 4000,
+          });
+          router.push("/Admin");
+        } else {
+          toast.error("Invalid Credentials.", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 4000,
+          });
+        }
+      } else {
+        toast.error("Invalid Credentials.", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 4000,
+        });
+        console.error("Login failed");
+      }
+    } catch (error) {
+      console.error("An error occurred during login:", error);
+    }
   };
-  // useEffect(() => {
-  //   if (user.roleId === 2 || user.roleId === 4)
-  //     router.push('/Admin');
-  //   else if (user.roleId === 1 || user.roleId === 3)
-  //     router.push('/Client/Main');
-  // })
-  if (isLoading) {
-    return <Spinner />;
-  }
+
   return (
-    <VStack h={"100vh"} justifyContent={"center"} alignItems={"center"}>
+    <VStack maxH={"50vh"} alignContent={"center"}>
       <Stack
         direction={{ base: "column", md: "row" }}
         border={"2px solid black"}
@@ -147,6 +158,7 @@ export default function SignIn() {
           </HStack>
         </VStack>
       </Stack>
+      <ToastContainer autoClose={4000} />
     </VStack>
   );
 }

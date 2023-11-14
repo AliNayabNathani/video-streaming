@@ -17,12 +17,19 @@ import {
   Input,
   Select,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { PageHeading } from "../../components/Admin/SmallReusableComponents/Heading";
 import { server } from "../../components/server";
+import PrivateRoute from "../PrivateRoute";
 
-const AddCategoryModal = ({ isOpen, onClose }) => {
+const AddCategoryModal = ({
+  isOpen,
+  onClose,
+  couponData,
+  setCoupons,
+  fetchData,
+}) => {
   const [couponsData, setCouponsData] = useState({
     name: "",
     value: 0,
@@ -31,10 +38,13 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
     max_redemptions: 0,
   });
 
-  const handleSubmit = () => {
-    const { name, value, desc, max_value, max_redemptions } = couponsData;
-    const res = axios
-      .post(
+  const [isLoading, setLoading] = useState();
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      const { name, value, desc, max_value, max_redemptions } = couponsData;
+      const res = await axios.post(
         `${server}users/add-new-coupon`,
         { name, value, desc, max_value, max_redemptions },
         {
@@ -43,12 +53,26 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
           },
           withCredentials: true,
         }
-      )
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
-    console.log(res);
-    onClose();
+      );
+      console.log(res.data);
+      setCoupons((prevCoupons) => [...prevCoupons, res.data]);
+      fetchData();
+      onClose();
+    } catch (error) {
+      console.error("Error adding coupon:", error);
+    } finally {
+      setLoading(false);
+      // Reset the form fields
+      setCouponsData({
+        name: "",
+        value: 0,
+        desc: "",
+        max_value: 0,
+        max_redemptions: 0,
+      });
+    }
   };
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -105,7 +129,9 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
                   })
                 }
               />
-              <Button onClick={handleSubmit}>Submit</Button>
+              <Button onClick={handleSubmit} isLoading={isLoading}>
+                Submit
+              </Button>
             </VStack>
           </ModalBody>
           <ModalFooter></ModalFooter>
@@ -115,9 +141,8 @@ const AddCategoryModal = ({ isOpen, onClose }) => {
   );
 };
 
-const HeaderModalButtons = ({ categoryData, setCategoryData, heading }) => {
+const HeaderModalButtons = ({ setCoupons, heading, couponData, fetchData }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedButton, setSelectedButton] = useState("");
 
   return (
     <HStack justifyContent="space-between">
@@ -126,20 +151,62 @@ const HeaderModalButtons = ({ categoryData, setCategoryData, heading }) => {
         <Button onClick={onOpen}>Add Category</Button>
       </Stack>
       {/* Pass selectedButton to the AddModal */}
-      <AddCategoryModal isOpen={isOpen} onClose={onClose} />
+      <AddCategoryModal
+        isOpen={isOpen}
+        onClose={onClose}
+        setCoupons={setCoupons}
+        couponData={couponData}
+        fetchData={fetchData}
+      />
     </HStack>
   );
 };
 
 export default function Coupons() {
+  const [couponData, setCoupons] = useState();
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${server}users/get-coupons`, {
+        headers: {
+          "Content-type": "application/json",
+        },
+        withCredentials: true,
+      });
+      const modifiedData = response.data.coupons.map((item) => {
+        const datePart = item.createdAt.split("T")[0];
+        return {
+          ...item,
+          createdAt: datePart,
+        };
+      });
+      setCoupons(modifiedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <>
-      <HeaderModalButtons
-        heading={"Coupons Management"}
-        button1={"Add Coupons"}
-      />
-      <SearchBar />
-      <CouponTable />
+      <PrivateRoute allowedRole={"1"}>
+        <HeaderModalButtons
+          heading={"Coupons Management"}
+          button1={"Add Coupons"}
+          setCoupons={setCoupons}
+          couponData={couponData}
+          fetchData={fetchData}
+        />
+        <SearchBar />
+        <CouponTable
+          couponData={couponData}
+          setCoupons={setCoupons}
+          fetchData={fetchData}
+        />
+      </PrivateRoute>
     </>
   );
 }

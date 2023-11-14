@@ -64,7 +64,7 @@ const TableTemplate = ({
 
     const router = useRouter();
     return (
-      <HStack align={"center"} justifyContent={"space-between"}>
+      <HStack align={"center"} justifyContent={"space-evenly"}>
         <BiEdit cursor={"pointer"} size={25} />
         <AiOutlineDelete
           onClick={() => deleteCategory(columnId)}
@@ -213,8 +213,8 @@ const TableTemplate = ({
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             onPageChange={handlePageClick}
-            containerClassName={"styles.pagination"}
-            activeClassName={"styles.active"}
+            containerClassName={styles.pagination}
+            activeClassName={styles.active}
           />
         </>
       ) : null}
@@ -268,6 +268,7 @@ export default function CategoryTable({ categoryData, setCategoryData }) {
           },
           withCredentials: true,
         });
+        console.log(response.data);
         setCategoryData(response.data.categories);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -276,6 +277,7 @@ export default function CategoryTable({ categoryData, setCategoryData }) {
 
     fetchData();
   }, []);
+
   const filterData = () => {
     if (searchQuery) {
       return categoryData.filter(

@@ -42,7 +42,7 @@ import { BiImageAdd, BiPlay } from "react-icons/bi";
 import { Tooltip } from "recharts";
 import videojs from "video.js";
 import axios from "axios";
-import { server } from "../../../server";
+import { pictureServer, server } from "../../../server";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -294,7 +294,7 @@ const VideoOutline = ({ index, setEpisodes, episodes, data }) => {
           objectFit={"cover"}
           src={
             data?.poster
-              ? `http://localhost:5000/uploadPicture/${data.poster}`
+              ? `${pictureServer}/${data.poster}`
               : `https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png`
           }
         />
@@ -386,7 +386,7 @@ const TrailerOutline = ({
               bg={"#414141"}
               bgImage={
                 data?.trailerPoster
-                  ? `http://localhost:5000/uploadPicture/${data.trailerPoster}`
+                  ? `${pictureServer}/${data.trailerPoster}`
                   : null
               }
               bgSize={"contain"}
@@ -698,6 +698,7 @@ export default function AddVideoTest({ channelId }) {
       Type: input.type,
       Cast: input.castDetails,
       Genre: input.genre,
+      category: input.category,
 
       trailers: trailers.filter((trailer) =>
         Object.values(trailer).some((value) => value !== "")
@@ -723,10 +724,7 @@ export default function AddVideoTest({ channelId }) {
       console.log(response.status);
 
       if (response.status === 201) {
-        toast.success(`Added Successfully`, {
-          position: toast.POSITION.TOP_CENTER,
-          autoClose: 4000,
-        });
+        x;
       } else {
         toast.error("Video creation failed.", {
           position: toast.POSITION.TOP_CENTER,

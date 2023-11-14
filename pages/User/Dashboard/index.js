@@ -47,44 +47,6 @@ import { FiMaximize2, FiMinimize2 } from "react-icons/fi";
 import PrivateRoute from "../../PrivateRoute";
 import Loader from "../../../components/Loader";
 
-const ShowInfo = [
-  {
-    name: "Dark",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/dark-small.jpg",
-  },
-  {
-    name: "Dark",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/dark-small.jpg",
-  },
-  {
-    name: "Dark",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/dark-small.jpg",
-  },
-  {
-    name: "Dark",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/dark-small.jpg",
-  },
-  {
-    name: "Dark",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/dark-small.jpg",
-  },
-  {
-    name: "Dark",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/dark-small.jpg",
-  },
-  {
-    name: "Dark",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "/assests/Shows/dark-small.jpg",
-  },
-];
-
 const Movies = () => {
   const router = useRouter();
   const [MovieData, setMovieData] = useState([]);
@@ -110,8 +72,14 @@ const Movies = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(`${server}user/getGenres`);
-        // console.log(response.data.categories);
-        setCategories(response.data.categories);
+        const combinedGenres = response.data.categories;
+
+        // Split combined genres into individual genres and remove duplicates
+        const individualGenres = [
+          ...new Set(combinedGenres.flatMap((genres) => genres.split(","))),
+        ];
+
+        setCategories(individualGenres);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -126,10 +94,9 @@ const Movies = () => {
     const fetchDataForMovies = async () => {
       try {
         const videoType = "Movie";
-        const genreParam = selectedCategory ? `&genre=${selectedCategory}` : "";
 
         const response = await axios.get(
-          `${server}user/allchannels?videoType=${videoType}${genreParam}`,
+          `${server}user/allchannels?videoType=${videoType}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -139,7 +106,18 @@ const Movies = () => {
         );
 
         if (response.status === 200) {
-          setMovieData(response.data.channels);
+          let filteredMovies = response.data.channels;
+
+          if (selectedCategory !== null) {
+            // Filter movies only if a category is selected
+            filteredMovies = filteredMovies.filter((channel) =>
+              channel.videos.some((video) =>
+                video.Genre.split(",").includes(selectedCategory)
+              )
+            );
+          }
+
+          setMovieData(filteredMovies);
         } else if (response.status === 404) {
           setMovieData([]);
         } else {
@@ -719,8 +697,13 @@ const Shows = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(`${server}user/getGenres`);
-        // console.log(response.data.categories);
-        setCategories(response.data.categories);
+        const combinedGenres = response.data.categories;
+
+        const individualGenres = [
+          ...new Set(combinedGenres.flatMap((genres) => genres.split(","))),
+        ];
+
+        setCategories(individualGenres);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -735,10 +718,9 @@ const Shows = () => {
     const fetchDataForSeries = async () => {
       try {
         const videoType = "Series";
-        const genreParam = selectedCategory ? `&genre=${selectedCategory}` : "";
 
         const response = await axios.get(
-          `${server}user/allchannels?videoType=${videoType}${genreParam}`,
+          `${server}user/allchannels?videoType=${videoType}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -748,7 +730,17 @@ const Shows = () => {
         );
 
         if (response.status === 200) {
-          setSeriesData(response.data.channels);
+          let filteredSeries = response.data.channels;
+
+          if (selectedCategory !== null) {
+            filteredSeries = filteredSeries.filter((channel) =>
+              channel.videos.some((video) =>
+                video.Genre.split(",").includes(selectedCategory)
+              )
+            );
+          }
+
+          setSeriesData(filteredSeries);
         } else if (response.status === 404) {
           setSeriesData([]);
         } else {

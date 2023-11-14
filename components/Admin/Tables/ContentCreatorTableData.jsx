@@ -32,6 +32,9 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { ToggleButton } from "../SmallReusableComponents/Action";
 import { server } from "../../server";
 import { HiOutlineEye } from "react-icons/hi";
+import { useRouter } from "next/router";
+import styles from "./Table.module.css";
+import { toast } from "react-toastify";
 
 const deleteCreator = (id) => {
   axios
@@ -58,7 +61,11 @@ const changeActiveStatus = (id) => {
       withCredentials: true,
     })
     .then((res) => {
-      console.log(res.data);
+      // console.log("LOGGG", res);
+      toast.success(`Status Changed to ${res.data.ContentCreator.status}`, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 4000,
+      });
     })
     .catch((err) => {
       console.error(err);
@@ -88,7 +95,7 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
         <Box onClick={() => handleNavigation("/Admin/UserDetails", router)}>
           <HiOutlineEye cursor={"pointer"} size={25} />
         </Box>
-        <BiEdit cursor={"pointer"} size={25} />
+        {/* <BiEdit cursor={"pointer"} size={25} /> */}
         <AiOutlineDelete
           onClick={() => deleteCreator(columnId)}
           cursor={"pointer"}
@@ -231,8 +238,8 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             onPageChange={handlePageClick}
-            containerClassName={"pagination"}
-            activeClassName={"active"}
+            containerClassName={styles.pagination}
+            activeClassName={styles.active}
           />
         </>
       ) : null}

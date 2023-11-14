@@ -20,6 +20,7 @@ import {
   Video,
   VideoPlayer,
 } from "../../components/Admin/SmallReusableComponents/VideoPlayer";
+import PrivateRoute from "../PrivateRoute";
 
 const VideoDetailsData = [
   {
@@ -152,44 +153,46 @@ const VideoInfo = () => {
 export default function VideoDetails() {
   return (
     <>
-      <PageHeading text={"Video Management"} />
-      <Stack direction={["column", "column"]}>
-        <VideoInfo />
-        <Divider my={"2rem"} bg={"white"} />
-        <NormalHeading text={"Trailer"} />
-        <Stack
-          direction={["column", "row"]}
-          justifyContent={["center", "space-between"]}
-          spacing={[6, 0]}
-        >
-          {TrailerData.map((trailer, index) => (
-            <VideoPlayer
-              key={index}
-              src={trailer.src}
-              poster={trailer.poster}
-              name={trailer.name}
-            />
-          ))}
-        </Stack>
-        <Divider my={"2rem"} bg={"white"} />
-        <NormalHeading text={"Episode"} />
-        <Grid
-          templateColumns={["1fr", "repeat(3, 1fr)"]}
-          autoRows="auto"
-          gap={[6, 2]}
-        >
-          {EpisodeData.map((episode, index) => (
-            <GridItem key={index} colSpan={1}>
+      <PrivateRoute allowedRole={"1"}>
+        <PageHeading text={"Video Management"} />
+        <Stack direction={["column", "column"]}>
+          <VideoInfo />
+          <Divider my={"2rem"} bg={"white"} />
+          <NormalHeading text={"Trailer"} />
+          <Stack
+            direction={["column", "row"]}
+            justifyContent={["center", "space-between"]}
+            spacing={[6, 0]}
+          >
+            {TrailerData.map((trailer, index) => (
               <VideoPlayer
-                src={episode.src}
-                poster={episode.poster}
-                name={episode.name}
+                key={index}
+                src={trailer.src}
+                poster={trailer.poster}
+                name={trailer.name}
               />
-              <Text textAlign="start">Episodes {episode.id}</Text>
-            </GridItem>
-          ))}
-        </Grid>
-      </Stack>
+            ))}
+          </Stack>
+          <Divider my={"2rem"} bg={"white"} />
+          <NormalHeading text={"Episode"} />
+          <Grid
+            templateColumns={["1fr", "repeat(3, 1fr)"]}
+            autoRows="auto"
+            gap={[6, 2]}
+          >
+            {EpisodeData.map((episode, index) => (
+              <GridItem key={index} colSpan={1}>
+                <VideoPlayer
+                  src={episode.src}
+                  poster={episode.poster}
+                  name={episode.name}
+                />
+                <Text textAlign="start">Episodes {episode.id}</Text>
+              </GridItem>
+            ))}
+          </Grid>
+        </Stack>
+      </PrivateRoute>
     </>
   );
 }

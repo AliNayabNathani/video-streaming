@@ -3,7 +3,6 @@ import { useSearchContext } from "../Context api/Context";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { server } from "../../server";
-
 import {
   Table,
   Thead,
@@ -16,6 +15,12 @@ import {
   Button,
   Box,
   HStack,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
 } from "@chakra-ui/react";
 
 import ReactPaginate from "react-paginate";
@@ -25,10 +30,12 @@ import { BiEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { HiOutlineEye } from "react-icons/hi";
+import { toast } from "react-toastify";
+import Loader from "../../Loader";
 
-const deleteUser = (id) => {
+const deleteVideo = (id, setVideoData) => {
   axios
-    .delete(server + `users/${id}`, {
+    .delete(server + `users/video/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -36,15 +43,25 @@ const deleteUser = (id) => {
     })
     .then((res) => {
       console.log(res.data);
+      toast.success(`Deleted Successfully!`, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 4000,
+      });
+
+      setVideoData((prevData) => prevData.filter((video) => video.id !== id));
     })
     .catch((err) => {
       console.error(err);
+      toast.error(err.msg, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 4000,
+      });
     });
 };
 
 const changeActiveStatus = (id) => {
   axios
-    .put(server + `users/${id}/active`, {
+    .put(server + `users/${id}/active-video`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -52,13 +69,20 @@ const changeActiveStatus = (id) => {
     })
     .then((res) => {
       console.log(res.data);
+      toast.success(`Status Changed to ${res.data.video.status}`, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 4000,
+      });
     })
     .catch((err) => {
-      console.error(err);
+      toast.error(err.msg, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 4000,
+      });
     });
 };
 
-const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
+const TableTemplate = ({ data, text, columns, itemsPerPage, setVideoData }) => {
   var num = 0;
   itemsPerPage = itemsPerPage || 10;
   const [currentPage, setCurrentPage] = useState(0);
@@ -75,16 +99,62 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
 
   const Actions = ({ item }) => {
     const columnId = item.id;
-    console.log(columnId);
     const router = useRouter();
+    const [isOpen, setIsOpen] = useState(false);
+
+    const onClose = () => setIsOpen(false);
+
+    const handleDelete = () => {
+      setIsOpen(true);
+    };
+
+    const handleConfirmDelete = () => {
+      deleteVideo(columnId, setVideoData);
+      onClose();
+    };
+
     return (
-      <HStack align={"center"} justifyContent={"space-between"}>
-        <Box onClick={() => handleNavigation("/Admin/VideoDetails", router)}>
-          <HiOutlineEye cursor={"pointer"} size={25} />
-        </Box>
-        <AiOutlineDelete cursor={"pointer"} size={25} />
-        <ToggleButton columnId={columnId} data={item} cursor={"pointer"} />
-      </HStack>
+      <>
+        <HStack align={"center"} justifyContent={"space-between"}>
+          <Box
+            onClick={() => handleNavigation(`/Admin/Video/${columnId}`, router)}
+          >
+            <HiOutlineEye cursor={"pointer"} size={25} />
+          </Box>
+          <AiOutlineDelete
+            cursor={"pointer"}
+            size={25}
+            onClick={handleDelete}
+          />
+          <ToggleButton
+            columnId={columnId}
+            data={item}
+            cursor={"pointer"}
+            changeStatus={changeActiveStatus}
+          />
+        </HStack>
+
+        <AlertDialog isOpen={isOpen} onClose={onClose}>
+          <AlertDialogOverlay>
+            <AlertDialogContent>
+              <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                Confirm Delete
+              </AlertDialogHeader>
+
+              <AlertDialogBody>
+                Are you sure you want to delete this video?
+              </AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button onClick={onClose}>Cancel</Button>
+                <Button colorScheme="red" onClick={handleConfirmDelete} ml={3}>
+                  Delete
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
+      </>
     );
   };
 
@@ -237,6 +307,8 @@ const VideoTableColumns = [
 export default function VideoTable() {
   const { searchQuery, isFilter } = useSearchContext();
   const [videoData, setVideoData] = useState();
+  const [isLoading, setisLoading] = useState(true);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -254,13 +326,18 @@ export default function VideoTable() {
           };
         });
         setVideoData(modifiedData);
+        setisLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setisLoading(false);
+      } finally {
+        setisLoading(false);
       }
     };
 
     fetchData();
   }, []);
+
   videoData?.sort((a, b) => parseInt(a.id) - parseInt(b.id));
   console.log(videoData);
 
@@ -276,9 +353,16 @@ export default function VideoTable() {
     return videoData;
   };
   return (
-    <TableTemplate
-      data={searchQuery?.length > 1 && isFilter ? filterData() : videoData}
-      columns={VideoTableColumns}
-    />
+    <>
+      {isLoading ? (
+        <Loader color="#55DF01" />
+      ) : (
+        <TableTemplate
+          data={searchQuery?.length > 1 && isFilter ? filterData() : videoData}
+          columns={VideoTableColumns}
+          setVideoData={setVideoData}
+        />
+      )}
+    </>
   );
 }

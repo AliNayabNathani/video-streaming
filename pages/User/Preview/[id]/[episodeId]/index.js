@@ -49,6 +49,7 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import Link from "next/link";
+import PrivateRoute from "../../../../PrivateRoute";
 
 const MainVideo = ({ src, poster, name, onOptions }) => {
   const videoRef = useRef(null);
@@ -261,7 +262,7 @@ const Episodes = ({ episodesData, videoData, userId }) => {
                 direction={{ base: "row", md: "column" }}
                 alignSelf={["center", "normal"]}
               >
-                <Icon as={FiDownload} boxSize={6} />
+                {/* <Icon as={FiDownload} boxSize={6} /> */}
               </Stack>
             </Stack>
           </Stack>
@@ -348,7 +349,7 @@ const Preview = () => {
             }
           );
 
-          console.log("EPI RES:", episodeResponse.data.episode);
+          // console.log("EPI RES:", episodeResponse.data.episode);
           setEpisodeData(episodeResponse?.data.episode);
         } catch (err) {
           console.error(err);
@@ -364,94 +365,100 @@ const Preview = () => {
   };
 
   return (
-    <UserTemplate>
-      <Box
-        mt={"1rem"}
-        border={"1px solid transparent"}
-        cursor={"pointer"}
-        maxW={"100vw"}
-        overflow={"hidden"}
-      >
-        {episodeData && (
-          <MainVideo
-            src={
-              episodeData
-                ? `${videoServer}/${replaceSpacesWithPercent20(
-                    episodeData?.file
-                  )}`
-                : `${videoServer}/${"v2.mp4"}`
-            }
-            poster={
-              episodeData
-                ? `${pictureServer}/${replaceSpacesWithPercent20(
-                    episodeData?.poster
-                  )}`
-                : `${videoServer}/${"No_Image.jpg"}`
-            }
-            name={episodeData?.title}
-          />
-        )}
-      </Box>
-      <Box mx={["1rem", "2rem"]}>
-        <VStack w={"100%"} alignItems={["center", "flex-start"]} mb={[10, 20]}>
-          <Stack
+    <PrivateRoute>
+      <UserTemplate>
+        <Box
+          mt={"1rem"}
+          border={"1px solid transparent"}
+          cursor={"pointer"}
+          maxW={"100vw"}
+          overflow={"hidden"}
+        >
+          {episodeData && (
+            <MainVideo
+              src={
+                episodeData
+                  ? `${videoServer}/${replaceSpacesWithPercent20(
+                      episodeData?.file
+                    )}`
+                  : `${videoServer}/${"v2.mp4"}`
+              }
+              poster={
+                episodeData
+                  ? `${pictureServer}/${replaceSpacesWithPercent20(
+                      episodeData?.poster
+                    )}`
+                  : `${videoServer}/${"No_Image.jpg"}`
+              }
+              name={episodeData?.title}
+            />
+          )}
+        </Box>
+        <Box mx={["1rem", "2rem"]}>
+          <VStack
             w={"100%"}
-            direction={["column", "row"]}
-            my={"1rem"}
-            spacing={"1rem"}
-            justifyContent={"space-between"}
-            alignItems={"center"}
+            alignItems={["center", "flex-start"]}
+            mb={[10, 20]}
           >
-            <Box w={"70%"}>
-              <Heading size={"xl"} fontWeight={"bold"}>
-                {episodeData?.title ? episodeData.title : ""}
-              </Heading>
-              <span>{episodeData?.views} Views</span>
-            </Box>
-            {/* <Stack
+            <Stack
+              w={"100%"}
+              direction={["column", "row"]}
+              my={"1rem"}
+              spacing={"1rem"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
+              <Box w={"70%"}>
+                <Heading size={"xl"} fontWeight={"bold"}>
+                  {episodeData?.title ? episodeData.title : ""}
+                </Heading>
+                <span>{episodeData?.views} Views</span>
+              </Box>
+              {/* <Stack
               w={["100%", "auto"]}
               direction={["column", "row"]}
               spacing={"1rem"}
             > */}
-            <Button
-              leftIcon={<ArrowBackIcon size={20} />}
-              variant={"outline"}
-              w={"auto"}
-              onClick={() => router.back()}
-            >
-              Go Back
-            </Button>
-            {/* </Stack> */}
-          </Stack>
+              <Button
+                leftIcon={<ArrowBackIcon size={20} />}
+                variant={"outline"}
+                w={"auto"}
+                onClick={() => router.back()}
+              >
+                Go Back
+              </Button>
+              {/* </Stack> */}
+            </Stack>
 
-          <Box w={["100%", "40%"]}>
-            <Collapse startingHeight={"20"} isOpen={isReadMoreOpen}>
-              <Text>{episodeData?.description}</Text>
-            </Collapse>
-            <Button size="sm" onClick={toggleReadMore}>
-              Show {isReadMoreOpen ? "Less" : "More"}
-            </Button>
-          </Box>
-        </VStack>
+            <Box w={["100%", "50%"]}>
+              <Collapse startingHeight={"5"} isOpen={isReadMoreOpen}>
+                {episodeData?.description}
+              </Collapse>
+              <Button size="sm" onClick={toggleReadMore}>
+                Show {isReadMoreOpen ? "Less" : "More"}
+              </Button>
+            </Box>
+          </VStack>
 
-        <Flex
-          width={"100%"}
-          py={["auto", "2rem"]}
-          borderRight={"2px solid black"}
-        >
-          <EpisodeOutline text="Episodes" setContent={setContent}>
-            Episodes
-          </EpisodeOutline>
-        </Flex>
-        {content === "Episodes" ? (
-          <Episodes
-            episodesData={episodesData}
-            videoData={videoData?.id}
-            userId={userId}
-          />
-        ) : null}
-      </Box>
-    </UserTemplate>
+          <Flex
+            width={"100%"}
+            py={["auto", "2rem"]}
+            borderRight={"2px solid black"}
+          >
+            <EpisodeOutline text="Episodes" setContent={setContent}>
+              Episodes
+            </EpisodeOutline>
+          </Flex>
+          {content === "Episodes" ? (
+            <Episodes
+              episodesData={episodesData}
+              videoData={videoData?.id}
+              userId={userId}
+            />
+          ) : null}
+        </Box>
+      </UserTemplate>
+    </PrivateRoute>
   );
 };
 

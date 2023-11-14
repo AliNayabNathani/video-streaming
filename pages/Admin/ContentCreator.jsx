@@ -24,6 +24,8 @@ import {
 import axios from "axios";
 import { server } from "../../components/server";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ShowAddUserModal = ({ isOpen, onClose }) => {
   const [userInfo, setUserInfo] = useState({
@@ -31,13 +33,13 @@ const ShowAddUserModal = ({ isOpen, onClose }) => {
     gender: "",
     number: "",
   });
-  console.log(userInfo);
+
   const handleSubmit = async () => {
     const { name, gender, number } = userInfo;
     const res = await axios
       .post(
         `${server}users/add-content-creator`,
-        { name, gender, number },
+        { name, gender, mobile_number: number },
         {
           headers: {
             "Content-type": "application/json",
@@ -45,9 +47,17 @@ const ShowAddUserModal = ({ isOpen, onClose }) => {
           withCredentials: true,
         }
       )
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-    console.log(res);
+      .then((res) => {
+        toast.success(`${userInfo.name} Added to Content Creator`, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 4000,
+        });
+      })
+      .catch((err) => {
+        toast.error(err.response.data.msg, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      });
     onClose();
   };
 
@@ -173,10 +183,12 @@ export default function ContentCreatorManagement() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <HeaderButtons onOpen={onOpen} />
-      <ShowAddUserModal isOpen={isOpen} onClose={onClose} />
-      <SearchBar />
-      <ContentCreatorTable />
+      <PrivateRoute allowedRole={"1"}>
+        <HeaderButtons onOpen={onOpen} />
+        <ShowAddUserModal isOpen={isOpen} onClose={onClose} />
+        <SearchBar />
+        <ContentCreatorTable />
+      </PrivateRoute>
     </>
   );
 }

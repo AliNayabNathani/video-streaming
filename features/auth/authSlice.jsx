@@ -10,7 +10,6 @@ const user =
 const initialState = {
   user: user ? user : null,
   isError: false,
-  isSucess: false,
   isLoading: false,
   isAuthenticated: false,
   message: "",
@@ -51,13 +50,31 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   await authService.logout();
 });
 
+export const updateProfile = createAsyncThunk(
+  "auth/updateProfile",
+  async (userData, thunkAPI) => {
+    try {
+      const updatedUser = await authService.updateProfile(userData);
+      return updatedUser;
+    } catch (error) {
+      console.log(error);
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     reset: (state) => {
       state.isLoading = false;
-      state.isSucess = false;
       state.isError = false;
       state.message = "";
     },
@@ -69,13 +86,12 @@ export const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSucess = true;
+        state.message = action.payload.msg;
         state.user = action.payload;
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = true;
         state.isError = true;
-        state.message = action.payload;
         state.user = null;
       })
       .addCase(login.pending, (state) => {
@@ -84,20 +100,31 @@ export const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSucess = true;
+        state.message = action.payload.msg;
         state.user = action.payload;
         state.isAuthenticated = true;
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload.data;
         state.isAuthenticated = false;
-        state.user = null;
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = "Profile updated successfully.";
+        state.user = action.payload.user;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });

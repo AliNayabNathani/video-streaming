@@ -27,7 +27,7 @@ import { useRef, useState } from "react";
 import { Actions } from "../SmallReusableComponents/Action";
 import ReactPaginate from "react-paginate";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import "./Table.css";
+import styles from "./Table.module.css";
 import { useSearchContext } from "../Context api/Context";
 
 const TableTemplate = ({
@@ -196,8 +196,8 @@ const TableTemplate = ({
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             onPageChange={handlePageClick}
-            containerClassName={"pagination"}
-            activeClassName={"active"}
+            containerClassName={styles.pagination}
+            activeClassName={styles.active}
           />
         </>
       ) : null}

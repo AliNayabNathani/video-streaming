@@ -51,7 +51,7 @@ import {
 import { useState } from "react";
 import { HiTrash } from "react-icons/hi";
 import axios from "axios";
-import { server } from "../../components/server";
+import { pictureServer, server } from "../../components/server";
 import { useSelector } from "react-redux";
 import Chatbot from "../../components/User/ChatBot";
 
@@ -1074,10 +1074,7 @@ const Profile = () => {
               justifyContent={"center"}
               key={index}
             >
-              <Avatar
-                size={"2xl"}
-                src={`http://localhost:5000/uploadPicture/${profile.avatar}`}
-              />
+              <Avatar size={"2xl"} src={`${pictureServer}/${profile.avatar}`} />
               <Text mt={4} textAlign={"center"}>
                 {profile.name}
               </Text>

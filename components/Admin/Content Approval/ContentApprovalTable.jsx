@@ -231,8 +231,8 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             onPageChange={handlePageClick}
-            containerClassName={"styles.pagination"}
-            activeClassName={"styles.active"}
+            containerClassName={styles.pagination}
+            activeClassName={styles.active}
           />
         </>
       ) : null}

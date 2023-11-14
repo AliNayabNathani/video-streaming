@@ -1,72 +1,69 @@
-import {
-  Box,
-  Form,
-  Button,
-  ChakraProvider,
-  Divider,
-  Flex,
-  FormLabel,
-  HStack,
-  Input,
-  Stack,
-  VStack,
-  useColorModeValue,
-} from "@chakra-ui/react";
-// import { PageHeading } from "../SmallReusableComponents/Heading";
 import { useState } from "react";
+import axios from "axios";
+import { VStack, FormLabel, Input, Button } from "@chakra-ui/react";
 import { PageHeading } from "../../components/Admin/SmallReusableComponents/Heading";
+import { server } from "../../components/server";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import PrivateRoute from "../PrivateRoute";
 
-const DummyUser = [
-  {
-    name: "Abheshkhemani@gmail.com",
-    password: "Abheesh123",
-  },
-];
+const ChangePasswordForm = () => {
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const router = useRouter();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-const Inputs = () => {
-  const [Pass, SetPass] = useState();
-  const [NewPass, SetNewPass] = useState();
-  const [ConfirmPass, setConfirmPass] = useState();
+    try {
+      const apiUrl = `${server}auth/changepassword`;
 
-  const HandleSubmit = () => {
-    DummyUser.map((User) => {
-      if (Pass === User.password && NewPass === ConfirmPass) {
-        SetPass(NewPass);
-      } else alert("Incorrect Info");
-    });
+      const requestBody = {
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      };
+
+      const response = await axios.patch(apiUrl, requestBody, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+      toast.success(`Password Changed Successfully`, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 4000,
+      });
+      router.push("/Admin/Profile");
+    } catch (error) {
+      console.error("Error changing password", error.response);
+    }
   };
+
   return (
     <VStack
       bg={"#232323"}
       border={"2px solid black"}
       borderRadius={"5px"}
-      w={["auto", "auto", "50%"]}
+      w={["auto", "50%"]}
       h={["auto", "80%"]}
       p={[5, 20]}
+      marginInline={"auto"}
     >
-      <form onSubmit={HandleSubmit}>
+      <form onSubmit={handleSubmit}>
         <FormLabel>Old Password: </FormLabel>
         <Input
           mb={"1rem"}
-          onChange={(e) => SetPass(e.target.value)}
+          onChange={(e) => setOldPassword(e.target.value)}
           type="password"
           focusBorderColor="#323232"
         />
         <FormLabel>New Password: </FormLabel>
         <Input
           mb={"1rem"}
-          onChange={(e) => SetNewPass(e.target.value)}
+          onChange={(e) => setNewPassword(e.target.value)}
           type="password"
           focusBorderColor="#323232"
         />
-        <FormLabel>Confirm Password: </FormLabel>
-        <Input
-          mb={"1rem"}
-          onChange={(e) => setConfirmPass(e.target.value)}
-          type="password"
-          focusBorderColor="#323232"
-        />
-
         <Button type="submit" mt={2} w={"100%"}>
           Update
         </Button>
@@ -78,14 +75,10 @@ const Inputs = () => {
 export default function ChangePassword() {
   return (
     <>
-      <PageHeading text={"Change Password"} />
-      <Stack
-        direction={{ base: "column", md: "row" }}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Inputs />
-      </Stack>
+      <PrivateRoute allowedRole={"1"}>
+        <PageHeading text={"Change Password"} />
+        <ChangePasswordForm />
+      </PrivateRoute>
     </>
   );
 }

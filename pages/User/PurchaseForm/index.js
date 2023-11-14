@@ -16,6 +16,7 @@ import { server } from "../../../components/server";
 
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
+import PrivateRoute from "../../PrivateRoute";
 
 const PaymentForm = () => {
   const [userId, setUserId] = useState(null);
@@ -75,62 +76,64 @@ const PaymentForm = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      height={["50vh", "100vh"]}
-    >
-      <Box w={["lg", "xl"]} p={4} borderWidth="1px" borderRadius="lg">
-        {paymentSuccessful ? (
-          <Box textAlign="center" color="white" fontSize="lg">
-            <Heading>Payment Successful!</Heading>
-            <NextLink href="/User/Dashboard" passHref>
-              <Heading size={"4xl"} my={[4, 6]}>
-                <CheckCircleIcon color={"green"} />
-              </Heading>
-              <Link color="white">Go to Dashboard</Link>
-            </NextLink>
-          </Box>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <FormControl mb={4}>
-              <FormLabel>Card Details</FormLabel>
-              <CardElement
-                options={{
-                  style: {
-                    base: {
-                      color: "white",
-                      "::placeholder": {
-                        color: "gray.400",
+    <PrivateRoute>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        height={["50vh", "100vh"]}
+      >
+        <Box w={["lg", "xl"]} p={4} borderWidth="1px" borderRadius="lg">
+          {paymentSuccessful ? (
+            <Box textAlign="center" color="white" fontSize="lg">
+              <Heading>Payment Successful!</Heading>
+              <NextLink href="/User/Dashboard" passHref>
+                <Heading size={"4xl"} my={[4, 6]}>
+                  <CheckCircleIcon color={"green"} />
+                </Heading>
+                <Link color="white">Go to Dashboard</Link>
+              </NextLink>
+            </Box>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <FormControl mb={4}>
+                <FormLabel>Card Details</FormLabel>
+                <CardElement
+                  options={{
+                    style: {
+                      base: {
+                        color: "white",
+                        "::placeholder": {
+                          color: "gray.400",
+                        },
+                      },
+                      invalid: {
+                        color: "red.500",
                       },
                     },
-                    invalid: {
-                      color: "red.500",
-                    },
-                  },
-                }}
-              />
-            </FormControl>
-            <Button
-              type="submit"
-              colorScheme="blue"
-              disabled={loading}
-              mt={[2, 4]}
-              w={"100%"}
-            >
-              {loading ? <Spinner size="sm" /> : "Purchase Video"}
-            </Button>
+                  }}
+                />
+              </FormControl>
+              <Button
+                type="submit"
+                colorScheme="blue"
+                disabled={loading}
+                mt={[2, 4]}
+                w={"100%"}
+              >
+                {loading ? <Spinner size="sm" /> : "Purchase Video"}
+              </Button>
 
-            {error && (
-              <Box color="red.500" mt={2}>
-                {error}
-              </Box>
-            )}
-          </form>
-        )}
+              {error && (
+                <Box color="red.500" mt={2}>
+                  {error}
+                </Box>
+              )}
+            </form>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </PrivateRoute>
   );
 };
 

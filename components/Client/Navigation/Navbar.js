@@ -50,11 +50,15 @@ const LinkItems = [
     icon: AiFillFile,
     to: "/Admin/ContentApproval",
   },
-  { name: "Coupons Management", icon: ImTicket, to: "/Admin/Coupons" },
-  { name: "Packages Management", icon: AiOutlineDropbox, to: "/Admin/Packages" },
+  // { name: "Coupons Management", icon: ImTicket, to: "/Admin/Coupons" },
+  // {
+  //   name: "Packages Management",
+  //   icon: AiOutlineDropbox,
+  //   to: "/Admin/Packages",
+  // },
   { name: "Content Management", icon: AiFillFile, to: "/Admin/Content" },
   { name: "Reports", icon: FaFileAlt, to: "/Admin/SubscriptionReport" },
-  { name: "Custom Push Notifications", icon: BsFillBellFill, to: "/Admin/Notif" },
+  // { name: "Custom Push Notifications", icon: BsFillBellFill, to: "/Admin/Notif" },
 ];
 const ReportItems = [
   { name: "Subscription Payment Report", to: "/Admin/SubscriptionReport" },
@@ -81,7 +85,7 @@ function SidebarContent({ onClose, ...rest }) {
 
   const handleNavigation = (to) => {
     router.push(to);
-  }
+  };
 
   return (
     <Box
@@ -105,7 +109,11 @@ function SidebarContent({ onClose, ...rest }) {
       {LinkItems.map((link, index) => (
         <Box
           key={link.name}
-          onClick={link.name !== 'Reports' ? () => handleNavigation(link.to) : () => handleItemClick(index)} // Use router.push to navigate
+          onClick={
+            link.name !== "Reports"
+              ? () => handleNavigation(link.to)
+              : () => handleItemClick(index)
+          } // Use router.push to navigate
           to
         >
           <NavItem px={4} py={2} to icon={link.icon}>
@@ -116,7 +124,7 @@ function SidebarContent({ onClose, ...rest }) {
             <Collapse in={openItem === index}>
               <UnorderedList>
                 {ReportItems.map((Report, subIndex) => (
-                  <ListItem p={1} listStyleType={'none'} key={subIndex}>
+                  <ListItem p={1} listStyleType={"none"} key={subIndex}>
                     <Box
                       key={Report.name}
                       fontSize="0.8rem"
@@ -126,9 +134,7 @@ function SidebarContent({ onClose, ...rest }) {
                       mx={3}
                       icon={null}
                     >
-                      <NavItem>
-                        {Report.name}
-                      </NavItem>
+                      <NavItem>{Report.name}</NavItem>
                     </Box>
                   </ListItem>
                 ))}

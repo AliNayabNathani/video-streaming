@@ -24,6 +24,7 @@ import { useRouter } from "next/router";
 import { HiOutlineEye } from "react-icons/hi";
 import { ToggleButton } from "../SmallReusableComponents/Action";
 import { server } from "../../server";
+import { toast } from "react-toastify";
 
 const changeActiveStatus = (id) => {
   axios
@@ -35,6 +36,10 @@ const changeActiveStatus = (id) => {
     })
     .then((res) => {
       console.log(res.data);
+      toast.success(`Status Changed to ${res.data.channel.status}`, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 4000,
+      });
     })
     .catch((err) => {
       console.error(err);
@@ -56,11 +61,15 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
   };
 
   const Actions = ({ item }) => {
+    console.log("THIS IS ITEM:", item);
     const columnId = item.id;
+    console.log("COLUMN ID", columnId);
     const router = useRouter();
     return (
       <HStack align={"center"} justifyContent={"space-around"}>
-        <Box onClick={() => handleNavigation("/Admin/ChannelDetails", router)}>
+        <Box
+          onClick={() => handleNavigation(`/Admin/Channel/${columnId}`, router)}
+        >
           <HiOutlineEye cursor={"pointer"} size={25} />
         </Box>
         <ToggleButton
@@ -200,8 +209,8 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             onPageChange={handlePageClick}
-            containerClassName={"styles.pagination"}
-            activeClassName={"styles.active"}
+            containerClassName={styles.pagination}
+            activeClassName={styles.active}
           />
         </>
       ) : null}

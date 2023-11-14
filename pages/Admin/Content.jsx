@@ -7,13 +7,14 @@ import "./TextEditor.css";
 import axios from "axios";
 import { server } from "../../components/server";
 import { Button } from "@chakra-ui/react";
+import PrivateRoute from "../PrivateRoute";
 
 export default function Content() {
   const Quill =
     typeof document !== "undefined"
       ? dynamic(() => import("react-quill"), {
-        ssr: false,
-      })
+          ssr: false,
+        })
       : null;
 
   const [SelectedButton, SetSelectedButton] = useState("Terms and Conditions");
@@ -95,33 +96,34 @@ export default function Content() {
     if (SelectedButton === "Terms and Conditions") setDisplayedText(terms);
     else if (SelectedButton === "Privacy Policy") setDisplayedText(privacy);
     else if (SelectedButton === "About Us") setDisplayedText(aboutUs);
-
   }, [SelectedButton]);
 
   const handleChange = () => {
-    axios.put(server + 'admin/terms-and-conditions', {
+    axios.put(server + "admin/terms-and-conditions", {
       headers: {
-        'Content-type': 'application/json'
+        "Content-type": "application/json",
       },
-      withCredentials: true
-    })
-  }
+      withCredentials: true,
+    });
+  };
   return (
     <>
-      <PageHeading text={"Content Management"} />
-      <ContentBar
-        Text_1={"Terms and Conditions"}
-        Text_2={"Privacy Policy"}
-        Text_3={"About Us"}
-        SetSelectedButton={SetSelectedButton}
-        SelectedButton={SelectedButton}
-      />
+      <PrivateRoute allowedRole={"1"}>
+        <PageHeading text={"Content Management"} />
+        <ContentBar
+          Text_1={"Terms and Conditions"}
+          Text_2={"Privacy Policy"}
+          Text_3={"About Us"}
+          SetSelectedButton={SetSelectedButton}
+          SelectedButton={SelectedButton}
+        />
 
-      {typeof document !== "undefined" ? (
-        <RichTextEditor displayedText={displayedText} />
-      ) : null}
+        {typeof document !== "undefined" ? (
+          <RichTextEditor displayedText={displayedText} />
+        ) : null}
 
-      <Button onClick={handleChange}>Update</Button>
+        <Button onClick={handleChange}>Update</Button>
+      </PrivateRoute>
     </>
   );
 }

@@ -14,15 +14,22 @@ import {
   TableContainer,
   Button,
   HStack,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
 } from "@chakra-ui/react";
-
 import ReactPaginate from "react-paginate";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import styles from "./Table.module.css";
 import { BiEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/router";
-const deleteCoupon = (id) => {
+import { toast } from "react-toastify";
+
+const deleteCoupon = (id, fetchData) => {
   axios
     .delete(server + `users/coupon/${id}`, {
       headers: {
@@ -32,15 +39,24 @@ const deleteCoupon = (id) => {
     })
     .then((res) => {
       console.log(res.data);
+      toast.success(`Delete Successfully`, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 4000,
+      });
+      fetchData();
     })
     .catch((err) => {
       console.error(err);
+      toast.success(err.msg, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 4000,
+      });
     });
 };
 
 const changeActiveStatus = (id) => {
   axios
-    .put(server + `users/${id}/active-coupon`, {
+    .put(server + `users/coupon/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -54,32 +70,71 @@ const changeActiveStatus = (id) => {
     });
 };
 
-const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
+const TableTemplate = ({ data, text, columns, itemsPerPage, fetchData }) => {
   var num = 0;
   itemsPerPage = itemsPerPage || 10;
   const [currentPage, setCurrentPage] = useState(0);
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const slicedData = data?.slice(startIndex, endIndex);
+
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
+
   const handleNavigation = (to, router) => {
     router.push(to);
   };
 
-  const Actions = ({ item }) => {
-    const columnId = item.id;
+  const Actions = ({ item, index, fetchData }) => {
+    const couponId = item.id;
+
     const router = useRouter();
+    const [isOpen, setIsOpen] = useState(false);
+
+    const onClose = () => setIsOpen(false);
+
+    const handleDelete = () => {
+      setIsOpen(true);
+    };
+
+    const handleConfirmDelete = () => {
+      deleteCoupon(couponId, fetchData);
+      onClose();
+    };
+
     return (
-      <HStack align={"center"} justifyContent={"space-between"}>
-        <BiEdit cursor={"pointer"} size={25} />
-        <AiOutlineDelete
-          onClick={() => deleteUser(columnId)}
-          cursor={"pointer"}
-          size={25}
-        />
-      </HStack>
+      <>
+        <HStack align={"center"} justifyContent={"space-between"}>
+          <BiEdit cursor={"pointer"} size={25} />
+          <AiOutlineDelete
+            onClick={handleDelete}
+            cursor={"pointer"}
+            size={25}
+          />
+        </HStack>
+
+        <AlertDialog isOpen={isOpen} onClose={onClose}>
+          <AlertDialogOverlay>
+            <AlertDialogContent>
+              <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                Confirm Delete
+              </AlertDialogHeader>
+
+              <AlertDialogBody>
+                Are you sure you want to delete this coupon?
+              </AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button onClick={onClose}>Cancel</Button>
+                <Button colorScheme="red" onClick={handleConfirmDelete} ml={3}>
+                  Delete
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
+      </>
     );
   };
 
@@ -163,8 +218,11 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
                       borderRight={"1px"}
                       borderColor={"blackAlpha.600"}
                     >
-                      {" "}
-                      <Actions item={item} columnId={item.id} />{" "}
+                      <Actions
+                        item={item}
+                        index={index}
+                        fetchData={fetchData}
+                      />
                     </Td>
                   ) : null}
                   <Td
@@ -172,7 +230,6 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
                     borderColor={"blackAlpha.600"}
                     borderBottom={0}
                   >
-                    {" "}
                     <ToggleButton
                       columnId={item.id}
                       changeStatus={changeActiveStatus}
@@ -228,66 +285,43 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             onPageChange={handlePageClick}
-            containerClassName={"styles.pagination"}
-            activeClassName={"styles.active"}
+            containerClassName={styles.pagination}
+            activeClassName={styles.active}
           />
         </>
       ) : null}
     </>
   );
 };
-const CouponTableColumn = ["name", "createdAt", "value", "Expiry_Date"];
 
-const CouponAction = () => (
-  <HStack justifyContent={"space-around"}>
-    <BiEdit cursor={"pointer"} size={25} />
-    <AiOutlineDelete cursor={"pointer"} size={25} />
-  </HStack>
-);
+const CouponTableColumn = ["name", "createdAt", "value"];
 
-export default function CouponTable() {
+export default function CouponTable({ couponData, setCoupons, fetchData }) {
   const { searchQuery, isFilter } = useSearchContext();
-  const [couponData, setContentData] = useState();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${server}users/get-coupons`, {
-          headers: {
-            "Content-type": "application/json",
-          },
-          withCredentials: true,
-        });
-        const modifiedData = await response.data.coupons.map((item) => {
-          const datePart = item.createdAt.split("T")[0];
-          return {
-            ...item,
-            createdAt: datePart,
-          };
-        });
-        console.log(response.data.coupons);
-        setContentData(modifiedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
-  couponData?.sort((a, b) => parseInt(a.id) - parseInt(b.id));
   console.log(couponData);
+
+  couponData?.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+
+  // console.log(couponData);
   const filterData = () => {
     if (searchQuery) {
-      return couponData.filter(
-        (data) =>
-          data.Coupon_ID.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          data.Coupon_Name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      return couponData.filter((data) => {
+        // console.log("ME SEARCHED", data);
+        const lowerCaseSearchQuery = searchQuery.toLowerCase();
+        return (
+          (data.id && data.id.toLowerCase().includes(lowerCaseSearchQuery)) ||
+          (data.name && data.name.toLowerCase().includes(lowerCaseSearchQuery))
+        );
+      });
     }
     return couponData;
   };
+
   return (
     <TableTemplate
       data={searchQuery?.length > 0 && isFilter ? filterData() : couponData}
       columns={CouponTableColumn}
+      fetchData={fetchData}
     />
   );
 }

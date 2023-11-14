@@ -17,6 +17,7 @@ import GraphSummary from "../../components/Admin/Dashboard/GraphSummary";
 import Charts from "../../components/Admin/Dashboard/chart";
 import { Dashboard_Tables } from "../../components/Admin/Tables/Table";
 import axios from "axios";
+import PrivateRoute from "../PrivateRoute";
 
 function Dashboard() {
   const [SelectedValue, setSelectedValue] = useState("Summary Overview");
@@ -25,7 +26,7 @@ function Dashboard() {
     setSelectedValue(e.target.value);
   };
   return (
-    <>
+    <PrivateRoute allowedRole="1">
       <Stack
         justifyContent={"space-between"}
         direction={["column", "row"]}
@@ -57,7 +58,7 @@ function Dashboard() {
       <Box mt={[8, 4]} alignSelf={"center"}>
         <Dashboard_Tables />
       </Box>
-    </>
+    </PrivateRoute>
   );
 }
 

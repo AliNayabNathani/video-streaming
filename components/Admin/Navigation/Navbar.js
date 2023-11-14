@@ -64,7 +64,7 @@ const LinkItems = [
     icon: AiFillPlayCircle,
     to: "/Admin/ContentCreator",
   },
-  { name: "Category Management", icon: BiWindow, to: "/Admin/Category" },
+  // { name: "Category Management", icon: BiWindow, to: "/Admin/Category" },
   { name: "Channels Management", icon: ImTicket, to: "/Admin/Channel" },
   { name: "Videos Management", icon: AiOutlineDropbox, to: "/Admin/Video" },
   {
@@ -73,18 +73,18 @@ const LinkItems = [
     to: "/Admin/ContentApproval",
   },
   { name: "Coupons Management", icon: ImTicket, to: "/Admin/Coupons" },
-  {
-    name: "Packages Management",
-    icon: AiOutlineDropbox,
-    to: "/Admin/Packages",
-  },
+  // {
+  //   name: "Packages Management",
+  //   icon: AiOutlineDropbox,
+  //   to: "/Admin/Packages",
+  // },
   { name: "Content Management", icon: AiFillFile, to: "/Admin/Content" },
-  { name: "Reports", icon: FaFileAlt, to: "/Admin/SubscriptionReport" },
-  {
-    name: "Custom Push Notifications",
-    icon: BsFillBellFill,
-    to: "/Admin/Notif",
-  },
+  // { name: "Reports", icon: FaFileAlt, to: "/Admin/SubscriptionReport" },
+  // {
+  //   name: "Custom Push Notifications",
+  //   icon: BsFillBellFill,
+  //   to: "/Admin/Notif",
+  // },
 ];
 const ReportItems = [
   { name: "Subscription Payment Report", to: "/Admin/SubscriptionReport" },
@@ -251,12 +251,12 @@ const MobileNav = ({ onOpen, ...rest }) => {
         justifyContent={"space-between"}
         spacing={{ base: "0", md: "6" }}
       > */}
-      <Text suppressHydrationWarning={true} className="styles.hide-on-small">
+      <Text suppressHydrationWarning={true} className={styles.hideOnSmall}>
         Hi {user?.user?.user?.name}!! Welcome to administrative panel
       </Text>
 
       <Flex>
-        <Menu>
+        {/* <Menu>
           <MenuButton cursor={"pointer"} minW={0}>
             <Box>
               <Icon
@@ -297,7 +297,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               </>
             ))}
           </MenuList>
-        </Menu>
+        </Menu> */}
 
         <Icon
           as={FaRegUserCircle}

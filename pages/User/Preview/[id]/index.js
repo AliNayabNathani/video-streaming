@@ -48,6 +48,7 @@ import {
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import Link from "next/link";
+import PrivateRoute from "../../../PrivateRoute";
 
 const EpisodeData = [
   {
@@ -133,8 +134,8 @@ const ShowInfo = [
 ];
 
 const MainVideo = ({ src, poster, name, onOptions }) => {
-  console.log("src", src);
-  console.log("posster:", poster);
+  // console.log("src", src);
+  // console.log("posster:", poster);
   const videoRef = useRef(null);
   const [playing, setPlaying] = useState(false);
 
@@ -351,7 +352,7 @@ const Episodes = ({ episodesData, videoData, userId }) => {
                 direction={{ base: "row", md: "column" }}
                 alignSelf={["center", "normal"]}
               >
-                <Icon as={FiDownload} boxSize={6} />
+                {/* <Icon as={FiDownload} boxSize={6} /> */}
               </Stack>
             </Stack>
           </Stack>
@@ -563,8 +564,8 @@ const Preview = () => {
   const Category = videoData?.category;
   const userData = JSON.parse(localStorage.getItem("User"));
   const userId = userData?.user?.userId;
-  console.log("SELCTEDTrailer", selectedTrailer);
-  console.log("TrailerDATA", trailersData);
+  // console.log("SELCTEDTrailer", selectedTrailer);
+  // console.log("TrailerDATA", trailersData);
   const replaceSpacesWithPercent20 = (inputString) => {
     return inputString.replace(/ /g, "%20");
   };
@@ -618,6 +619,7 @@ const Preview = () => {
 
   const toggleReadMore = () => {
     setisReadMoreOpen(!isReadMoreOpen);
+    // console.log("isReadMoreOpen:", isReadMoreOpen);
   };
 
   const AddToFavourite = async () => {
@@ -642,76 +644,77 @@ const Preview = () => {
   };
 
   return (
-    <UserTemplate>
-      <Box
-        mt={"1rem"}
-        border={"1px solid transparent"}
-        cursor={"pointer"}
-        minH={"max-content"}
-        maxH={"60%"}
-        maxW={"100vw"}
-        overflow={"hidden"}
-      >
-        {trailersData && trailersData.length >= 0 && (
-          <MainVideo
-            src={
-              trailersData && trailersData.length > 0
-                ? `${videoServer}/${replaceSpacesWithPercent20(
-                    trailersData[0]?.file
-                  )}`
-                : selectedTrailer
-                ? `${videoServer}/${replaceSpacesWithPercent20(
-                    selectedTrailer.file
-                  )}`
-                : `${videoServer}/${"v2.mp4"}`
-            }
-            poster={
-              trailersData && trailersData.length > 0
-                ? `${pictureServer}/${replaceSpacesWithPercent20(
-                    trailersData[0]?.poster
-                  )}`
-                : selectedTrailer
-                ? `${pictureServer}/${replaceSpacesWithPercent20(
-                    selectedTrailer?.poster
-                  )}`
-                : `${pictureServer}/${"No_Image.jpg"}`
-            }
-            // poster={
-            //   selectedTrailer
-            //     ? `${pictureServer}/${selectedTrailer.poster}`
-            //     : `${pictureServer}/No_Image.jpg`
-            // }
-            name={selectedTrailer ? selectedTrailer.title : ""}
-          />
-        )}
-      </Box>
-      <Box mx={["1rem", "2rem"]}>
-        <VStack w={"100%"} alignItems={"flex-start"} mt={[4, 8]}>
-          {/* <Heading fontWeight={"semibold"} textAlign={"start"} size={"lg"}>
+    <PrivateRoute>
+      <UserTemplate>
+        <Box
+          mt={"1rem"}
+          border={"1px solid transparent"}
+          cursor={"pointer"}
+          minH={"max-content"}
+          maxH={"60%"}
+          maxW={"100vw"}
+          overflow={"hidden"}
+        >
+          {trailersData && trailersData.length >= 0 && (
+            <MainVideo
+              src={
+                trailersData && trailersData.length > 0
+                  ? `${videoServer}/${replaceSpacesWithPercent20(
+                      trailersData[0]?.file
+                    )}`
+                  : selectedTrailer
+                  ? `${videoServer}/${replaceSpacesWithPercent20(
+                      selectedTrailer.file
+                    )}`
+                  : `${videoServer}/${"v2.mp4"}`
+              }
+              poster={
+                trailersData && trailersData.length > 0
+                  ? `${pictureServer}/${replaceSpacesWithPercent20(
+                      trailersData[0]?.poster
+                    )}`
+                  : selectedTrailer
+                  ? `${pictureServer}/${replaceSpacesWithPercent20(
+                      selectedTrailer?.poster
+                    )}`
+                  : `${pictureServer}/${"No_Image.jpg"}`
+              }
+              // poster={
+              //   selectedTrailer
+              //     ? `${pictureServer}/${selectedTrailer.poster}`
+              //     : `${pictureServer}/No_Image.jpg`
+              // }
+              name={selectedTrailer ? selectedTrailer.title : ""}
+            />
+          )}
+        </Box>
+        <Box mx={["1rem", "2rem"]}>
+          <VStack w={"100%"} alignItems={"flex-start"} mt={[4, 8]}>
+            {/* <Heading fontWeight={"semibold"} textAlign={"start"} size={"lg"}>
             Preview
           </Heading> */}
-          {/* <HStack spacing={"0.5rem"}>
+            {/* <HStack spacing={"0.5rem"}>
             <InfoOutline>On Trending</InfoOutline>
             <InfoOutline>4.5</InfoOutline>
             <InfoOutline>18+</InfoOutline>
             <InfoOutline>HD</InfoOutline>
           </HStack> */}
-        </VStack>
+          </VStack>
 
-        <VStack w={"100%"} alignItems={["center", "flex-start"]}>
-          <Stack
-            w={"100%"}
-            direction={["column", "row"]}
-            my={"1rem"}
-            spacing={"1rem"}
-            justifyContent={"space-between"}
-            alignItems={"center"}
-          >
-            <Box w={"100%"}>
-              <Heading size={"xl"} fontWeight={"bold"}>
-                {videoData?.name ? videoData.name : ""}
-              </Heading>
-              {/* <HStack>
+          <VStack w={"100%"} alignItems={["center", "flex-start"]}>
+            <Stack
+              w={"100%"}
+              direction={["column", "row"]}
+              my={"1rem"}
+              spacing={"1rem"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
+              <Box w={"100%"}>
+                <Heading size={"xl"} fontWeight={"bold"}>
+                  {videoData?.name ? videoData.name : ""}
+                </Heading>
+                {/* <HStack>
                 <BsDot size={32} />
                 <Text>2017</Text>
                 <BsDot size={32} />
@@ -719,104 +722,119 @@ const Preview = () => {
                 <BsDot size={32} />
                 <Text>Thriler</Text>
               </HStack> */}
-            </Box>
-            <Stack
-              w={["100%", "auto"]}
-              direction={["column", "row"]}
-              spacing={"1rem"}
-            >
-              {/* <Button leftIcon={<BiPlay size={24} />} variant={"outline"}>
+              </Box>
+              <Stack
+                w={["100%", "auto"]}
+                direction={["column", "row"]}
+                spacing={"1rem"}
+              >
+                {/* <Button leftIcon={<BiPlay size={24} />} variant={"outline"}>
                 Resume
               </Button> */}
-              {videoStatus === "none" && (
-                <Button
-                  leftIcon={<FiShoppingBag size={20} />}
-                  variant={"outline"}
-                  onClick={onOpen}
-                >
-                  Purchase
-                </Button>
-              )}
-              {/* <Button leftIcon={<BiPlay size={24} />} variant={"outline"}>
+                {videoStatus === "none" && (
+                  <Button
+                    leftIcon={<FiShoppingBag size={20} />}
+                    variant={"outline"}
+                    onClick={onOpen}
+                  >
+                    Purchase
+                  </Button>
+                )}
+                {/* <Button leftIcon={<BiPlay size={24} />} variant={"outline"}>
                 Trailer
               </Button> */}
-              <Button
-                leftIcon={<AiFillHeart size={24} color="#55DF01" />}
-                variant={"outline"}
-                onClick={AddToFavourite}
-              >
-                Add to Favourite
-              </Button>
+                <Button
+                  leftIcon={<AiFillHeart size={24} color="#55DF01" />}
+                  variant={"outline"}
+                  onClick={AddToFavourite}
+                >
+                  Add to Favourite
+                </Button>
+              </Stack>
             </Stack>
-          </Stack>
 
-          <Box w={["100%", "40%"]}>
-            <Collapse startingHeight={"20"} in={isReadMoreOpen}>
-              <Text>{videoData?.description}</Text>
-            </Collapse>
-            {!isReadMoreOpen && (
-              <Button onClick={toggleReadMore} size="sm" variant="link">
-                Read More
-              </Button>
-            )}
-            {isReadMoreOpen && (
-              <Button onClick={toggleReadMore} size="sm" variant="link">
-                Read Less
-              </Button>
-            )}
-          </Box>
-        </VStack>
+            <Box w={["100%", "50%"]} textAlign="justify">
+              {isReadMoreOpen ? (
+                <div>
+                  {videoData?.description}
+                  <Button
+                    size="sm"
+                    onClick={toggleReadMore}
+                    ml={4}
+                    variant={"link"}
+                    color={"#55FD01"}
+                  >
+                    Show Less
+                  </Button>
+                </div>
+              ) : (
+                <div>
+                  {videoData?.description.substring(0, 300)}
+                  <Button
+                    size="sm"
+                    onClick={toggleReadMore}
+                    ml={4}
+                    variant={"link"}
+                    color={"#55FD01"}
+                  >
+                    Show More
+                  </Button>
+                </div>
+              )}
+            </Box>
+          </VStack>
 
-        <Flex alignItems={"center"}>
-          <Flex
-            width={"100%"}
-            py={["auto", "2rem"]}
-            borderRight={"2px solid black"}
-          >
-            <EpisodeOutline text="Episodes" setContent={setContent}>
-              Episodes
-            </EpisodeOutline>
+          <Flex alignItems={"center"}>
+            <Flex
+              width={"100%"}
+              py={["auto", "2rem"]}
+              borderRight={"2px solid black"}
+            >
+              <EpisodeOutline text="Episodes" setContent={setContent}>
+                Episodes
+              </EpisodeOutline>
 
-            {/* <EpisodeOutline text="Similar titles" setContent={setContent}>
+              {/* <EpisodeOutline text="Similar titles" setContent={setContent}>
               Similar Titles
             </EpisodeOutline> */}
 
-            <EpisodeOutline text="Trailers" setContent={setContent}>
-              Trailers
-            </EpisodeOutline>
+              <EpisodeOutline text="Trailers" setContent={setContent}>
+                Trailers
+              </EpisodeOutline>
 
-            <EpisodeOutline text="Crew" setContent={setContent}>
-              Cast/Crew
-            </EpisodeOutline>
+              <EpisodeOutline text="Crew" setContent={setContent}>
+                Cast/Crew
+              </EpisodeOutline>
+            </Flex>
           </Flex>
-        </Flex>
-        {content === "Episodes" ? (
-          <Episodes
-            episodesData={episodesData}
-            videoData={videoData?.id}
-            userId={userId}
-          />
-        ) : content === "Trailers" ? (
-          <Trailers
-            trailersData={trailersData}
-            setSelectedTrailer={setSelectedTrailer}
-          />
-        ) : content === "Crew" ? (
-          <Crew Cast={Cast} Genre={Genre} Category={Category} />
-        ) : null}
-        {/* : content === "Similar titles" ? (
+          {content === "Episodes" ? (
+            <Episodes
+              episodesData={episodesData}
+              videoData={videoData?.id}
+              userId={userId}
+            />
+          ) : content === "Trailers" ? (
+            <Trailers
+              trailersData={trailersData}
+              setSelectedTrailer={setSelectedTrailer}
+            />
+          ) : content === "Crew" ? (
+            <Crew Cast={Cast} Genre={Genre} Category={Category} />
+          ) : null}
+          {/* : content === "Similar titles" ? (
           <Similar_Titles />
         ) */}
-      </Box>
-      <PurchaseModal
-        onClose={onClose}
-        isOpen={isOpen}
-        rentedAmount={videoData?.rented_amount}
-        purchasingAmount={videoData?.purchasing_amount}
-        video_id={videoData?.id}
-        user_id={userId}
-      />
-    </UserTemplate>
+        </Box>
+        <PurchaseModal
+          onClose={onClose}
+          isOpen={isOpen}
+          rentedAmount={videoData?.rented_amount}
+          purchasingAmount={videoData?.purchasing_amount}
+          video_id={videoData?.id}
+          user_id={userId}
+        />
+      </UserTemplate>
+    </PrivateRoute>
   );
 };
 

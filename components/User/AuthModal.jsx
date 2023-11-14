@@ -34,7 +34,7 @@ const SignIn = ({ setAuthChoice }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { user, isLoading, isSuccess, message, isError } = useSelector(
+  const { user, isLoading, message, isError } = useSelector(
     (state) => state.auth
   );
   const roleId = user?.user?.roleId;
@@ -56,10 +56,10 @@ const SignIn = ({ setAuthChoice }) => {
       );
     }
 
-    if (isSuccess || user) {
+    if (user) {
       fetchData();
     }
-  }, [user, isError, isSuccess, message, router, dispatch]);
+  }, [user, isError, message, router, dispatch]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -69,7 +69,7 @@ const SignIn = ({ setAuthChoice }) => {
     };
 
     const response = await dispatch(login(userData));
-    console.log("LOGIN RESPONSE", response);
+    // console.log("LOGIN RESPONSE", response);
     if (response.payload.msg === "Logged In") {
       toast.success(`Welcome Back`, {
         position: toast.POSITION.TOP_CENTER,

@@ -35,6 +35,8 @@ import { FiBell } from "react-icons/fi";
 import "./Style.css";
 import { FaRegUserCircle } from "react-icons/fa";
 import { useRouter } from "next/router";
+import { logout } from "../../../features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const NotifData = [
   {
@@ -58,6 +60,8 @@ const NotifData = [
 const MobileNav = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  // console.log("ME IS", isAuthenticated);
   return (
     <Box mt={3} display={{ base: "block", md: "none" }}>
       <Icon as={AiOutlineMenu} onClick={onOpen} />
@@ -95,9 +99,15 @@ const MobileNav = () => {
                     Settings
                   </MenuItem>
                   <MenuDivider />
-                  <MenuItem bg={"black"} color={"whiteAlpha.600"}>
-                    Sign Out
-                  </MenuItem>
+                  {isAuthenticated ? (
+                    <MenuItem bg={"black"} color={"whiteAlpha.600"}>
+                      Login
+                    </MenuItem>
+                  ) : (
+                    <MenuItem bg={"black"} color={"whiteAlpha.600"}>
+                      Signout
+                    </MenuItem>
+                  )}
                 </MenuList>
               </Menu>
               <LanguageSelect />
@@ -118,9 +128,17 @@ const MobileNav = () => {
 
 export default function Nav() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const handleNavigation = () => {
     router.push("/Client/Profile");
   };
+
+  const handleLogout = async () => {
+    await dispatch(logout());
+    router.push("/");
+    window.location.reload();
+  };
+
   return (
     <>
       <Box borderBottom={"2px solid #232323"} px={4} py={4}>
@@ -140,7 +158,7 @@ export default function Nav() {
             alignItems={"center"}
             spacing={"1rem"}
           >
-            <LanguageSelect />
+            {/* <LanguageSelect />
             <Menu>
               <MenuButton cursor={"pointer"} minW={0}>
                 <Box>
@@ -162,7 +180,7 @@ export default function Nav() {
                   <HStack w={"100%"} justifyContent={"space-between"}>
                     <Heading size={"md"}>Notifications</Heading>
                     <Text textDecor={"underline"} color={"#55DF01"}>
-                      Mark all Read{" "}
+                      Mark all Read
                     </Text>
                   </HStack>
                 </MenuItem>
@@ -181,15 +199,17 @@ export default function Nav() {
                   </>
                 ))}
               </MenuList>
-            </Menu>
+            </Menu> */}
 
-            <Icon
-              as={FaRegUserCircle}
-              color={"#55DF01"}
-              cursor={"pointer"}
-              boxSize={10}
-              onClick={handleNavigation}
-            />
+            <Menu>
+              <MenuButton as={Button} variant={"unstyled"} cursor={"pointer"}>
+                <FaRegUserCircle color="#55DF01" style={{ fontSize: "2rem" }} />
+              </MenuButton>
+
+              <MenuList>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </MenuList>
+            </Menu>
           </HStack>
           <MobileNav />
         </Flex>

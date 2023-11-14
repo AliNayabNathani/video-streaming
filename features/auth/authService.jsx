@@ -21,7 +21,7 @@ const login = async (userData) => {
     },
     withCredentials: true,
   });
-  console.log(res);
+  // console.log(res);
   if (res.data) {
     localStorage.setItem("User", JSON.stringify(res.data));
   }
@@ -33,10 +33,26 @@ const logout = async () => {
   await axios.get(server + "auth/logout", { withCredentials: true });
 };
 
+const updateProfile = async (userData) => {
+  const res = await axios.patch(server + "auth/updateprofile", userData, {
+    headers: {
+      "Content-type": "application/json",
+    },
+    withCredentials: true,
+  });
+
+  if (res.data) {
+    localStorage.setItem("User", JSON.stringify(res.data));
+  }
+
+  return res.data;
+};
+
 const authService = {
   register,
   logout,
   login,
+  updateProfile,
 };
 
 export default authService;

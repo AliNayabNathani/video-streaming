@@ -53,8 +53,9 @@ import { BiEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { HiOutlineEye } from "react-icons/hi";
+import { toast } from "react-toastify";
 
-const deleteUser = (id) => {
+const deleteUser = (id, fetchData) => {
   axios
     .delete(server + `users/${id}`, {
       headers: {
@@ -63,7 +64,7 @@ const deleteUser = (id) => {
       withCredentials: true,
     })
     .then((res) => {
-      console.log(res.data);
+      fetchData();
     })
     .catch((err) => {
       console.error(err);
@@ -80,6 +81,10 @@ const changeActiveStatus = (id) => {
     })
     .then((res) => {
       console.log(res.data);
+      toast.success(`Status Changed to ${res.data.user.status}`, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 4000,
+      });
     })
     .catch((err) => {
       console.error(err);
@@ -112,7 +117,7 @@ const UserExportCsv = async () => {
     });
 };
 
-const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
+const TableTemplate = ({ data, text, columns, itemsPerPage, fetchData }) => {
   var num = 0;
   itemsPerPage = itemsPerPage || 10;
   const [currentPage, setCurrentPage] = useState(0);
@@ -126,7 +131,7 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
     router.push(to);
   };
 
-  const Actions = ({ item }) => {
+  const Actions = ({ item, fetchData }) => {
     const columnId = item.id;
     const router = useRouter();
     return (
@@ -136,7 +141,7 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
         </Box>
         <BiEdit cursor={"pointer"} size={25} />
         <AiOutlineDelete
-          onClick={() => deleteUser(columnId)}
+          onClick={() => deleteUser(columnId, fetchData)}
           cursor={"pointer"}
           size={25}
         />
@@ -225,8 +230,11 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
                       borderRight={"1px"}
                       borderColor={"blackAlpha.600"}
                     >
-                      {" "}
-                      <Actions item={item} columnId={item.id} />{" "}
+                      <Actions
+                        item={item}
+                        columnId={item.id}
+                        fetchData={fetchData}
+                      />
                     </Td>
                   ) : null}
                 </Tr>
@@ -286,7 +294,7 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
   );
 };
 
-const ShowAddUserModal = ({ isOpen, onClose }) => {
+const ShowAddUserModal = ({ isOpen, onClose, fetchData }) => {
   const [newUserData, setNewUserData] = useState({
     name: "",
     email: "",
@@ -309,6 +317,7 @@ const ShowAddUserModal = ({ isOpen, onClose }) => {
         }
       );
       console.log(response);
+      fetchData();
       onClose();
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -434,21 +443,21 @@ export default function UserManagement() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [userData, setUserData] = useState([]);
   const user = useSelector((state) => state.user);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${server}users/`, {
-          headers: {
-            "Content-type": "application/json",
-          },
-          withCredentials: true,
-        });
-        setUserData(response.data.users);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${server}users/`, {
+        headers: {
+          "Content-type": "application/json",
+        },
+        withCredentials: true,
+      });
+      setUserData(response.data.users);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -469,11 +478,16 @@ export default function UserManagement() {
     <>
       <HeaderButtons onOpen={onOpen} />
       <SearchBar />
-      <ShowAddUserModal isOpen={isOpen} onClose={onClose} />
+      <ShowAddUserModal
+        isOpen={isOpen}
+        onClose={onClose}
+        fetchData={fetchData}
+      />
       <TableTemplate
         data={searchQuery?.length > 1 && isFilter ? filterData() : userData}
         columns={userColumns}
         to={"/Admin/UserDetails"}
+        fetchData={fetchData}
       />
     </>
   );
