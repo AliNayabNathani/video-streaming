@@ -139,7 +139,7 @@ const TableTemplate = ({ data, text, columns, itemsPerPage, fetchData }) => {
         <Box onClick={() => handleNavigation("/Admin/UserDetails", router)}>
           <HiOutlineEye cursor={"pointer"} size={25} />
         </Box>
-        <BiEdit cursor={"pointer"} size={25} />
+        {/* <BiEdit cursor={"pointer"} size={25} /> */}
         <AiOutlineDelete
           onClick={() => deleteUser(columnId, fetchData)}
           cursor={"pointer"}

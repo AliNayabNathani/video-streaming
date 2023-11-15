@@ -48,6 +48,7 @@ const changeActiveStatus = (id) => {
 
 const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
   var num = 0;
+  console.log("ITEM PER PAGE", itemsPerPage);
   itemsPerPage = itemsPerPage || 10;
   const [currentPage, setCurrentPage] = useState(0);
   const startIndex = currentPage * itemsPerPage;
@@ -61,9 +62,9 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
   };
 
   const Actions = ({ item }) => {
-    console.log("THIS IS ITEM:", item);
+    // console.log("THIS IS ITEM:", item);
     const columnId = item.id;
-    console.log("COLUMN ID", columnId);
+    // console.log("COLUMN ID", columnId);
     const router = useRouter();
     return (
       <HStack align={"center"} justifyContent={"space-around"}>
@@ -174,14 +175,14 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
               currentPage === 0 ? (
                 <Button
                   bg={"#232323"}
-                  leftIcon={<ChevronLeftIcon />}
+                  _hover={{ bg: "#323232" }}
+                  leftIcon={<ChevronLeftIcon boxSize={6} />}
                   onClick={() => handlePageClick({ selected: currentPage - 1 })}
                   isDisabled
                 ></Button>
               ) : (
                 <Button
                   bg={"#232323"}
-                  _hover={{ bg: "#323232" }}
                   leftIcon={<ChevronLeftIcon />}
                   onClick={() => handlePageClick({ selected: currentPage - 1 })}
                 ></Button>
@@ -191,14 +192,14 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
               currentPage === totalPages - 1 ? (
                 <Button
                   bg={"#232323"}
-                  rightIcon={<ChevronRightIcon />}
+                  _hover={{ bg: "#323232" }}
+                  rightIcon={<ChevronRightIcon boxSize={4} />}
                   onClick={() => handlePageClick({ selected: currentPage + 1 })}
                   isDisabled
                 ></Button>
               ) : (
                 <Button
                   bg={"#232323"}
-                  _hover={{ bg: "#323232" }}
                   rightIcon={<ChevronRightIcon />}
                   onClick={() => handlePageClick({ selected: currentPage + 1 })}
                 ></Button>
@@ -220,24 +221,7 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
 
 const ChannelColumn = ["id", "name", "creator_name", "createdAt"];
 
-const ChannelActions = ({ to }) => {
-  const router = useRouter();
-
-  const handleNavigation = (to) => {
-    router.push(to);
-  };
-  return (
-    <HStack justifyContent={"space-around"}>
-      <HiOutlineEye
-        onClick={() => handleNavigation(to)}
-        cursor={"pointer"}
-        size={25}
-      />
-      <ToggleButton cursor={"pointer"} />
-    </HStack>
-  );
-};
-export default function ChannelTable() {
+export default function ChannelTable({ itemsPerPage }) {
   const { searchQuery, isFilter } = useSearchContext();
   const [channelData, setChannelData] = useState();
   useEffect(() => {
@@ -281,6 +265,7 @@ export default function ChannelTable() {
     <TableTemplate
       data={searchQuery?.length > 0 && isFilter ? filterData() : channelData}
       columns={ChannelColumn}
+      itemsPerPage={itemsPerPage}
     />
   );
 }

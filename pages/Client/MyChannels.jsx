@@ -32,102 +32,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "../PrivateRoute";
 
-const ChannelData = [
-  {
-    name: "Dark",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-    episodes: [
-      {
-        name: "Episode 1",
-        Duration: "25",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Another episode description.",
-      },
-      {
-        name: "Episode 2",
-        Duration: "30",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Another episode description.",
-      },
-      {
-        name: "Episode 3",
-        Duration: "30",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Another episode description.",
-      },
-      {
-        name: "Episode 4",
-        Duration: "30",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Another episode description.",
-      },
-      {
-        name: "Episode 5",
-        Duration: "30",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Another episode description.",
-      },
-    ],
-  },
-  {
-    name: "Stranger Things",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-    episodes: [
-      {
-        name: "Episode 1",
-        Duration: "40",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Description for Stranger Things Episode 1.",
-      },
-      {
-        name: "Episode 2",
-        Duration: "35",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Description for Stranger Things Episode 2.",
-      },
-    ],
-  },
-  {
-    name: "Breaking Bad",
-    src: "https://vjs.zencdn.net/v/oceans.mp4",
-    poster: "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-    episodes: [
-      {
-        name: "Episode 1",
-        Duration: "45",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Description for Breaking Bad Episode 1.",
-      },
-      {
-        name: "Episode 2",
-        Duration: "50",
-        src: "https://vjs.zencdn.net/v/oceans.mp4",
-        poster:
-          "https://i.scdn.co/image/ab67706c0000bebb4492dc4cac4ffc505e0531a8",
-        desc: "Description for Breaking Bad Episode 2.",
-      },
-    ],
-  },
-];
-
 const VideoPlayer = ({ src, poster, name }) => (
   <Box
     border={"1px solid transparent"}
@@ -417,6 +321,7 @@ const AddChannelModal = ({ isOpen, onClose }) => {
           position: toast.POSITION.TOP_CENTER,
           autoClose: 4000,
         });
+        onClose();
       })
       .catch((err) => {
         toast.error(err.response.data.msg, {
@@ -513,12 +418,14 @@ export default function Channel() {
       <MainTemplate>
         <Box mx={"2rem"}>
           <Stack
-            direction={"row"}
+            direction={["column", "row"]}
             mt={"1rem"}
             mb={"3rem"}
             justifyContent={"space-between"}
           >
-            <Heading size={"lg"}>My Channels</Heading>
+            <Heading size={"lg"} textAlign={["center", "left"]} mb={[4, 0]}>
+              My Channels
+            </Heading>
             <Button onClick={onOpen}>Create Channel</Button>
           </Stack>
           <Box>

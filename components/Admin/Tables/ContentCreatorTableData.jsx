@@ -1,18 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchContext } from "../Context api/Context";
-import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  HStack,
-  Heading,
-  Input,
-  Select,
-  Stack,
-  VStack,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Button, HStack } from "@chakra-ui/react";
 import axios from "axios";
 import {
   Table,
@@ -203,14 +191,14 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
               currentPage === 0 ? (
                 <Button
                   bg={"#232323"}
-                  leftIcon={<ChevronLeftIcon />}
+                  _hover={{ bg: "#323232" }}
+                  leftIcon={<ChevronLeftIcon boxSize={6} />}
                   onClick={() => handlePageClick({ selected: currentPage - 1 })}
                   isDisabled
                 ></Button>
               ) : (
                 <Button
                   bg={"#232323"}
-                  _hover={{ bg: "#323232" }}
                   leftIcon={<ChevronLeftIcon />}
                   onClick={() => handlePageClick({ selected: currentPage - 1 })}
                 ></Button>
@@ -220,14 +208,14 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
               currentPage === totalPages - 1 ? (
                 <Button
                   bg={"#232323"}
-                  rightIcon={<ChevronRightIcon />}
+                  _hover={{ bg: "#323232" }}
+                  rightIcon={<ChevronRightIcon boxSize={4} />}
                   onClick={() => handlePageClick({ selected: currentPage + 1 })}
                   isDisabled
                 ></Button>
               ) : (
                 <Button
                   bg={"#232323"}
-                  _hover={{ bg: "#323232" }}
                   rightIcon={<ChevronRightIcon />}
                   onClick={() => handlePageClick({ selected: currentPage + 1 })}
                 ></Button>
@@ -255,7 +243,7 @@ const ContentCreatorColumn = [
   "status",
 ];
 
-export default function ContentCreatorTable() {
+export default function ContentCreatorTable({ itemsPerPage }) {
   const { searchQuery, isFilter } = useSearchContext();
   const [contentCreatorData, setContentCreatorData] = useState();
   console.log(contentCreatorData);
@@ -294,6 +282,7 @@ export default function ContentCreatorTable() {
       }
       columns={ContentCreatorColumn}
       to="/Admin/ContentCreatorDetails"
+      itemsPerPage={itemsPerPage}
     />
   );
 }

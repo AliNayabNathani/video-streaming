@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   HStack,
+  Heading,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -37,38 +38,59 @@ import { BiEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { HiOutlineEye } from "react-icons/hi";
+import Loader from "../../Loader";
 
-const AcceptContent = async (id) => {
+const AcceptContent = async (id, setContentData) => {
   try {
-    const response = await axios.post(`${server}users/content/${id}/accept`, {
-      headers: {
-        "Content-type": "application/json",
-      },
-      withCredentials: true,
-    });
+    const response = await axios.post(
+      `${server}users/content/${id}/accept`,
+      {},
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
     console.log(response);
+    setContentData((prevData) =>
+      prevData.filter((content) => content.id !== id)
+    );
     onClose();
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 };
 
-const RejectContent = async (id) => {
+const RejectContent = async (id, setContentData) => {
   try {
-    const response = await axios.post(`${server}users/content/${id}/reject`, {
-      headers: {
-        "Content-type": "application/json",
-      },
-      withCredentials: true,
-    });
+    const response = await axios.post(
+      `${server}users/content/${id}/reject`,
+      {},
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
     console.log(response);
+    setContentData((prevData) =>
+      prevData.filter((content) => content.id !== id)
+    );
     onClose();
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 };
 
-const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
+const TableTemplate = ({
+  data,
+  text,
+  columns,
+  itemsPerPage,
+  setContentData,
+}) => {
   var num = 0;
   itemsPerPage = itemsPerPage || 10;
   const [currentPage, setCurrentPage] = useState(0);
@@ -83,7 +105,7 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
     router.push(to);
   };
 
-  const Actions = ({ item }) => {
+  const Actions = ({ item, setContentData }) => {
     const columnId = item.id;
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -91,8 +113,12 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
       <>
         <HStack justifyContent={"space-around"}>
           <HiOutlineEye onClick={onOpen} cursor={"pointer"} size={25} />
-          <Button onClick={() => AcceptContent(columnId)}>Accept</Button>
-          <Button onClick={() => RejectContent(columnId)}>Reject</Button>
+          <Button onClick={() => AcceptContent(columnId, setContentData)}>
+            Accept
+          </Button>
+          <Button onClick={() => RejectContent(columnId, setContentData)}>
+            Reject
+          </Button>
         </HStack>
         <ContentAprrovalModal
           item={item}
@@ -146,47 +172,60 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
             </Tr>
           </Thead>
 
-          <Tbody>
-            {slicedData?.map((item, index) => {
-              num++;
+          {slicedData && slicedData.length > 0 ? (
+            <>
+              <Tbody>
+                {slicedData.map((item, index) => {
+                  num++;
 
-              return (
-                <Tr
-                  style={
-                    num % 2 === 0
-                      ? { background: "#232323" }
-                      : { background: "#323232" }
-                  }
-                  key={index}
-                >
-                  {columns.map((column) => {
-                    return (
-                      <Td
-                        textAlign={"center"}
-                        borderRight={"1px"}
-                        borderBottom={0}
-                        borderColor={"blackAlpha.600"}
-                        key={column}
-                      >
-                        {item[column]}
-                      </Td>
-                    );
-                  })}
-                  {Actions ? (
-                    <Td
-                      textAlign={"center"}
-                      borderBottom={0}
-                      borderRight={"1px"}
-                      borderColor={"blackAlpha.600"}
+                  return (
+                    <Tr
+                      style={
+                        num % 2 === 0
+                          ? { background: "#232323" }
+                          : { background: "#323232" }
+                      }
+                      key={index}
                     >
-                      {" "}
-                      <Actions item={item} columnId={item.id} />{" "}
-                    </Td>
-                  ) : null}
-                </Tr>
-              );
-            })}
-          </Tbody>
+                      {columns.map((column) => (
+                        <Td
+                          textAlign={"center"}
+                          borderRight={"1px"}
+                          borderBottom={0}
+                          borderColor={"blackAlpha.600"}
+                          key={column}
+                        >
+                          {item[column]}
+                        </Td>
+                      ))}
+                      {Actions && (
+                        <Td
+                          textAlign={"center"}
+                          borderBottom={0}
+                          borderRight={"1px"}
+                          borderColor={"blackAlpha.600"}
+                        >
+                          <Actions
+                            item={item}
+                            columnId={item.id}
+                            setContentData={setContentData}
+                          />
+                        </Td>
+                      )}
+                    </Tr>
+                  );
+                })}
+              </Tbody>
+            </>
+          ) : (
+            <Heading
+              position={"relative"}
+              left={[0, "20rem"]}
+              mt={["1rem", "2rem"]}
+            >
+              No Video(s) in Pending
+            </Heading>
+          )}
         </Table>
       </TableContainer>
       {itemsPerPage >= 10 ? (
@@ -325,15 +364,20 @@ const ContentApprovalTableColumns = [
 const ContentApprovalTable = () => {
   const { searchQuery, isFilter } = useSearchContext();
   const [contentData, setContentData] = useState();
+  const [isLoading, setisLoading] = useState(true);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${server}users/content-approval`, {
-          headers: {
-            "Content-type": "application/json",
-          },
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${server}users/any-videos?status=Pending`,
+          {
+            headers: {
+              "Content-type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
         console.log(response.data);
         const modifiedData = await response.data.videos.map((item) => {
           const datePart = item.createdAt.split("T")[0];
@@ -345,6 +389,8 @@ const ContentApprovalTable = () => {
         setContentData(modifiedData);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setisLoading(false);
       }
     };
 
@@ -363,10 +409,19 @@ const ContentApprovalTable = () => {
     return contentData;
   };
   return (
-    <TableTemplate
-      data={searchQuery?.length > 0 && isFilter ? filterData() : contentData}
-      columns={ContentApprovalTableColumns}
-    />
+    <>
+      {isLoading ? (
+        <Loader color="#55DF01" />
+      ) : (
+        <TableTemplate
+          data={
+            searchQuery?.length > 0 && isFilter ? filterData() : contentData
+          }
+          columns={ContentApprovalTableColumns}
+          setContentData={setContentData}
+        />
+      )}
+    </>
   );
 };
 

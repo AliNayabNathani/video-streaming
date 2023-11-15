@@ -4,11 +4,12 @@ import { SearchBar } from "../../../components/Admin/SmallReusableComponents/Sea
 import VideoTable from "../../../components/Admin/Video/VideoTable";
 
 export default function Video() {
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   return (
     <>
       <PageHeading text={"Video Management"} />
-      <SearchBar />
-      <VideoTable />
+      <SearchBar setItemsPerPage={setItemsPerPage} />
+      <VideoTable itemsPerPage={itemsPerPage} />
     </>
   );
 }

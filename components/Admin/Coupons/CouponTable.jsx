@@ -250,14 +250,14 @@ const TableTemplate = ({ data, text, columns, itemsPerPage, fetchData }) => {
               currentPage === 0 ? (
                 <Button
                   bg={"#232323"}
-                  leftIcon={<ChevronLeftIcon />}
+                  _hover={{ bg: "#323232" }}
+                  leftIcon={<ChevronLeftIcon boxSize={6} />}
                   onClick={() => handlePageClick({ selected: currentPage - 1 })}
                   isDisabled
                 ></Button>
               ) : (
                 <Button
                   bg={"#232323"}
-                  _hover={{ bg: "#323232" }}
                   leftIcon={<ChevronLeftIcon />}
                   onClick={() => handlePageClick({ selected: currentPage - 1 })}
                 ></Button>
@@ -267,14 +267,14 @@ const TableTemplate = ({ data, text, columns, itemsPerPage, fetchData }) => {
               currentPage === totalPages - 1 ? (
                 <Button
                   bg={"#232323"}
-                  rightIcon={<ChevronRightIcon />}
+                  _hover={{ bg: "#323232" }}
+                  rightIcon={<ChevronRightIcon boxSize={4} />}
                   onClick={() => handlePageClick({ selected: currentPage + 1 })}
                   isDisabled
                 ></Button>
               ) : (
                 <Button
                   bg={"#232323"}
-                  _hover={{ bg: "#323232" }}
                   rightIcon={<ChevronRightIcon />}
                   onClick={() => handlePageClick({ selected: currentPage + 1 })}
                 ></Button>
@@ -289,14 +289,21 @@ const TableTemplate = ({ data, text, columns, itemsPerPage, fetchData }) => {
             activeClassName={styles.active}
           />
         </>
-      ) : null}
+      ) : (
+        <></>
+      )}
     </>
   );
 };
 
 const CouponTableColumn = ["name", "createdAt", "value"];
 
-export default function CouponTable({ couponData, setCoupons, fetchData }) {
+export default function CouponTable({
+  couponData,
+  setCoupons,
+  fetchData,
+  itemsPerPage,
+}) {
   const { searchQuery, isFilter } = useSearchContext();
   console.log(couponData);
 
@@ -322,6 +329,7 @@ export default function CouponTable({ couponData, setCoupons, fetchData }) {
       data={searchQuery?.length > 0 && isFilter ? filterData() : couponData}
       columns={CouponTableColumn}
       fetchData={fetchData}
+      itemsPerPage={itemsPerPage}
     />
   );
 }

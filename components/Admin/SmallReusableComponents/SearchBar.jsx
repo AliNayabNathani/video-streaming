@@ -21,7 +21,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./Style.css";
 import { AiOutlineCalendar, AiOutlineSearch } from "react-icons/ai";
 import { useSearchContext } from "../Context api/Context";
-const SearchBar = () => {
+
+const SearchBar = ({ setItemsPerPage }) => {
   const [startDate, setStartDate] = useState(new Date());
   const { searchQuery, updateSearchQuery, updateFilter } = useSearchContext();
 
@@ -96,7 +97,12 @@ const SearchBar = () => {
         alignItems={"center"}
       >
         <Text textAlign={["center", "left"]}>Show enteries</Text>
-        <Select defaultValue={"10"} bg={"#3B3B3B"} w={"30%"}>
+        <Select
+          defaultValue={"10"}
+          bg={"#3B3B3B"}
+          w={"30%"}
+          onChange={(e) => setItemsPerPage(parseInt(e.target.value))}
+        >
           <option value="10">10</option>
           <option value="25">25</option>
           <option value="50">50</option>

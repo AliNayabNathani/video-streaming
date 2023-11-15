@@ -25,7 +25,7 @@ import {
 
 import ReactPaginate from "react-paginate";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import "./Table.css";
+import styles from "./Table.module.css";
 import { BiEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/router";
@@ -83,8 +83,9 @@ const changeActiveStatus = (id) => {
 };
 
 const TableTemplate = ({ data, text, columns, itemsPerPage, setVideoData }) => {
+  console.log("THIS IS ITEM PER PAGE", itemsPerPage);
   var num = 0;
-  itemsPerPage = itemsPerPage || 10;
+  itemsPerPage = itemsPerPage;
   const [currentPage, setCurrentPage] = useState(0);
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -128,9 +129,9 @@ const TableTemplate = ({ data, text, columns, itemsPerPage, setVideoData }) => {
           />
           <ToggleButton
             columnId={columnId}
+            changeStatus={changeActiveStatus}
             data={item}
             cursor={"pointer"}
-            changeStatus={changeActiveStatus}
           />
         </HStack>
 
@@ -250,14 +251,14 @@ const TableTemplate = ({ data, text, columns, itemsPerPage, setVideoData }) => {
               currentPage === 0 ? (
                 <Button
                   bg={"#232323"}
-                  leftIcon={<ChevronLeftIcon />}
+                  _hover={{ bg: "#323232" }}
+                  leftIcon={<ChevronLeftIcon boxSize={6} />}
                   onClick={() => handlePageClick({ selected: currentPage - 1 })}
                   isDisabled
                 ></Button>
               ) : (
                 <Button
                   bg={"#232323"}
-                  _hover={{ bg: "#323232" }}
                   leftIcon={<ChevronLeftIcon />}
                   onClick={() => handlePageClick({ selected: currentPage - 1 })}
                 ></Button>
@@ -267,14 +268,14 @@ const TableTemplate = ({ data, text, columns, itemsPerPage, setVideoData }) => {
               currentPage === totalPages - 1 ? (
                 <Button
                   bg={"#232323"}
-                  rightIcon={<ChevronRightIcon />}
+                  _hover={{ bg: "#323232" }}
+                  rightIcon={<ChevronRightIcon boxSize={4} />}
                   onClick={() => handlePageClick({ selected: currentPage + 1 })}
                   isDisabled
                 ></Button>
               ) : (
                 <Button
                   bg={"#232323"}
-                  _hover={{ bg: "#323232" }}
                   rightIcon={<ChevronRightIcon />}
                   onClick={() => handlePageClick({ selected: currentPage + 1 })}
                 ></Button>
@@ -285,8 +286,8 @@ const TableTemplate = ({ data, text, columns, itemsPerPage, setVideoData }) => {
             marginPagesDisplayed={2}
             pageRangeDisplayed={5}
             onPageChange={handlePageClick}
-            containerClassName={"pagination"}
-            activeClassName={"active"}
+            containerClassName={styles.pagination}
+            activeClassName={styles.active}
           />
         </>
       ) : null}
@@ -304,7 +305,7 @@ const VideoTableColumns = [
   "createdAt",
 ];
 
-export default function VideoTable() {
+export default function VideoTable({ itemsPerPage }) {
   const { searchQuery, isFilter } = useSearchContext();
   const [videoData, setVideoData] = useState();
   const [isLoading, setisLoading] = useState(true);
@@ -312,12 +313,16 @@ export default function VideoTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${server}users/videos`, {
-          headers: {
-            "Content-type": "application/json",
-          },
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${server}users/any-videos?status=Active&status=InActive`,
+          {
+            headers: {
+              "Content-type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
+
         const modifiedData = await response.data.videos.map((item) => {
           const datePart = item.createdAt.split("T")[0];
           return {
@@ -325,7 +330,9 @@ export default function VideoTable() {
             createdAt: datePart,
           };
         });
+        modifiedData.sort((a, b) => parseInt(a.id) - parseInt(b.id));
         setVideoData(modifiedData);
+        // console.log("VIDEO DATA", modifiedData);
         setisLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -338,29 +345,35 @@ export default function VideoTable() {
     fetchData();
   }, []);
 
-  videoData?.sort((a, b) => parseInt(a.id) - parseInt(b.id));
-  console.log(videoData);
-
+  // videoData?.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+  // console.log(videoData);
   const filterData = () => {
     if (searchQuery) {
-      return videoData.filter(
-        (data) =>
-          data.Video_ID.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          data.Video_Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          data.Creator_Name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      // console.log("SE", searchQuery);
+      return videoData.filter((data) => {
+        const lowercaseQuery = searchQuery.toLowerCase();
+        return (
+          (typeof data.id === "number" &&
+            data.id.toString().includes(searchQuery)) ||
+          data.name.toLowerCase().includes(lowercaseQuery) ||
+          data.creator_name.toLowerCase().includes(lowercaseQuery) ||
+          data.status.toLowerCase().includes(lowercaseQuery)
+        );
+      });
     }
     return videoData;
   };
+
   return (
     <>
       {isLoading ? (
         <Loader color="#55DF01" />
       ) : (
         <TableTemplate
-          data={searchQuery?.length > 1 && isFilter ? filterData() : videoData}
+          data={searchQuery?.length >= 1 && isFilter ? filterData() : videoData}
           columns={VideoTableColumns}
           setVideoData={setVideoData}
+          itemsPerPage={itemsPerPage}
         />
       )}
     </>

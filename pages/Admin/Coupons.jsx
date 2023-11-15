@@ -145,12 +145,17 @@ const HeaderModalButtons = ({ setCoupons, heading, couponData, fetchData }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <HStack justifyContent="space-between">
+    <Stack
+      direction={["column", "row"]}
+      justifyContent="space-between"
+      alignItems={"center"}
+    >
       <PageHeading text={heading} />
-      <Stack direction={{ base: "column", md: "row" }}>
-        <Button onClick={onOpen}>Add Category</Button>
-      </Stack>
-      {/* Pass selectedButton to the AddModal */}
+
+      <Button onClick={onOpen} mb={[4, 0]}>
+        Add Category
+      </Button>
+
       <AddCategoryModal
         isOpen={isOpen}
         onClose={onClose}
@@ -158,12 +163,13 @@ const HeaderModalButtons = ({ setCoupons, heading, couponData, fetchData }) => {
         couponData={couponData}
         fetchData={fetchData}
       />
-    </HStack>
+    </Stack>
   );
 };
 
 export default function Coupons() {
   const [couponData, setCoupons] = useState();
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const fetchData = async () => {
     try {
@@ -200,11 +206,12 @@ export default function Coupons() {
           couponData={couponData}
           fetchData={fetchData}
         />
-        <SearchBar />
+        <SearchBar setItemsPerPage={setItemsPerPage} />
         <CouponTable
           couponData={couponData}
           setCoupons={setCoupons}
           fetchData={fetchData}
+          itemsPerPage={itemsPerPage}
         />
       </PrivateRoute>
     </>

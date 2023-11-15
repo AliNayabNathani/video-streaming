@@ -26,6 +26,7 @@ import { server } from "../../components/server";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PrivateRoute from "../PrivateRoute";
 
 const ShowAddUserModal = ({ isOpen, onClose }) => {
   const [userInfo, setUserInfo] = useState({

@@ -25,8 +25,9 @@ const Actions = ({ to }) => {
 };
 
 const ToggleButton = ({ columnId, data, changeStatus }) => {
-  console.log("aoun", columnId);
-  // console.log("DATA SWITCH", data);
+  // console.log("aoun", data);
+  // console.log("DATA SWITCH", data.status);
+
   const [isOn, setIsOn] = useState(true);
 
   useEffect(() => {
