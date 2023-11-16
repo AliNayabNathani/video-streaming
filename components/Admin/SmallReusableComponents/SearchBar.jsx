@@ -22,13 +22,40 @@ import "./Style.css";
 import { AiOutlineCalendar, AiOutlineSearch } from "react-icons/ai";
 import { useSearchContext } from "../Context api/Context";
 
-const SearchBar = ({ setItemsPerPage }) => {
-  const [startDate, setStartDate] = useState(new Date());
+const SearchBar = ({
+  setItemsPerPage,
+  startDate,
+  endDate,
+  setStartDate,
+  setEndDate,
+  channelData,
+}) => {
+  // console.log(channelData);
   const { searchQuery, updateSearchQuery, updateFilter } = useSearchContext();
 
   const handleClear = () => {
-    // setStartDate(new Date());
+    if (channelData && channelData.length > 0) {
+      const minDate = channelData.reduce((min, data) => {
+        const currentDate = new Date(data.createdAt);
+        return currentDate < min ? currentDate : min;
+      }, new Date());
+
+      setStartDate(minDate);
+      setEndDate(new Date());
+    } else {
+      setStartDate(new Date());
+      setEndDate(new Date());
+    }
+
     updateSearchQuery("");
+  };
+
+  const filterPastDates = (date) => {
+    const minDate = channelData.reduce((min, data) => {
+      const currentDate = new Date(data.createdAt);
+      return currentDate < min ? currentDate : min;
+    }, new Date());
+    return date >= minDate;
   };
 
   return (
@@ -46,6 +73,7 @@ const SearchBar = ({ setItemsPerPage }) => {
                 className="datepicker"
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
+                filterDate={filterPastDates}
               />
               <Icon as={AiOutlineCalendar} />
             </box>
@@ -55,8 +83,9 @@ const SearchBar = ({ setItemsPerPage }) => {
             <box className="custom-datepicker">
               <DatePicker
                 className="datepicker"
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                filterDate={filterPastDates}
               />
               <Icon as={AiOutlineCalendar} />
             </box>

@@ -221,46 +221,43 @@ const TableTemplate = ({ data, text, columns, itemsPerPage }) => {
 
 const ChannelColumn = ["id", "name", "creator_name", "createdAt"];
 
-export default function ChannelTable({ itemsPerPage }) {
+export default function ChannelTable({
+  itemsPerPage,
+  startDate,
+  endDate,
+  setStartDate,
+  setEndDate,
+  channelData,
+  setChannelData,
+}) {
   const { searchQuery, isFilter } = useSearchContext();
-  const [channelData, setChannelData] = useState();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${server}users/channels`, {
-          headers: {
-            "Content-type": "application/json",
-          },
-          withCredentials: true,
-        });
-        const modifiedData = await response.data.channels.map((item) => {
-          const datePart = item.createdAt.split("T")[0];
-          return {
-            ...item,
-            createdAt: datePart,
-          };
-        });
-        setChannelData(modifiedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
 
-    fetchData();
-  }, []);
   channelData?.sort((a, b) => parseInt(a.id) - parseInt(b.id));
-  console.log(searchQuery);
+  // console.log(searchQuery);
   const filterData = () => {
-    if (searchQuery) {
-      return channelData.filter(
-        (data) =>
-          data.id.toLowerCase().includes(searchQuery?.toLowerCase()) ||
-          data.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          data.creator_name.toLowerCase().includes(searchQuery?.toLowerCase())
-      );
+    if (searchQuery || (startDate && endDate)) {
+      return channelData.filter((item) => {
+        const lowercaseQuery = searchQuery?.toLowerCase();
+        const createdAt = new Date(item.createdAt);
+
+        const formattedCreatedAt = createdAt.toISOString().split("T")[0];
+
+        const matchesSearchQuery =
+          (item.id.toLowerCase().includes(lowercaseQuery) ||
+            item.name.toLowerCase().includes(lowercaseQuery) ||
+            item.creator_name.toLowerCase().includes(lowercaseQuery)) &&
+          (!startDate ||
+            formattedCreatedAt >= startDate.toISOString().split("T")[0]) &&
+          (!endDate ||
+            formattedCreatedAt <= endDate.toISOString().split("T")[0]);
+
+        return matchesSearchQuery;
+      });
     }
+    // console.log(matchesSearchQuery);
     return channelData;
   };
+
   return (
     <TableTemplate
       data={searchQuery?.length > 0 && isFilter ? filterData() : channelData}

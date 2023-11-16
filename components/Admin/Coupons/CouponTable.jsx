@@ -303,30 +303,43 @@ export default function CouponTable({
   setCoupons,
   fetchData,
   itemsPerPage,
+  startDate,
+  endDate,
+  setStartDate,
+  setEndDate,
 }) {
   const { searchQuery, isFilter } = useSearchContext();
-  console.log(couponData);
+  // console.log(couponData);
 
   couponData?.sort((a, b) => parseInt(a.id) - parseInt(b.id));
 
   // console.log(couponData);
   const filterData = () => {
-    if (searchQuery) {
-      return couponData.filter((data) => {
-        // console.log("ME SEARCHED", data);
-        const lowerCaseSearchQuery = searchQuery.toLowerCase();
-        return (
-          (data.id && data.id.toLowerCase().includes(lowerCaseSearchQuery)) ||
-          (data.name && data.name.toLowerCase().includes(lowerCaseSearchQuery))
-        );
+    if (searchQuery || (startDate && endDate)) {
+      return couponData.filter((item) => {
+        console.log("ITEM", item);
+        const lowercaseQuery = searchQuery?.toLowerCase();
+        const createdAt = new Date(item.createdAt);
+
+        const formattedCreatedAt = createdAt.toISOString().split("T")[0];
+
+        const matchesSearchQuery =
+          item.name.toLowerCase().includes(lowercaseQuery) &&
+          (!startDate ||
+            formattedCreatedAt >= startDate.toISOString().split("T")[0]) &&
+          (!endDate ||
+            formattedCreatedAt <= endDate.toISOString().split("T")[0]);
+
+        return matchesSearchQuery;
       });
     }
+    // console.log(matchesSearchQuery);
     return couponData;
   };
 
   return (
     <TableTemplate
-      data={searchQuery?.length > 0 && isFilter ? filterData() : couponData}
+      data={searchQuery?.length >= 0 && isFilter ? filterData() : couponData}
       columns={CouponTableColumn}
       fetchData={fetchData}
       itemsPerPage={itemsPerPage}

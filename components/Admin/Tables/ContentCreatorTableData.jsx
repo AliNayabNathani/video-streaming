@@ -243,38 +243,36 @@ const ContentCreatorColumn = [
   "status",
 ];
 
-export default function ContentCreatorTable({ itemsPerPage }) {
+export default function ContentCreatorTable({
+  itemsPerPage,
+  contentCreatorData,
+  setContentCreatorData,
+}) {
   const { searchQuery, isFilter } = useSearchContext();
-  const [contentCreatorData, setContentCreatorData] = useState();
-  console.log(contentCreatorData);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${server}users/get-content-creator`, {
-          headers: {
-            "Content-type": "application/json",
-          },
-          withCredentials: true,
-        });
-        console.log(response);
-        setContentCreatorData(response.data.creators);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
 
-    fetchData();
-  }, []);
   const filterData = () => {
-    if (searchQuery) {
-      return contentCreatorData.filter(
-        (data) =>
-          data.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          data.id.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+    if (searchQuery || (startDate && endDate)) {
+      return contentCreatorData.filter((item) => {
+        const lowercaseQuery = searchQuery?.toLowerCase();
+        const createdAt = new Date(item.createdAt);
+
+        const formattedCreatedAt = createdAt.toISOString().split("T")[0];
+
+        const matchesSearchQuery =
+          (item.id.toLowerCase().includes(lowercaseQuery) ||
+            item.name.toLowerCase().includes(lowercaseQuery)) &&
+          (!startDate ||
+            formattedCreatedAt >= startDate.toISOString().split("T")[0]) &&
+          (!endDate ||
+            formattedCreatedAt <= endDate.toISOString().split("T")[0]);
+
+        return matchesSearchQuery;
+      });
     }
-    return contentCreatorData;
+    // console.log(matchesSearchQuery);
+    return data;
   };
+
   return (
     <TableTemplate
       data={

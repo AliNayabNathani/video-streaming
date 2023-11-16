@@ -170,6 +170,8 @@ const HeaderModalButtons = ({ setCoupons, heading, couponData, fetchData }) => {
 export default function Coupons() {
   const [couponData, setCoupons] = useState();
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
   const fetchData = async () => {
     try {
@@ -187,6 +189,19 @@ export default function Coupons() {
         };
       });
       setCoupons(modifiedData);
+
+      if (modifiedData && modifiedData.length > 0) {
+        const minDate = modifiedData.reduce((min, data) => {
+          const currentDate = new Date(data.createdAt);
+          return currentDate < min ? currentDate : min;
+        }, new Date());
+
+        setStartDate(minDate);
+        setEndDate(new Date());
+      } else {
+        setStartDate(new Date());
+        setEndDate(new Date());
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -206,12 +221,25 @@ export default function Coupons() {
           couponData={couponData}
           fetchData={fetchData}
         />
-        <SearchBar setItemsPerPage={setItemsPerPage} />
+
+        <SearchBar
+          setItemsPerPage={setItemsPerPage}
+          startDate={startDate}
+          endDate={endDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          channelData={couponData}
+        />
+
         <CouponTable
           couponData={couponData}
           setCoupons={setCoupons}
           fetchData={fetchData}
           itemsPerPage={itemsPerPage}
+          startDate={startDate}
+          endDate={endDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
         />
       </PrivateRoute>
     </>

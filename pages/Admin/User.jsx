@@ -437,12 +437,15 @@ const HeaderButtons = ({ onOpen }) => {
     </Stack>
   );
 };
+
 export default function UserManagement() {
   const { searchQuery, isFilter } = useSearchContext();
-  console.log("query: ", searchQuery);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [userData, setUserData] = useState([]);
-  const user = useSelector((state) => state.user);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
   const fetchData = async () => {
     try {
       const response = await axios.get(`${server}users/`, {
@@ -452,6 +455,11 @@ export default function UserManagement() {
         withCredentials: true,
       });
       setUserData(response.data.users);
+      const minDate = response.data.users.reduce((min, data) => {
+        const currentDate = new Date(data.createdAt);
+        return currentDate < min ? currentDate : min;
+      }, new Date());
+      setStartDate(minDate);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -464,30 +472,52 @@ export default function UserManagement() {
   userData.sort((a, b) => parseInt(a.id) - parseInt(b.id));
 
   const filterData = () => {
-    if (searchQuery) {
-      return userData.filter(
-        (data) =>
-          data?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          data?.id.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+    if (searchQuery || (startDate && endDate)) {
+      return userData.filter((item) => {
+        const lowercaseQuery = searchQuery?.toLowerCase();
+        const createdAt = new Date(item.createdAt);
+
+        const formattedCreatedAt = createdAt.toISOString().split("T")[0];
+
+        const matchesSearchQuery =
+          (item.id.toLowerCase().includes(lowercaseQuery) ||
+            item.name.toLowerCase().includes(lowercaseQuery)) &&
+          (!startDate ||
+            formattedCreatedAt >= startDate.toISOString().split("T")[0]) &&
+          (!endDate ||
+            formattedCreatedAt <= endDate.toISOString().split("T")[0]);
+
+        return matchesSearchQuery;
+      });
     }
-    return userData;
+    // console.log(matchesSearchQuery);
+    return data;
   };
 
   return (
     <>
       <HeaderButtons onOpen={onOpen} />
-      <SearchBar />
+      <SearchBar
+        startDate={startDate}
+        endDate={endDate}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
+        channelData={userData}
+        setItemsPerPage={setItemsPerPage}
+      />
+
       <ShowAddUserModal
         isOpen={isOpen}
         onClose={onClose}
         fetchData={fetchData}
       />
+
       <TableTemplate
         data={searchQuery?.length > 1 && isFilter ? filterData() : userData}
         columns={userColumns}
         to={"/Admin/UserDetails"}
         fetchData={fetchData}
+        itemsPerPage={itemsPerPage}
       />
     </>
   );

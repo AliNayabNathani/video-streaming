@@ -8,7 +8,7 @@ const PrivateRoute = ({ children, allowedRole }) => {
   const storedUserData = localStorage.getItem("User");
   const parsedUserData = storedUserData ? JSON.parse(storedUserData) : null;
   const userRoleFromLocalStorage = parsedUserData?.user?.roleId;
-  console.log("from LS", userRoleFromLocalStorage);
+  // console.log("from LS", userRoleFromLocalStorage);
   useEffect(() => {
     if (!isAuthenticated) {
       router.replace("/");

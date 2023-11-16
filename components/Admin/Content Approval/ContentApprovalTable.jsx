@@ -92,6 +92,7 @@ const TableTemplate = ({
   setContentData,
 }) => {
   var num = 0;
+
   itemsPerPage = itemsPerPage || 10;
   const [currentPage, setCurrentPage] = useState(0);
   const startIndex = currentPage * itemsPerPage;
@@ -361,53 +362,43 @@ const ContentApprovalTableColumns = [
   "createdAt",
 ];
 
-const ContentApprovalTable = () => {
+const ContentApprovalTable = ({
+  itemsPerPage,
+  isLoading,
+  startDate,
+  endDate,
+  setStartDate,
+  setEndDate,
+  contentData,
+  setContentData,
+}) => {
   const { searchQuery, isFilter } = useSearchContext();
-  const [contentData, setContentData] = useState();
-  const [isLoading, setisLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${server}users/any-videos?status=Pending`,
-          {
-            headers: {
-              "Content-type": "application/json",
-            },
-            withCredentials: true,
-          }
-        );
-        console.log(response.data);
-        const modifiedData = await response.data.videos.map((item) => {
-          const datePart = item.createdAt.split("T")[0];
-          return {
-            ...item,
-            createdAt: datePart,
-          };
-        });
-        setContentData(modifiedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setisLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
   contentData?.sort((a, b) => parseInt(a.id) - parseInt(b.id));
-  console.log(contentData);
+
   const filterData = () => {
-    if (searchQuery) {
-      return contentData.filter(
-        (data) =>
-          data.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          data.creator_name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+    if (searchQuery || (startDate && endDate)) {
+      return contentData.filter((item) => {
+        const lowercaseQuery = searchQuery?.toLowerCase();
+        const createdAt = new Date(item.createdAt);
+
+        const formattedCreatedAt = createdAt.toISOString().split("T")[0];
+
+        const matchesSearchQuery =
+          (item.name.toLowerCase().includes(lowercaseQuery) ||
+            item.creator_name.toLowerCase().includes(lowercaseQuery)) &&
+          (!startDate ||
+            formattedCreatedAt >= startDate.toISOString().split("T")[0]) &&
+          (!endDate ||
+            formattedCreatedAt <= endDate.toISOString().split("T")[0]);
+
+        return matchesSearchQuery;
+      });
     }
+    // console.log(matchesSearchQuery);
     return contentData;
   };
+  // console.log(itemsPerPage);
   return (
     <>
       {isLoading ? (
@@ -419,6 +410,7 @@ const ContentApprovalTable = () => {
           }
           columns={ContentApprovalTableColumns}
           setContentData={setContentData}
+          itemsPerPage={itemsPerPage}
         />
       )}
     </>

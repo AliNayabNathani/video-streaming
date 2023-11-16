@@ -305,62 +305,37 @@ const VideoTableColumns = [
   "createdAt",
 ];
 
-export default function VideoTable({ itemsPerPage }) {
+export default function VideoTable({
+  itemsPerPage,
+  isLoading,
+  startDate,
+  endDate,
+  videoData,
+  setVideoData,
+}) {
   const { searchQuery, isFilter } = useSearchContext();
-  const [videoData, setVideoData] = useState();
-  const [isLoading, setisLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${server}users/any-videos?status=Active&status=InActive`,
-          {
-            headers: {
-              "Content-type": "application/json",
-            },
-            withCredentials: true,
-          }
-        );
-
-        const modifiedData = await response.data.videos.map((item) => {
-          const datePart = item.createdAt.split("T")[0];
-          return {
-            ...item,
-            createdAt: datePart,
-          };
-        });
-        modifiedData.sort((a, b) => parseInt(a.id) - parseInt(b.id));
-        setVideoData(modifiedData);
-        // console.log("VIDEO DATA", modifiedData);
-        setisLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setisLoading(false);
-      } finally {
-        setisLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // videoData?.sort((a, b) => parseInt(a.id) - parseInt(b.id));
-  // console.log(videoData);
   const filterData = () => {
-    if (searchQuery) {
-      // console.log("SE", searchQuery);
-      return videoData.filter((data) => {
-        const lowercaseQuery = searchQuery.toLowerCase();
-        return (
-          (typeof data.id === "number" &&
-            data.id.toString().includes(searchQuery)) ||
-          data.name.toLowerCase().includes(lowercaseQuery) ||
-          data.creator_name.toLowerCase().includes(lowercaseQuery) ||
-          data.status.toLowerCase().includes(lowercaseQuery)
-        );
+    if (searchQuery || (startDate && endDate)) {
+      return videoData.filter((item) => {
+        const lowercaseQuery = searchQuery?.toLowerCase();
+        const createdAt = new Date(item.createdAt);
+
+        const formattedCreatedAt = createdAt.toISOString().split("T")[0];
+
+        const matchesSearchQuery =
+          (item.id.toLowerCase().includes(lowercaseQuery) ||
+            item.name.toLowerCase().includes(lowercaseQuery) ||
+            item.creator_name.toLowerCase().includes(lowercaseQuery)) &&
+          (!startDate ||
+            formattedCreatedAt >= startDate.toISOString().split("T")[0]) &&
+          (!endDate ||
+            formattedCreatedAt <= endDate.toISOString().split("T")[0]);
+
+        return matchesSearchQuery;
       });
     }
+    // console.log(matchesSearchQuery);
     return videoData;
   };
 

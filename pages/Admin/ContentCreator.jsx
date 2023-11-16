@@ -23,7 +23,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { server } from "../../components/server";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "../PrivateRoute";
@@ -182,13 +182,55 @@ const HeaderButtons = ({ onOpen }) => {
 
 export default function ContentCreatorManagement() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [contentCreatorData, setContentCreatorData] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${server}users/get-content-creator`, {
+          headers: {
+            "Content-type": "application/json",
+          },
+          withCredentials: true,
+        });
+
+        setContentCreatorData(response.data.creators);
+
+        const minDate = response.data.creators.reduce((min, data) => {
+          const currentDate = new Date(data.createdAt);
+          return currentDate < min ? currentDate : min;
+        }, new Date());
+
+        setStartDate(minDate);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <PrivateRoute allowedRole={"1"}>
         <HeaderButtons onOpen={onOpen} />
         <ShowAddUserModal isOpen={isOpen} onClose={onClose} />
-        <SearchBar />
-        <ContentCreatorTable />
+        <SearchBar
+          setItemsPerPage={setItemsPerPage}
+          startDate={startDate}
+          endDate={endDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          channelData={contentCreatorData}
+        />
+        <ContentCreatorTable
+          contentCreatorData={contentCreatorData}
+          setContentCreatorData={setContentCreatorData}
+          itemsPerPage={itemsPerPage}
+        />
       </PrivateRoute>
     </>
   );
