@@ -1,12 +1,41 @@
-import { Heading, Text } from "@chakra-ui/react";
+import { Box, Heading, Text } from "@chakra-ui/react";
 import MainTemplate from "../../components/Client/Templates/Main";
+import { useEffect, useState } from "react";
+import { server } from "../../components/server";
+import axios from "axios";
 
 export default function ContentPolicy() {
-    return (
-        <MainTemplate>
-            <Heading size={'lg'} mb={'2rem'}>Content Policy</Heading>
-            <Text mb={'1rem'}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, rem minima maxime veritatis dolorem recusandae fuga sint ipsa aspernatur itaque officiis, nulla labore veniam! Amet dolores nobis necessitatibus? Nulla commodi nesciunt nisi veritatis ducimus, tempora eveniet est velit eum ad unde earum qui quae iusto officia doloribus sunt deleniti non?</Text>
-            <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, rem minima maxime veritatis dolorem recusandae fuga sint ipsa aspernatur itaque officiis, nulla labore veniam! Amet dolores nobis necessitatibus? Nulla commodi nesciunt nisi veritatis ducimus, tempora eveniet est velit eum ad unde earum qui quae iusto officia doloribus sunt deleniti non?</Text>
-        </MainTemplate>
-    )
+  const [contentPolicy, setContentPolicy] = useState();
+
+  useEffect(() => {
+    axios
+      .get(server + "creator/content-policy", {
+        headers: {
+          "Content-type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then((response) => {
+        // console.log(response.data);
+        setContentPolicy(response.data.contentPolicy);
+      })
+      .catch((err) => {
+        console.log(err);
+        throw err;
+      });
+  }, []);
+  return (
+    <MainTemplate>
+      <Box m={"1rem"}>
+        <Heading
+          mb={["1rem", "2rem"]}
+          size={["xl", "lg"]}
+          textAlign={["center", "left"]}
+          children="Support"
+        />
+
+        <Text textAlign={["center", "justify"]}>{contentPolicy}</Text>
+      </Box>
+    </MainTemplate>
+  );
 }

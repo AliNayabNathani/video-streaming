@@ -1,13 +1,42 @@
-import { Heading, Text } from "@chakra-ui/react";
+import { Box, Heading, Text } from "@chakra-ui/react";
 import MainTemplate from "../../components/Client/Templates/Main";
+import { server } from "../../components/server";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Terms() {
-    return (
-        <MainTemplate>
-            <Heading size={'lg'} mb={'2rem'}>Terms and Conditions</Heading>
-            <Text mb={'1rem'}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, rem minima maxime veritatis dolorem recusandae fuga sint ipsa aspernatur itaque officiis, nulla labore veniam! Amet dolores nobis necessitatibus? Nulla commodi nesciunt nisi veritatis ducimus, tempora eveniet est velit eum ad unde earum qui quae iusto officia doloribus sunt deleniti non?</Text>
-            <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, rem minima maxime veritatis dolorem recusandae fuga sint ipsa aspernatur itaque officiis, nulla labore veniam! Amet dolores nobis necessitatibus? Nulla commodi nesciunt nisi veritatis ducimus, tempora eveniet est velit eum ad unde earum qui quae iusto officia doloribus sunt deleniti non?</Text>
-        </MainTemplate>
-    )
+  const [termsAndConditions, setTermsAndConditions] = useState();
 
+  useEffect(() => {
+    axios
+      .get(server + "users/get-all-content", {
+        headers: {
+          "Content-type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then((response) => {
+        // console.log(response.data);
+        setTermsAndConditions(response.data.termsAndConditions);
+      })
+      .catch((err) => {
+        console.log(err);
+        throw err;
+      });
+  }, []);
+
+  return (
+    <MainTemplate>
+      <Box m={"1rem"}>
+        <Heading
+          mb={["1rem", "2rem"]}
+          size={["xl", "lg"]}
+          textAlign={["center", "left"]}
+          children="Terms And Conditions"
+        />
+
+        <Text textAlign={["center", "justify"]}>{termsAndConditions}</Text>
+      </Box>
+    </MainTemplate>
+  );
 }

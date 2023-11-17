@@ -7,23 +7,18 @@ import PrivateRoute from "../PrivateRoute";
 
 export default function Overview() {
   const [overviewText, setOverviewText] = useState();
-  const response = axios.get(server + "client/get-overview", {
-    headers: {
-      "Content-type": "application/json",
-    },
-    withCredentials: true,
-  });
+
   useEffect(() => {
     axios
-      .get(server + "client/get-overview", {
+      .get(server + "creator/overview", {
         headers: {
           "Content-type": "application/json",
         },
         withCredentials: true,
       })
       .then((response) => {
-        console.log(response.data);
-        setOverviewText(response.data.overviewData);
+        // console.log(response.data);
+        setOverviewText(response.data.overView);
       })
       .catch((err) => {
         console.log(err);
@@ -35,16 +30,14 @@ export default function Overview() {
     <PrivateRoute allowedRole="2">
       <MainTemplate>
         <Box p={8}>
-          <Heading mb={"2rem"} size={"md"}>
+          <Heading
+            mb={["1rem", "2rem"]}
+            size={["xl", "lg"]}
+            textAlign={["center", "left"]}
+          >
             Overview
           </Heading>
-          <Text>{overviewText}</Text>
-          <br />
-          <Text>{overviewText}</Text>
-          <br />
-          <Text>{overviewText}</Text>
-          <br />
-          <Text>{overviewText}</Text>
+          <Text textAlign={["center", "justify"]}>{overviewText}</Text>
         </Box>
       </MainTemplate>
     </PrivateRoute>

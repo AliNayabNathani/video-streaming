@@ -1,25 +1,49 @@
-import { Heading, Text } from "@chakra-ui/react";
+import { Box, Heading, Text } from "@chakra-ui/react";
 import MainTemplate from "../../components/Client/Templates/Main";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { server } from "../../components/server";
 
 export default function Submission() {
-    return (
-        <MainTemplate>
-            <Heading size={'lg'} mb={'2rem'}>Submission</Heading>
-            <Heading color={'#55DF01'} size={'md'}>Lorem ipsum dolor sit amet.</Heading>
-            <Text mb={'3rem'}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, rem minima maxime veritatis dolorem recusandae fuga sint ipsa aspernatur itaque officiis, nulla labore veniam! Amet dolores nobis necessitatibus? Nulla commodi nesciunt nisi veritatis ducimus, tempora eveniet est velit eum ad unde earum qui quae iusto officia doloribus sunt deleniti non?</Text>
+  const [faqs, setFaqs] = useState([]);
 
-            <Heading color={'#55DF01'} size={'md'}>Lorem ipsum dolor sit amet.</Heading>
-            <Text mb={'3rem'}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, rem minima maxime veritatis dolorem recusandae fuga sint ipsa aspernatur itaque officiis, nulla labore veniam! Amet dolores nobis necessitatibus? Nulla commodi nesciunt nisi veritatis ducimus, tempora eveniet est velit eum ad unde earum qui quae iusto officia doloribus sunt deleniti non?</Text>
+  useEffect(() => {
+    axios
+      .get(server + "creator/faqs", {
+        headers: {
+          "Content-type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response.data);
+        setFaqs(response.data.faq);
+      })
+      .catch((err) => {
+        console.log(err);
+        throw err;
+      });
+  }, []);
 
-            <Heading color={'#55DF01'} size={'md'}>Lorem ipsum dolor sit amet.</Heading>
-            <Text mb={'3rem'}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, rem minima maxime veritatis dolorem recusandae fuga sint ipsa aspernatur itaque officiis, nulla labore veniam! Amet dolores nobis necessitatibus? Nulla commodi nesciunt nisi veritatis ducimus, tempora eveniet est velit eum ad unde earum qui quae iusto officia doloribus sunt deleniti non?</Text>
+  return (
+    <MainTemplate>
+      <Box m={"1rem"}>
+        <Heading
+          mb={["2rem", "2rem"]}
+          size={["xl", "lg"]}
+          textAlign={["center", "left"]}
+          children="Submission"
+        />
 
-            <Heading color={'#55DF01'} size={'md'}>Lorem ipsum dolor sit amet.</Heading>
-            <Text mb={'3rem'}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, rem minima maxime veritatis dolorem recusandae fuga sint ipsa aspernatur itaque officiis, nulla labore veniam! Amet dolores nobis necessitatibus? Nulla commodi nesciunt nisi veritatis ducimus, tempora eveniet est velit eum ad unde earum qui quae iusto officia doloribus sunt deleniti non?</Text>
-
-            <Heading color={'#55DF01'} size={'md'}>Lorem ipsum dolor sit amet.</Heading>
-            <Text mb={'3rem'}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, rem minima maxime veritatis dolorem recusandae fuga sint ipsa aspernatur itaque officiis, nulla labore veniam! Amet dolores nobis necessitatibus? Nulla commodi nesciunt nisi veritatis ducimus, tempora eveniet est velit eum ad unde earum qui quae iusto officia doloribus sunt deleniti non?</Text>
-
-        </MainTemplate>
-    )
+        {faqs.map((faq, index) => (
+          <Box key={index} mb="2rem" textAlign={["center", "justify"]}>
+            <Heading color={"#55DF01"} size={"md"}>
+              {faq.questions}
+            </Heading>
+            <Text>{faq.answers}</Text>
+          </Box>
+        ))}
+      </Box>
+    </MainTemplate>
+  );
 }
