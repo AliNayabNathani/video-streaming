@@ -871,7 +871,7 @@ const Shows = () => {
                     my={[4, 8]}
                     fontSize={["2xl", "4xl"]}
                   >
-                    No Movies Found for Genre: {selectedCategory}
+                    No Shows Found for Genre: {selectedCategory}
                   </Heading>
                 )}
           </>
