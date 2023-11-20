@@ -32,8 +32,9 @@ export default function Contact() {
           mb={["2rem", "2rem"]}
           size={["xl", "lg"]}
           textAlign={["center", "left"]}
-          children="Contact Us"
-        />
+        >
+          Contact Us
+        </Heading>
         {contactUs && (
           <Text textAlign={["center", "justify"]} mb={[8, 8]}>
             {contactUs.description}
