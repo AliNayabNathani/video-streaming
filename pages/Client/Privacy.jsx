@@ -31,8 +31,9 @@ export default function Privacy() {
           mb={["1rem", "2rem"]}
           size={["xl", "lg"]}
           textAlign={["center", "left"]}
-          children="Privacy Policy"
-        />
+        >
+          Privacy Policy
+        </Heading>
 
         <Text textAlign={["center", "justify"]}>{privacyPolicy}</Text>
       </Box>

@@ -31,8 +31,9 @@ export default function Account() {
           mb={["2rem", "2rem"]}
           size={["xl", "lg"]}
           textAlign={["center", "left"]}
-          children="Account"
-        />
+        >
+          Account
+        </Heading>
 
         {faqs.map((faq, index) => (
           <Box key={index} mb="2rem" textAlign={["center", "justify"]}>

@@ -31,8 +31,9 @@ export default function ContentPolicy() {
           mb={["1rem", "2rem"]}
           size={["xl", "lg"]}
           textAlign={["center", "left"]}
-          children="Support"
-        />
+        >
+          Support
+        </Heading>
 
         <Text textAlign={["center", "justify"]}>{contentPolicy}</Text>
       </Box>

@@ -32,8 +32,9 @@ export default function Copyright() {
           mb={["1rem", "2rem"]}
           size={["xl", "lg"]}
           textAlign={["center", "left"]}
-          children="Copyright & Trademark"
-        />
+        >
+          Copyright & Trademark
+        </Heading>
 
         <Text textAlign={["center", "justify"]}>{copyrightTrademark}</Text>
       </Box>

@@ -32,8 +32,9 @@ export default function Terms() {
           mb={["1rem", "2rem"]}
           size={["xl", "lg"]}
           textAlign={["center", "left"]}
-          children="Terms And Conditions"
-        />
+        >
+          Terms And Conditions
+        </Heading>
 
         <Text textAlign={["center", "justify"]}>{termsAndConditions}</Text>
       </Box>

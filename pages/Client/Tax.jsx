@@ -31,8 +31,9 @@ export default function Tax() {
           mb={["2rem", "2rem"]}
           size={["xl", "lg"]}
           textAlign={["center", "left"]}
-          children="Tax"
-        />
+        >
+          Tax
+        </Heading>
 
         {faqs.map((faq, index) => (
           <Box key={index} mb="2rem" textAlign={["center", "justify"]}>

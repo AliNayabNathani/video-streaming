@@ -32,8 +32,9 @@ export default function Submission() {
           mb={["2rem", "2rem"]}
           size={["xl", "lg"]}
           textAlign={["center", "left"]}
-          children="Submission"
-        />
+        >
+          Submission
+        </Heading>
 
         {faqs.map((faq, index) => (
           <Box key={index} mb="2rem" textAlign={["center", "justify"]}>
