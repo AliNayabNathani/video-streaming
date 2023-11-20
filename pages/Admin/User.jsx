@@ -45,7 +45,6 @@ import {
   TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
-
 import ReactPaginate from "react-paginate";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import "./Table.css";

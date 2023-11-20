@@ -34,6 +34,7 @@ import { AiOutlineMenu } from "react-icons/ai";
 import { useRef } from "react";
 import { ContentBar } from "../Reusable Components/ContentBar";
 import { useDetailContext } from "../Context/context";
+import PrivateRoute from "../../../pages/PrivateRoute";
 
 const NavData = [
   {
