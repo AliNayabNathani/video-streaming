@@ -212,9 +212,9 @@ const MainVideo = ({ src, poster, name, onOptions }) => {
         ref={videoRef}
         className="video-js vjs-default-skin"
         style={{
-          padding: "0",
-          maxWidth: "100vw",
-          maxHeight: "60vh",
+          // padding: "0",
+          // maxWidth: "100vw",
+          // maxHeight: "60vh",
           objectFit: "cover",
         }}
         poster={poster}

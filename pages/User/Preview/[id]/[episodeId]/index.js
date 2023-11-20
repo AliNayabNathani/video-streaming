@@ -135,8 +135,8 @@ const MainVideo = ({ src, poster, name, onOptions }) => {
         className="video-js vjs-default-skin"
         style={{
           padding: "0",
-          maxWidth: "100vw",
-          maxHeight: "60vh",
+          // maxWidth: "100vw",
+          // maxHeight: "60vh",
           objectFit: "cover",
         }}
         poster={poster}
@@ -336,7 +336,7 @@ const Preview = () => {
   useEffect(() => {
     const fetchEpisode = async () => {
       const { episodeId } = router.query;
-      console.log("EPISODE ID", episodeId);
+      // console.log("EPISODE ID", episodeId);
       if (episodeId) {
         try {
           const episodeResponse = await axios.get(

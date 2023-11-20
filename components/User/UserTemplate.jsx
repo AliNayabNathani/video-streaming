@@ -13,6 +13,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Stack,
   Text,
 } from "@chakra-ui/react";
 import { FiBell, FiKey, FiSearch, FiSettings } from "react-icons/fi";
@@ -119,7 +120,7 @@ const Navbar = () => {
         </a> */}
       </HStack>
 
-      <HStack w={"20%"} justifyContent={"flex-end"}>
+      <HStack w={"20%"} justifyContent={"space-evenly"}>
         <Icon
           _hover={{ color: "#55DF01" }}
           aria-label="open menu"
@@ -127,7 +128,7 @@ const Navbar = () => {
           boxSize={[8, 6]}
           as={FiSearch}
         />
-        <Icon
+        {/* <Icon
           display={["none", "flex"]}
           boxSize={6}
           as={AiOutlineLine}
@@ -146,28 +147,37 @@ const Navbar = () => {
           boxSize={6}
           as={AiOutlineLine}
           transform="rotate(90deg)"
-        />
-        <Text display={["none", "flex"]} color={"#fff"}>
-          {user?.user?.user?.name &&
-            user.user.user.name.charAt(0).toUpperCase() +
-              user.user.user.name.slice(1)}
-        </Text>
-        <Menu>
-          <MenuButton
-            as={Button}
-            rounded={"full"}
-            variant={"link"}
-            cursor={"pointer"}
-          >
-            <Avatar
-              size={"md"}
+        /> */}
+        <Stack direction={"row"} alignItems={"center"}>
+          <Text display={["none", "flex"]} color={"#fff"}>
+            {user?.user?.user?.name &&
+              user.user.user.name.charAt(0).toUpperCase() +
+                user.user.user.name.slice(1)}
+          </Text>
+          <Menu>
+            <MenuButton
+              as={Button}
               rounded={"full"}
-              src={"/assests/People/cena.jpg"}
-            />
-            <ChevronDownIcon mt={2} color={"#55DF01"} boxSize={8} />
-          </MenuButton>
-          <MenuList bg={"#232323"} alignItems={"center"}>
-            {/* <MenuItem p={4} color={"white"} bg={"#232323"}>
+              variant={"link"}
+              cursor={"pointer"}
+              alignItems={"center"}
+            >
+              <Avatar
+                size={"md"}
+                rounded={"full"}
+                name={
+                  user?.user?.user?.name &&
+                  user.user.user.name.charAt(0).toUpperCase() +
+                    user.user.user.name.slice(1)
+                }
+                color={"white"}
+                bg={"#55DF01"}
+              />
+              <ChevronDownIcon mt={2} color={"#55DF01"} boxSize={8} />
+            </MenuButton>
+
+            <MenuList bg={"#232323"} alignItems={"center"}>
+              {/* <MenuItem p={4} color={"white"} bg={"#232323"}>
               <BsDownload />
               <Text ml={4} color={"white"}>
                 Downloads
@@ -206,18 +216,19 @@ const Navbar = () => {
                 Settings
               </Text>
             </MenuItem> */}
-            <MenuItem
-              p={4}
-              color={"white"}
-              bg={"#232323"}
-              onClick={handleLogout}
-            >
-              <Text ml={4} color={"white"}>
-                Logout
-              </Text>
-            </MenuItem>
-          </MenuList>
-        </Menu>
+              <MenuItem
+                p={4}
+                color={"white"}
+                bg={"#232323"}
+                onClick={handleLogout}
+              >
+                <Text ml={4} color={"white"}>
+                  Logout
+                </Text>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Stack>
         {/* <Image /> */}
       </HStack>
     </HStack>

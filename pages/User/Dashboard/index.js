@@ -538,21 +538,18 @@ const Channels = () => {
   const [ChannelData, setChannelData] = useState([]);
   const [videoData, setVideoData] = useState([]);
   const [ChannelCategory, setChannelCategory] = useState();
-  // getAllChannelsQuery
-  const categoryList = ["Action", "Drama", "Thriller"];
+
   useEffect(() => {
     const fetchDataForGenres = async () => {
-      const categoryData = {};
-      const videoType = "Channel";
       await axios
-        .get(`${server}user/allchannels`, {
+        .get(`${server}user/get-all-channels-videos`, {
           headers: {
             "Content-Type": "application/json",
           },
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res.data);
+          console.log("all channels res:", res.data);
           setChannelData(res.data.channels);
         })
         .catch((err) => {
@@ -568,51 +565,58 @@ const Channels = () => {
       {ChannelData.map((channel, index) => {
         const videos = channel.videos;
         const creatorId = channel.content_creator_id;
-        console.log("Videos", videos);
-        console.log(channel);
-        return (
-          <Box px={["2rem", "5rem"]} key={index}>
-            <Heading size={"lg"}>{channel.name}</Heading>
-            <Box>
-              <HStack
-                maxW="100%"
-                overflowX="auto"
-                className="scrollable-container"
-                spacing={"1rem"}
-              >
-                {videos.map((video, index) => {
-                  return (
+
+        if (videos && videos.length > 0) {
+          return (
+            <Box key={index} px={["2rem", "5rem"]}>
+              <Heading size="lg">{channel.name}</Heading>
+              <Box>
+                <HStack
+                  maxW="100%"
+                  overflowX="auto"
+                  className="scrollable-container"
+                  spacing="1rem"
+                >
+                  {videos.map((video, videoIndex) => (
                     <Box
-                      key={index}
-                      mt={"2rem"}
-                      border={"1px solid transparent"}
-                      cursor={"pointer"}
+                      key={videoIndex}
+                      mt="2rem"
+                      border="1px solid transparent"
+                      cursor="pointer"
                       _hover={{ scale: "1.5" }}
-                      height={"auto"}
-                      onClick={() =>
-                        router.push(
-                          `/User/Preview?creatorId=${creatorId}&id=${video.id}`
-                        )
-                      }
+                      height="auto"
+                      onClick={() => router.push(`/User/Preview/${video.id}`)}
                       minW={["80%", "300px"]}
-                      mr={"1rem"}
+                      mr="1rem"
                     >
                       <Video
-                        src={"https://vjs.zencdn.net/v/oceans.mp4"}
-                        poster={"/assests/Shows/dark-small.jpg"}
-                        name={"Dark"}
+                        src={
+                          video.trailers && video.trailers.length > 0
+                            ? `${videoServer}/${video.trailers[0]?.file}`
+                            : "https://vjs.zencdn.net/v/oceans.mp4"
+                        }
+                        poster={
+                          video.trailers && video.trailers.length > 0
+                            ? `${pictureServer}/${
+                                video.trailers[0]?.poster || "No_Image.jpg"
+                              }`
+                            : `${pictureServer}/No_Image.jpg`
+                        }
+                        name={video.name}
                       />
                     </Box>
-                  );
-                })}
-              </HStack>
+                  ))}
+                </HStack>
+              </Box>
             </Box>
-          </Box>
-        );
+          );
+        }
+        return null;
       })}
     </>
   );
 };
+
 const Carousal = () => {
   const responsive = {
     0: { items: 1 },

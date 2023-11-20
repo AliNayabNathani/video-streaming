@@ -136,9 +136,9 @@ const TableTemplate = ({ data, text, columns, itemsPerPage, fetchData }) => {
     const router = useRouter();
     return (
       <HStack align={"center"} justifyContent={"space-between"}>
-        <Box onClick={() => handleNavigation("/Admin/UserDetails", router)}>
+        {/* <Box onClick={() => handleNavigation("/Admin/UserDetails", router)}>
           <HiOutlineEye cursor={"pointer"} size={25} />
-        </Box>
+        </Box> */}
         {/* <BiEdit cursor={"pointer"} size={25} /> */}
         <AiOutlineDelete
           onClick={() => deleteUser(columnId, fetchData)}
