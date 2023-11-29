@@ -27,7 +27,7 @@ export default function Overview() {
   }, []);
 
   return (
-    <PrivateRoute allowedRole="2">
+    <PrivateRoute allowedRole="4">
       <MainTemplate>
         <Box p={8}>
           <Heading

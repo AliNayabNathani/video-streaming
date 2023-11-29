@@ -33,7 +33,7 @@ export default function Profile() {
   };
 
   return (
-    <PrivateRoute allowedRole="2">
+    <PrivateRoute allowedRole="4">
       <MainTemplate>
         <Heading size={"lg"}>Profile</Heading>
         <Flex mt={"5rem"} justifyContent={"center"}>

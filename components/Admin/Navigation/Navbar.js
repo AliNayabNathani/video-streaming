@@ -123,7 +123,7 @@ function SidebarContent({ onClose, ...rest }) {
       overflow={"auto"}
       {...rest}
     >
-      <Flex h="20" align={"center"} mx={4} justifyContent={"left"}>
+      <Flex h="20" align={"center"} mx={4} justifyContent={["space-between"]}>
         <Image
           src="/assests/videe0/Logo/Black _ White/sideBarLogo.png"
           alt="Logo"

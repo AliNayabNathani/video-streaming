@@ -56,7 +56,7 @@ export default function Dashboard() {
   // if (error) return <div>{error.message}</div>;
 
   return (
-    <PrivateRoute allowedRole="2">
+    <PrivateRoute allowedRole="4">
       <MainTemplate>
         <Box mx={{ base: "0", md: "3rem" }} width={"100%"}>
           <HStack mb={"2rem"} justifyContent={"space-between"}>

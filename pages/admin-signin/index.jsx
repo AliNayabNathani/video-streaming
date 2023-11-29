@@ -17,8 +17,12 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login, reset, addToken } from "../features/auth/authSlice";
-import Spinner from "../components/spinner";
+import {
+  login,
+  reset,
+  addToken,
+  adminLogin,
+} from "../../features/auth/authSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -29,28 +33,22 @@ export default function SignIn() {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const dispatch = useDispatch();
+
   const handleLogin = async (e) => {
     // e.preventDefault();
-
     const userData = {
       email,
       password,
     };
+    console.log(userData);
 
     try {
-      const response = await dispatch(login(userData));
-      // console.log("IM RESPONSE", response.payload);
-
+      const response = await dispatch(adminLogin(userData));
+      console.log(response.payload.user.roleId);
       if (response.payload.msg === "Logged In") {
         const roleId = response.payload.user.roleId;
-        // console.log("ME ROLEID", roleId);
-        if (roleId === "2") {
-          toast.success(`Welcome Back`, {
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: 4000,
-          });
-          router.push("/Client/Dashboard");
-        } else if (roleId === "1") {
+
+        if (roleId === "1") {
           toast.success(`Welcome Back`, {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 4000,
@@ -132,30 +130,28 @@ export default function SignIn() {
               </FormErrorMessage>
             )}
           </FormControl>
-          <HStack
-            alignSelf={"flex-start"}
+          <Stack
+            direction={["column", "row"]}
             alignItems={"center"}
             w={"100%"}
             justifyContent={"space-between"}
           >
-            <Checkbox defaultIsChecked colorScheme="green">
-              Remember Me
-            </Checkbox>
-            <Text fontSize="sm" alignSelf="flex-end">
+            <Checkbox colorScheme="green">Remember Me</Checkbox>
+            <Text fontSize="sm" alignSelf={["center", "flex-end"]}>
               Forgot Password?
             </Text>
-          </HStack>
+          </Stack>
           <Button onClick={handleLogin} w={"100%"} mt={[2, 4]} p={[0, 6]}>
             Sign In
           </Button>
-          <HStack>
+          <Stack direction={["column", "row"]} alignItems={"center"}>
             <Text fontSize="sm" mt={0}>
               You don&apos;t have an account?
             </Text>
             <Text color={"#55DF01"} fontWeight={"semibold"}>
               Create Account
             </Text>
-          </HStack>
+          </Stack>
         </VStack>
       </Stack>
       <ToastContainer autoClose={4000} />

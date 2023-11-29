@@ -14,8 +14,53 @@ const register = async (userData) => {
 };
 
 //Login User
-const login = async (userData) => {
-  const res = await axios.post(server + "auth/login", userData, {
+// const login = async (userData) => {
+//   const res = await axios.post(server + "auth/login", userData, {
+//     headers: {
+//       "Content-type": "application/json",
+//     },
+//     withCredentials: true,
+//   });
+//   // console.log(res);
+//   if (res.data) {
+//     localStorage.setItem("User", JSON.stringify(res.data));
+//   }
+//   return res.data;
+// };
+
+//Admin Login
+const adminlogin = async (userData) => {
+  const res = await axios.post(server + "auth/login/admin", userData, {
+    headers: {
+      "Content-type": "application/json",
+    },
+    withCredentials: true,
+  });
+  // console.log(res);
+  if (res.data) {
+    localStorage.setItem("User", JSON.stringify(res.data));
+  }
+  return res.data;
+};
+
+//Creator Login
+const creatorLogin = async (userData) => {
+  const res = await axios.post(server + "auth/login/creator", userData, {
+    headers: {
+      "Content-type": "application/json",
+    },
+    withCredentials: true,
+  });
+  // console.log(res);
+  if (res.data) {
+    localStorage.setItem("User", JSON.stringify(res.data));
+  }
+  return res.data;
+};
+
+//User Login
+const userLogin = async (userData) => {
+  const res = await axios.post(server + "auth/login/user", userData, {
     headers: {
       "Content-type": "application/json",
     },
@@ -51,7 +96,9 @@ const updateProfile = async (userData) => {
 const authService = {
   register,
   logout,
-  login,
+  adminlogin,
+  creatorLogin,
+  userLogin,
   updateProfile,
 };
 

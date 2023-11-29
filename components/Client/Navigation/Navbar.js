@@ -97,7 +97,7 @@ function SidebarContent({ onClose, ...rest }) {
       overflow={"auto"}
       {...rest}
     >
-      <Flex h="20" align={"center"} mx={4} justifyContent={"left"}>
+      <Flex h="20" align={"center"} mx={4} justifyContent={["left"]}>
         <Image
           src="/assests/videe0/Logo/Black _ White/sideBarLogo.png"
           alt="Logo"
@@ -184,11 +184,12 @@ const NavItem = ({ icon, children, ...rest }) => {
 
 const MobileNav = ({ onOpen, ...rest }) => {
   const dummyUser = {
-    name: "Ali Nayab",
-    email: "nayab@example.com",
     avatar:
       "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9",
   };
+
+  const userFromLocalStorage = JSON.parse(localStorage.getItem("User"));
+  const currentUser = userFromLocalStorage?.user;
 
   return (
     <Flex
@@ -221,7 +222,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
         spacing={{ base: "0", md: "6" }}
       > */}
       <Text className="hide-on-small">
-        Hi {dummyUser.name}!! Welcome to administrative panel
+        Hi {currentUser.name}!! Welcome to administrative panel
       </Text>
 
       <Flex>
@@ -245,7 +246,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
             <HStack align={"flex-end"} alignItems={"center"}>
               <Avatar size={"sm"} src={dummyUser.avatar} />
               <Text className="hide-on-small" alignSelf={"center"}>
-                {dummyUser.email}
+                {currentUser.email}
               </Text>
               <Box display={{ base: "none", md: "flex" }}>
                 <FiChevronDown />

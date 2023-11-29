@@ -153,7 +153,7 @@ const InfoBar = () => (
 export default function Nav() {
   return (
     <>
-      <PrivateRoute allowedRole="2">
+      <PrivateRoute allowedRole="4">
         <Box
           borderBottom={"1px solid black"}
           bg={useColorModeValue("gray.100", "gray.900")}

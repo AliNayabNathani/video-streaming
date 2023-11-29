@@ -33,18 +33,70 @@ export const register = createAsyncThunk(
 );
 
 //Log in
-export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
-  try {
-    return await authService.login(user);
-  } catch (err) {
-    console.log(err);
-    const message =
-      (err.response && err.response.data && err.response.data.message) ||
-      err.message ||
-      err.toString();
-    return thunkAPI.rejectWithValue(message);
+// export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
+//   try {
+//     return await authService.login(user);
+//   } catch (err) {
+//     console.log(err);
+//     const message =
+//       (err.response && err.response.data && err.response.data.message) ||
+//       err.message ||
+//       err.toString();
+//     return thunkAPI.rejectWithValue(message);
+//   }
+// });
+
+//Admin Login:
+export const adminLogin = createAsyncThunk(
+  "auth/login/admin",
+  async (user, thunkAPI) => {
+    try {
+      return await authService.adminlogin(user);
+    } catch (err) {
+      console.log(err);
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
   }
-});
+);
+
+//Creator Login
+export const creatorLogin = createAsyncThunk(
+  "auth/login/creator",
+  async (user, thunkAPI) => {
+    try {
+      return await authService.creatorLogin(user);
+    } catch (err) {
+      console.log(err);
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+//User Login
+//Creator Login
+export const userLogin = createAsyncThunk(
+  "auth/login/user",
+  async (user, thunkAPI) => {
+    try {
+      return await authService.userLogin(user);
+    } catch (err) {
+      console.log(err);
+      const message =
+        (err.response && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 export const logout = createAsyncThunk("auth/logout", async () => {
   await authService.logout();
@@ -94,17 +146,47 @@ export const authSlice = createSlice({
         state.isError = true;
         state.user = null;
       })
-      .addCase(login.pending, (state) => {
+      .addCase(adminLogin.pending, (state) => {
         state.isLoading = true;
         state.isAuthenticated = false;
       })
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(adminLogin.fulfilled, (state, action) => {
         state.isLoading = false;
         state.message = action.payload.msg;
         state.user = action.payload;
         state.isAuthenticated = true;
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(adminLogin.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isAuthenticated = false;
+      })
+      .addCase(creatorLogin.pending, (state) => {
+        state.isLoading = true;
+        state.isAuthenticated = false;
+      })
+      .addCase(creatorLogin.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = action.payload.msg;
+        state.user = action.payload;
+        state.isAuthenticated = true;
+      })
+      .addCase(creatorLogin.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isAuthenticated = false;
+      })
+      .addCase(userLogin.pending, (state) => {
+        state.isLoading = true;
+        state.isAuthenticated = false;
+      })
+      .addCase(userLogin.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = action.payload.msg;
+        state.user = action.payload;
+        state.isAuthenticated = true;
+      })
+      .addCase(userLogin.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isAuthenticated = false;

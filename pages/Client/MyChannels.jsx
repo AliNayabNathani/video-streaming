@@ -414,7 +414,7 @@ export default function Channel() {
   }, []);
 
   return (
-    <PrivateRoute allowedRole="2">
+    <PrivateRoute allowedRole="4">
       <MainTemplate>
         <Box mx={"2rem"}>
           <Stack

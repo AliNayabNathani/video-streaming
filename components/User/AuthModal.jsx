@@ -16,7 +16,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { AiFillApple, AiFillFacebook } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { login, register, reset } from "../../features/auth/authSlice";
+import {
+  login,
+  register,
+  reset,
+  userLogin,
+} from "../../features/auth/authSlice";
 import axios from "axios";
 import { server } from "../server";
 import { ToastContainer, toast } from "react-toastify";
@@ -68,7 +73,7 @@ const SignIn = ({ setAuthChoice }) => {
       password,
     };
 
-    const response = await dispatch(login(userData));
+    const response = await dispatch(userLogin(userData));
     // console.log("LOGIN RESPONSE", response);
     if (response.payload.msg === "Logged In") {
       toast.success(`Welcome Back`, {

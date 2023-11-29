@@ -876,7 +876,7 @@ export default function MyVideo() {
   );
 
   return (
-    <PrivateRoute allowedRole="2">
+    <PrivateRoute allowedRole="4">
       <MainTemplate>
         <Box mx={{ base: "0", md: "3rem" }} width={"100%"}>
           <HStack justifyContent={"space-between"} mb={"2rem"}>

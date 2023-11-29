@@ -101,6 +101,7 @@ const Index = () => {
             border={"1px solid transparent"}
             bg={"#414141"}
             placeholder="Email Address"
+            textAlign={["center", "left"]}
           />
           <Button
             w={["100%", "20%"]}
